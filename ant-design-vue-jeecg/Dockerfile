@@ -1,5 +1,5 @@
 FROM nginx
-MAINTAINER jeecgos@163.com
+MAINTAINER yqsailor@163.com
 VOLUME /tmp
 ENV LANG en_US.UTF-8
 RUN echo "server {  \
