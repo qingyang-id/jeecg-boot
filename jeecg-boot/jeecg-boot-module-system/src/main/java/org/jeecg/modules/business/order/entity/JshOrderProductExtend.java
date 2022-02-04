@@ -1,4 +1,4 @@
-package org.jeecg.modules.business.customer.entity;
+package org.jeecg.modules.business.order.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -17,38 +17,38 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: jsh_customer
+ * @Description: jsh_order_product_extend
  * @Author: jeecg-boot
- * @Date:   2022-02-03
+ * @Date:   2022-02-04
  * @Version: V1.0
  */
 @Data
-@TableName("jsh_customer")
+@TableName("jsh_order_product_extend")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="jsh_customer对象", description="jsh_customer")
-public class JshCustomer implements Serializable {
+@ApiModel(value="jsh_order_product_extend对象", description="jsh_order_product_extend")
+public class JshOrderProductExtend implements Serializable {
     private static final long serialVersionUID = 1L;
 
-	/**主键*/
-	@TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "主键")
-    private java.math.BigInteger id;
+  /**主键*/
+  @TableId(type = IdType.AUTO)
+  @ApiModelProperty(value = "主键")
+  private java.math.BigInteger id;
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
     private java.lang.String createBy;
-	/**创建日期*/
+	/**创建时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "创建日期")
+    @ApiModelProperty(value = "创建时间")
     private java.util.Date createTime;
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.String updateBy;
-	/**更新日期*/
+	/**更新时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "更新日期")
+    @ApiModelProperty(value = "更新时间")
     private java.util.Date updateTime;
 
   /**
@@ -58,28 +58,24 @@ public class JshCustomer implements Serializable {
   @TableLogic
   private Integer delFlag;
 
-	/**客户名字*/
-	@Excel(name = "客户名字", width = 15)
-    @ApiModelProperty(value = "客户名字")
-    private java.lang.String name;
+  /**订单ID*/
+  @Excel(name = "订单ID", width = 15)
+  @ApiModelProperty(value = "订单ID")
+  private java.math.BigInteger orderId;
 
-    /**
-     * 性别（1:男 2:女 0:未知）
-     */
-    @Excel(name = "性别", width = 15,dicCode="sex")
-    @Dict(dicCode = "sex")
-    private Integer sex;
+	/**订单产品表ID*/
+	@Excel(name = "订单产品表ID", width = 15)
+    @ApiModelProperty(value = "订单产品表ID")
+    private java.math.BigInteger orderProductId;
 
-	/**常用地址*/
-	@Excel(name = "常用地址", width = 15)
-    @ApiModelProperty(value = "常用地址")
-    private java.lang.String address;
-	/**手机*/
-	@Excel(name = "手机", width = 15)
-    @ApiModelProperty(value = "手机")
-    private java.lang.String phone;
-	/**租户id*/
-	@Excel(name = "租户id", width = 15)
-    @ApiModelProperty(value = "租户id")
-    private java.math.BigInteger tenantId;
+  /**类型:1拉,2抽,3条*/
+  @Excel(name = "类型:1拉,2抽,3条", width = 15, dicCode = "1,2,3")
+  @Dict(dicCode = "1,2,3")
+  @ApiModelProperty(value = "类型:1拉,2抽,3条")
+  private java.lang.Integer type;
+
+	/**数量*/
+	@Excel(name = "数量", width = 15)
+    @ApiModelProperty(value = "数量")
+    private java.lang.Integer num;
 }

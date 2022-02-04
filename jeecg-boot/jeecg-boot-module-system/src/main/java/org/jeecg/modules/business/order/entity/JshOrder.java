@@ -1,4 +1,4 @@
-package org.jeecg.modules.business.customer.entity;
+package org.jeecg.modules.business.order.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,17 +15,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: jsh_customer
+ * @Description: jsh_order
  * @Author: jeecg-boot
- * @Date:   2022-02-03
+ * @Date:   2022-02-04
  * @Version: V1.0
  */
+@ApiModel(value="jsh_order对象", description="jsh_order")
 @Data
-@TableName("jsh_customer")
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value="jsh_customer对象", description="jsh_customer")
-public class JshCustomer implements Serializable {
+@TableName("jsh_order")
+public class JshOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**主键*/
@@ -37,18 +33,18 @@ public class JshCustomer implements Serializable {
 	/**创建人*/
     @ApiModelProperty(value = "创建人")
     private java.lang.String createBy;
-	/**创建日期*/
+	/**创建时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "创建日期")
+    @ApiModelProperty(value = "创建时间")
     private java.util.Date createTime;
 	/**更新人*/
     @ApiModelProperty(value = "更新人")
     private java.lang.String updateBy;
-	/**更新日期*/
+	/**更新时间*/
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "更新日期")
+    @ApiModelProperty(value = "更新时间")
     private java.util.Date updateTime;
 
   /**
@@ -58,26 +54,39 @@ public class JshCustomer implements Serializable {
   @TableLogic
   private Integer delFlag;
 
-	/**客户名字*/
-	@Excel(name = "客户名字", width = 15)
-    @ApiModelProperty(value = "客户名字")
-    private java.lang.String name;
+	/**订单编码*/
+	@Excel(name = "订单编码", width = 15)
+    @ApiModelProperty(value = "订单编码")
+    private java.lang.String orderCode;
 
-    /**
-     * 性别（1:男 2:女 0:未知）
-     */
-    @Excel(name = "性别", width = 15,dicCode="sex")
-    @Dict(dicCode = "sex")
-    private Integer sex;
+	/**客户id*/
+	@Excel(name = "客户id", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @ApiModelProperty(value = "客户id")
+    private java.math.BigInteger customerId;
 
-	/**常用地址*/
-	@Excel(name = "常用地址", width = 15)
-    @ApiModelProperty(value = "常用地址")
+	/**订单总额*/
+	@Excel(name = "订单总额", width = 15)
+    @ApiModelProperty(value = "订单总额")
+    private java.math.BigInteger totalPrice;
+
+	/**下单时间*/
+	@Excel(name = "下单时间", width = 15, format = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty(value = "下单时间")
+    private java.util.Date orderTime;
+
+	/**地址*/
+	@Excel(name = "地址", width = 15)
+    @ApiModelProperty(value = "地址")
     private java.lang.String address;
-	/**手机*/
-	@Excel(name = "手机", width = 15)
-    @ApiModelProperty(value = "手机")
-    private java.lang.String phone;
+
+	/**备注*/
+	@Excel(name = "备注", width = 15)
+    @ApiModelProperty(value = "备注")
+    private java.lang.String remark;
+
 	/**租户id*/
 	@Excel(name = "租户id", width = 15)
     @ApiModelProperty(value = "租户id")

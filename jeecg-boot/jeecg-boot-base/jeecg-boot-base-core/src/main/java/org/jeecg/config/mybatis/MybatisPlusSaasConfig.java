@@ -41,12 +41,6 @@ public class MybatisPlusSaasConfig {
 
         // 生产管理
         tenantTable.add("jsh_product");
-        tenantTable.add("jsh_product_attribute");
-        tenantTable.add("jsh_product_category");
-        tenantTable.add("jsh_product_current_stock");
-        tenantTable.add("jsh_product_extend");
-        tenantTable.add("jsh_product_initial_stock");
-        tenantTable.add("jsh_unit");
         tenantTable.add("jsh_customer");
         tenantTable.add("jsh_order");
     }

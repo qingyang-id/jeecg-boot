@@ -4,23 +4,23 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="客户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="name">
-              <j-search-select-tag v-model="model.name" dict=""  />
+            <a-form-model-item label="删除状态:0未删除,1删除" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="delFlag">
+              <a-input-number v-model="model.delFlag" placeholder="请输入删除状态:0未删除,1删除" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-model="model.sex" type="radioButton" title="性别" dictCode="sex" placeholder="请选择性别"/>
+            <a-form-model-item label="订单产品表ID" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderProductId">
+              <a-input-number v-model="model.orderProductId" placeholder="请输入订单产品表ID" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="常用地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-              <a-input v-model="model.address" placeholder="请输入常用地址"  ></a-input>
+            <a-form-model-item label="类型:1拉,2抽,3条" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="type">
+              <a-input-number v-model="model.type" placeholder="请输入类型:1拉,2抽,3条" style="width: 100%" />
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="手机" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="phone">
-              <a-input v-model="model.phone" placeholder="请输入手机"  ></a-input>
+            <a-form-model-item label="数量" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="num">
+              <a-input-number v-model="model.num" placeholder="请输入数量" style="width: 100%" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -31,11 +31,11 @@
 
 <script>
 
-  import { httpAction, getAction } from '@api/manage'
+  import { httpAction, getAction } from '@/api/manage'
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'JshCustomerForm',
+    name: 'JshOrderProductExtendForm',
     components: {
     },
     props: {
@@ -60,24 +60,23 @@
         },
         confirmLoading: false,
         validatorRules: {
-           name: [
-              { required: true, message: '请输入客户名字!'},
+           delFlag: [
+              { required: true, message: '请输入删除状态:0未删除,1删除!'},
            ],
-          sex: [
-            { required: true, message: '请选择性别!'},
-          ],
-           address: [
-              { required: true, message: '请输入常用地址!'},
+           orderProductId: [
+              { required: true, message: '请输入订单产品表ID!'},
            ],
-           phone: [
-              { required: true, message: '请输入手机!'},
-              { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码!'},
+           type: [
+              { required: true, message: '请输入类型:1拉,2抽,3条!'},
+           ],
+           num: [
+              { required: true, message: '请输入数量!'},
            ],
         },
         url: {
-          add: "/business/customer/jshCustomer/add",
-          edit: "/business/customer/jshCustomer/edit",
-          queryById: "/business/customer/jshCustomer/queryById"
+          add: "/business/order/jshOrderProductExtend/add",
+          edit: "/business/order/jshOrderProductExtend/edit",
+          queryById: "/business/order/jshOrderProductExtend/queryById"
         }
       }
     },
