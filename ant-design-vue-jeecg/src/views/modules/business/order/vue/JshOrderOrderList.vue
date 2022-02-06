@@ -4,33 +4,6 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="订单编码">
-              <a-input placeholder="请输入订单编码" v-model="queryParam.orderCode"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="客户">
-              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" dict="jsh_customer,name,id"/>
-            </a-form-item>
-          </a-col>
-          <template v-if="toggleSearchStatus">
-            <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="下单时间">
-                <j-date placeholder="请选择下单时间" v-model="queryParam.orderTime"></j-date>
-              </a-form-item>
-            </a-col>
-          </template>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -39,7 +12,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order_product')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -74,6 +47,26 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <template slot="htmlSlot" slot-scope="text">
+          <div v-html="text"></div>
+        </template>
+        <template slot="imgSlot" slot-scope="text">
+          <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
+          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+        </template>
+        <template slot="fileSlot" slot-scope="text">
+          <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
+          <a-button
+            v-else
+            :ghost="true"
+            type="primary"
+            icon="download"
+            size="small"
+            @click="downloadFile(text)">
+            下载
+          </a-button>
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -96,26 +89,25 @@
       </a-table>
     </div>
 
-    <jsh-order-modal ref="modalForm" @ok="modalFormOk"/>
+    <jsh-order-product-modal ref="modalForm" @ok="modalFormOk"/>
   </a-card>
 </template>
 
 <script>
 
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import JshOrderModal from './modules/JshOrderModal'
-  import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import JshOrderProductModal from './modules/JshOrderProductModal'
   import '@/assets/less/TableExpand.less'
 
   export default {
-    name: "JshOrderList",
+    name: "JshOrderProductList",
     mixins:[JeecgListMixin],
     components: {
-      JshOrderModal
+      JshOrderProductModal
     },
     data () {
       return {
-        description: 'jsh_order管理页面',
+        description: 'jsh_order_product管理页面',
         // 表头
         columns: [
           {
@@ -129,40 +121,59 @@
             }
           },
           {
-            title:'订单编码',
+            title:'删除状态:0未删除,1删除',
             align:"center",
-            dataIndex: 'orderCode'
+            dataIndex: 'delFlag'
           },
           {
             title:'客户id',
             align:"center",
-            dataIndex: 'customerId_dictText'
+            dataIndex: 'customerId'
           },
           {
-            title:'订单总额',
+            title:'订单ID',
             align:"center",
-            dataIndex: 'totalPrice',
-            customRender:function (t) {
-              return t / 100;
-            }
+            dataIndex: 'orderId'
           },
           {
-            title:'下单时间',
+            title:'产品id',
             align:"center",
-            dataIndex: 'orderTime',
-            customRender:function (text) {
-              return !text?"":(text.length>10?text.substr(0,10):text)
-            }
+            dataIndex: 'productId'
           },
           {
-            title:'地址',
+            title:'宽',
             align:"center",
-            dataIndex: 'address'
+            dataIndex: 'width'
           },
           {
-            title:'备注',
+            title:'高',
             align:"center",
-            dataIndex: 'remark'
+            dataIndex: 'height'
+          },
+          {
+            title:'数量',
+            align:"center",
+            dataIndex: 'num'
+          },
+          {
+            title:'方向:0其他,1双开,2左开,3右开',
+            align:"center",
+            dataIndex: 'direction'
+          },
+          {
+            title:'颜色',
+            align:"center",
+            dataIndex: 'color'
+          },
+          {
+            title:'单价',
+            align:"center",
+            dataIndex: 'price'
+          },
+          {
+            title:'总价',
+            align:"center",
+            dataIndex: 'totalPrice'
           },
           {
             title: '操作',
@@ -174,11 +185,11 @@
           }
         ],
         url: {
-          list: "/business/order/jshOrder/list",
-          delete: "/business/order/jshOrder/delete",
-          deleteBatch: "/business/order/jshOrder/deleteBatch",
-          exportXlsUrl: "/business/order/jshOrder/exportXls",
-          importExcelUrl: "/business/order/jshOrder/importExcel",
+          list: "/business/order/jshOrderProduct/list",
+          delete: "/business/order/jshOrderProduct/delete",
+          deleteBatch: "/business/order/jshOrderProduct/deleteBatch",
+          exportXlsUrl: "/business/order/jshOrderProduct/exportXls",
+          importExcelUrl: "business/order/jshOrderProduct/importExcel",
 
         },
         dictOptions:{},
@@ -198,12 +209,17 @@
       },
       getSuperFieldList(){
         let fieldList=[];
-         fieldList.push({type:'string',value:'orderCode',text:'订单编码',dictCode:''})
-         fieldList.push({type:'sel_search',value:'customerId',text:'客户id',dictTable:'jsh_customer', dictText:'name', dictCode:'id'})
-         fieldList.push({type:'double',value:'totalPrice',text:'订单总额',dictCode:''})
-         fieldList.push({type:'date',value:'orderTime',text:'下单时间'})
-         fieldList.push({type:'sel_search',value:'address',text:'地址',dictTable:'jsh_customer', dictText:'address', dictCode:'address'})
-         fieldList.push({type:'string',value:'remark',text:'备注',dictCode:''})
+        fieldList.push({type:'int',value:'delFlag',text:'删除状态:0未删除,1删除',dictCode:''})
+        fieldList.push({type:'int',value:'customerId',text:'客户id',dictCode:''})
+        fieldList.push({type:'int',value:'orderId',text:'订单ID',dictCode:''})
+        fieldList.push({type:'int',value:'productId',text:'产品id',dictCode:''})
+        fieldList.push({type:'int',value:'width',text:'宽',dictCode:''})
+        fieldList.push({type:'int',value:'height',text:'高',dictCode:''})
+        fieldList.push({type:'int',value:'num',text:'数量',dictCode:''})
+        fieldList.push({type:'int',value:'direction',text:'方向:0其他,1双开,2左开,3右开',dictCode:''})
+        fieldList.push({type:'string',value:'color',text:'颜色',dictCode:''})
+        fieldList.push({type:'int',value:'price',text:'单价',dictCode:''})
+        fieldList.push({type:'int',value:'totalPrice',text:'总价',dictCode:''})
         this.superFieldList = fieldList
       }
     }

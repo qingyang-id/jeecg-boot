@@ -31,7 +31,7 @@ public class JshOrderProductDetail implements Serializable {
     private static final long serialVersionUID = 1L;
 
   /**主键*/
-  @TableId(type = IdType.AUTO)
+  @TableId(type = IdType.ASSIGN_ID)
   @ApiModelProperty(value = "主键")
   private java.math.BigInteger id;
 	/**创建人*/

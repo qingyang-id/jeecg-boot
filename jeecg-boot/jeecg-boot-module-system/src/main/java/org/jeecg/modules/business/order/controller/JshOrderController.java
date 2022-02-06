@@ -17,6 +17,11 @@ import org.jeecg.modules.business.order.entity.JshOrderProduct;
 import org.jeecg.modules.business.order.service.IJshOrderProductService;
 import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
+import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
+import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
+import org.jeecg.modules.business.order.vo.JshOrderProductPage;
+import org.jeecg.modules.business.order.service.IJshOrderProductDetailService;
+import org.jeecg.modules.business.order.service.IJshOrderProductExtendService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -54,6 +59,10 @@ public class JshOrderController {
 	private IJshOrderService jshOrderService;
 	@Autowired
 	private IJshOrderProductService jshOrderProductService;
+   @Autowired
+   private IJshOrderProductExtendService jshOrderProductExtendService;
+   @Autowired
+   private IJshOrderProductDetailService jshOrderProductDetailService;
 
 	/**
 	 * 分页列表查询
@@ -87,8 +96,8 @@ public class JshOrderController {
 	@ApiOperation(value="jsh_order-添加", notes="jsh_order-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody JshOrderPage jshOrderPage) {
-//		JshOrder jshOrder = new JshOrder();
-//		BeanUtils.copyProperties(jshOrderPage, jshOrder);
+		JshOrder jshOrder = new JshOrder();
+		BeanUtils.copyProperties(jshOrderPage, jshOrder);
 		jshOrderService.saveMain(jshOrderPage);
 		return Result.OK("添加成功！");
 	}
@@ -202,8 +211,21 @@ public class JshOrderController {
       for (JshOrder main : jshOrderList) {
           JshOrderPage vo = new JshOrderPage();
           BeanUtils.copyProperties(main, vo);
-          List<JshOrderProduct> jshOrderProductList = jshOrderProductService.selectByMainId(main.getId());
-          vo.setJshOrderProductList(jshOrderProductList);
+
+        List<JshOrderProductPage> jshOrderProductPageList = new ArrayList<>();
+        List<JshOrderProduct> jshOrderProductList = jshOrderProductService.selectByMainId(main.getId());
+        for (JshOrderProduct jshOrderProduct : jshOrderProductList) {
+          JshOrderProductPage jshOrderProductPage = new JshOrderProductPage();
+          BeanUtils.copyProperties(jshOrderProduct, jshOrderProductPage);
+
+          List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
+          jshOrderProductPage.setJshOrderProductDetailList(jshOrderProductDetailList);
+          List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderProductExtendService.selectByMainId(main.getId());
+          jshOrderProductPage.setJshOrderProductExtendList(jshOrderProductExtendList);
+          jshOrderProductPageList.add(jshOrderProductPage);
+        }
+        vo.setJshOrderProductPageList(jshOrderProductPageList);
+
           pageList.add(vo);
       }
 
@@ -236,8 +258,6 @@ public class JshOrderController {
           try {
               List<JshOrderPage> list = ExcelImportUtil.importExcel(file.getInputStream(), JshOrderPage.class, params);
               for (JshOrderPage page : list) {
-//                  JshOrder po = new JshOrder();
-//                  BeanUtils.copyProperties(page, po);
                   jshOrderService.saveMain(page);
               }
               return Result.OK("文件导入成功！数据行数:" + list.size());

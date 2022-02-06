@@ -10,6 +10,8 @@ import org.jeecg.modules.business.order.mapper.JshOrderProductExtendMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderProductMapper;
 import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
+import org.jeecg.modules.business.order.vo.JshOrderProductPage;
+import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,21 +45,38 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
 	public void saveMain(JshOrderPage jshOrderPage) {
     JshOrder jshOrder = new JshOrder();
     BeanUtils.copyProperties(jshOrderPage, jshOrder);
-    List<JshOrderProduct> jshOrderProductList = jshOrderPage.getJshOrderProductList();
+    List<JshOrderProductPage> jshOrderProductPageList = jshOrderPage.getJshOrderProductPageList();
 		jshOrderMapper.insert(jshOrder);
-		if(jshOrderProductList!=null && jshOrderProductList.size()>0) {
-			for(JshOrderProduct entity:jshOrderProductList) {
-				//外键设置
-				entity.setOrderId(jshOrder.getId());
-				jshOrderProductMapper.insert(entity);
+
+		if(jshOrderProductPageList!=null && jshOrderProductPageList.size()>0) {
+			for(JshOrderProductPage jshOrderProductPage:jshOrderProductPageList) {
+        JshOrderProduct jshOrderProduct = new JshOrderProduct();
+        BeanUtils.copyProperties(jshOrderProductPage, jshOrderProduct);
+				// 外键设置
+        jshOrderProduct.setOrderId(jshOrder.getId());
+				jshOrderProductMapper.insert(jshOrderProduct);
+
+        List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderProductPage.getJshOrderProductExtendList();
+        if(jshOrderProductExtendList!=null && jshOrderProductExtendList.size()>0) {
+          for(JshOrderProductExtend jshOrderProductExtend: jshOrderProductExtendList) {
+            // 外键设置
+            jshOrderProductExtend.setOrderId(jshOrder.getId());
+            jshOrderProductExtend.setOrderProductId(jshOrderProduct.getId());
+            jshOrderProductExtendMapper.insert(jshOrderProductExtend);
+          }
+        }
+
+        List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductPage.getJshOrderProductDetailList();
+        if(jshOrderProductDetailList!=null && jshOrderProductDetailList.size()>0) {
+          for(JshOrderProductDetail jshOrderProductDetail: jshOrderProductDetailList) {
+            // 外键设置
+            jshOrderProductDetail.setOrderId(jshOrder.getId());
+            jshOrderProductDetail.setOrderProductId(jshOrderProduct.getId());
+            jshOrderProductDetailMapper.insert(jshOrderProductDetail);
+          }
+        }
 			}
 		}
-    List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderPage.getJshOrderProductExtendList();
-    if(jshOrderProductExtendList!=null && jshOrderProductExtendList.size()>0) {
-      for(JshOrderProductExtend entity:jshOrderProductExtendList) {
-
-      }
-    }
 	}
 
 	@Override
@@ -65,26 +84,52 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
 	public void updateMain(JshOrderPage jshOrderPage) {
     JshOrder jshOrder = new JshOrder();
     BeanUtils.copyProperties(jshOrderPage, jshOrder);
-    List<JshOrderProduct> jshOrderProductList = jshOrderPage.getJshOrderProductList();
+    List<JshOrderProductPage> jshOrderProductPageList = jshOrderPage.getJshOrderProductPageList();
 
 		jshOrderMapper.updateById(jshOrder);
 
 		//1.先删除子表数据
 		jshOrderProductMapper.deleteByMainId(jshOrder.getId());
+		jshOrderProductDetailMapper.deleteByMainId(jshOrder.getId());
+    jshOrderProductExtendMapper.deleteByMainId(jshOrder.getId());
 
 		//2.子表数据重新插入
-		if(jshOrderProductList!=null && jshOrderProductList.size()>0) {
-			for(JshOrderProduct entity:jshOrderProductList) {
-				//外键设置
-				entity.setOrderId(jshOrder.getId());
-				jshOrderProductMapper.insert(entity);
-			}
-		}
+    if(jshOrderProductPageList!=null && jshOrderProductPageList.size()>0) {
+      for(JshOrderProductPage jshOrderProductPage:jshOrderProductPageList) {
+        JshOrderProduct jshOrderProduct = new JshOrderProduct();
+        BeanUtils.copyProperties(jshOrderProductPage, jshOrderProduct);
+        // 外键设置
+        jshOrderProduct.setOrderId(jshOrder.getId());
+        jshOrderProductMapper.insert(jshOrderProduct);
+
+        List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderProductPage.getJshOrderProductExtendList();
+        if(jshOrderProductExtendList!=null && jshOrderProductExtendList.size()>0) {
+          for(JshOrderProductExtend jshOrderProductExtend: jshOrderProductExtendList) {
+            // 外键设置
+            jshOrderProductExtend.setOrderId(jshOrder.getId());
+            jshOrderProductExtend.setOrderProductId(jshOrderProduct.getId());
+            jshOrderProductExtendMapper.insert(jshOrderProductExtend);
+          }
+        }
+
+        List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductPage.getJshOrderProductDetailList();
+        if(jshOrderProductDetailList!=null && jshOrderProductDetailList.size()>0) {
+          for(JshOrderProductDetail jshOrderProductDetail: jshOrderProductDetailList) {
+            // 外键设置
+            jshOrderProductDetail.setOrderId(jshOrder.getId());
+            jshOrderProductDetail.setOrderProductId(jshOrderProduct.getId());
+            jshOrderProductDetailMapper.insert(jshOrderProductDetail);
+          }
+        }
+      }
+    }
 	}
 
 	@Override
 	@Transactional
 	public void delMain(BigInteger id) {
+		jshOrderProductDetailMapper.deleteByMainId(id);
+		jshOrderProductExtendMapper.deleteByMainId(id);
 		jshOrderProductMapper.deleteByMainId(id);
 		jshOrderMapper.deleteById(id);
 	}
@@ -93,7 +138,10 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
 	@Transactional
 	public void delBatchMain(Collection<? extends Serializable> idList) {
 		for(Serializable id:idList) {
-			jshOrderProductMapper.deleteByMainId(new BigInteger(id.toString()));
+		  BigInteger mainId = new BigInteger(id.toString());
+      jshOrderProductDetailMapper.deleteByMainId(mainId);
+      jshOrderProductExtendMapper.deleteByMainId(mainId);
+			jshOrderProductMapper.deleteByMainId(mainId);
 			jshOrderMapper.deleteById(id);
 		}
 	}

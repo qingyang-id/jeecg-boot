@@ -1,26 +1,27 @@
 <template>
   <j-modal
     :title="title"
-    :width="width"
+    :width="1200"
     :visible="visible"
+    :maskClosable="false"
     switchFullscreen
     @ok="handleOk"
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
-    @cancel="handleCancel"
-    cancelText="关闭">
-    <jsh-order-product-extend-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></jsh-order-product-extend-form>
+    @cancel="handleCancel">
+    <jsh-order-product-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"/>
   </j-modal>
 </template>
 
 <script>
 
-  import JshOrderProductExtendForm from './JshOrderProductExtendForm'
+  import JshOrderProductForm from './JshOrderProductForm'
+
   export default {
-    name: 'JshOrderProductExtendModal',
+    name: 'JshOrderProductModal',
     components: {
-      JshOrderProductExtendForm
+      JshOrderProductForm
     },
-    data () {
+    data() {
       return {
         title:'',
         width:800,
@@ -28,7 +29,7 @@
         disableSubmit: false
       }
     },
-    methods: {
+    methods:{
       add () {
         this.visible=true
         this.$nextTick(()=>{
@@ -46,7 +47,7 @@
         this.visible = false;
       },
       handleOk () {
-        this.$refs.realForm.submitForm();
+        this.$refs.realForm.handleOk();
       },
       submitCallback(){
         this.$emit('ok');
@@ -58,3 +59,6 @@
     }
   }
 </script>
+
+<style scoped>
+</style>

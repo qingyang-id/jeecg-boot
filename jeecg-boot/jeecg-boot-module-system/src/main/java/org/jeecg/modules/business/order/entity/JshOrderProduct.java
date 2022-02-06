@@ -27,7 +27,7 @@ public class JshOrderProduct implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	/**主键*/
-	@TableId(type = IdType.AUTO)
+	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private java.math.BigInteger id;
 	/**创建人*/
@@ -79,8 +79,8 @@ public class JshOrderProduct implements Serializable {
     private java.lang.Integer num;
 
 	/**方向:0其他,1双开,2左开,3右开*/
-  @Excel(name = "方向:0其他,1双开,2左开,3右开", width = 15, dicCode = "0,1,2,3")
-  @Dict(dicCode = "1,2")
+  @Excel(name = "方向:0其他,1双开,2左开,3右开", width = 15, dicCode = "direction")
+  @Dict(dicCode = "direction")
   @ApiModelProperty(value = "方向:0其他,1双开,2左开,3右开")
   private java.lang.Integer direction;
 

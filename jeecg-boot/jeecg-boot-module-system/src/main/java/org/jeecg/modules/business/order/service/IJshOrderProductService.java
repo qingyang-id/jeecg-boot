@@ -1,9 +1,13 @@
 package org.jeecg.modules.business.order.service;
 
-import org.jeecg.modules.business.order.entity.JshOrderProduct;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.business.order.entity.JshOrderProduct;
+import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
+import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
 
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,4 +19,26 @@ import java.util.List;
 public interface IJshOrderProductService extends IService<JshOrderProduct> {
 
 	public List<JshOrderProduct> selectByMainId(BigInteger mainId);
+
+  /**
+   * 添加一对多
+   *
+   */
+  public void saveMain(JshOrderProduct jshOrderProduct, List<JshOrderProductDetail> jshOrderProductDetailList, List<JshOrderProductExtend> jshOrderProductExtendList) ;
+
+  /**
+   * 修改一对多
+   *
+   */
+  public void updateMain(JshOrderProduct jshOrderProduct,List<JshOrderProductDetail> jshOrderProductDetailList,List<JshOrderProductExtend> jshOrderProductExtendList);
+
+  /**
+   * 删除一对多
+   */
+  public void delMain (String id);
+
+  /**
+   * 批量删除一对多
+   */
+  public void delBatchMain (Collection<? extends Serializable> idList);
 }

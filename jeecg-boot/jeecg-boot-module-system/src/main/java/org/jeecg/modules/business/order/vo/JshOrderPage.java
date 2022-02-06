@@ -5,9 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.jeecg.common.aspect.annotation.Dict;
-import org.jeecg.modules.business.order.entity.JshOrderProduct;
-import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
-import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -83,14 +80,6 @@ public class JshOrderPage {
 
 	@ExcelCollection(name="jsh_order_product")
 	@ApiModelProperty(value = "jsh_order_product")
-	private List<JshOrderProduct> jshOrderProductList;
-
-  @ExcelCollection(name="jsh_order_product_extend")
-  @ApiModelProperty(value = "jsh_order_product_extend")
-  private List<JshOrderProductExtend> jshOrderProductExtendList;
-
-  @ExcelCollection(name="jsh_order_product_detail")
-  @ApiModelProperty(value = "jsh_order_product_detail")
-  private List<JshOrderProductDetail> jshOrderProductDetailList;
+	private List<JshOrderProductPage> jshOrderProductPageList;
 
 }

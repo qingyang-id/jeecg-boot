@@ -7,15 +7,6 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -27,6 +18,14 @@ import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
+
 /**
  * @Author Scott
  * @Date 2018-07-12 14:23
@@ -35,7 +34,7 @@ import org.jeecg.common.util.oConvertUtils;
 public class JwtUtil {
 
 	// Token过期时间30分钟（用户登录过期时间是此时间的两倍，以token在reids缓存时间为准）
-	public static final long EXPIRE_TIME = 30 * 60 * 1000;
+	public static final long EXPIRE_TIME = 48 * 60 * 60 * 1000;
 
     /**
      *
@@ -110,7 +109,7 @@ public class JwtUtil {
 
 	/**
 	 * 根据request中的token获取用户账号
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 * @throws JeecgBootException
@@ -123,7 +122,7 @@ public class JwtUtil {
 		}
 		return username;
 	}
-	
+
 	/**
 	  *  从session中获取变量
 	 * @param key
@@ -148,7 +147,7 @@ public class JwtUtil {
 		if(returnValue!=null){returnValue = returnValue + moshi;}
 		return returnValue;
 	}
-	
+
 	/**
 	  * 从当前用户中获取变量
 	 * @param key
@@ -161,10 +160,10 @@ public class JwtUtil {
 			user = JeecgDataAutorUtils.loadUserInfo();
 		}
 		//#{sys_user_code}%
-		
+
 		// 获取登录用户信息
 		LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-		
+
 		String moshi = "";
 		if(key.indexOf("}")!=-1){
 			 moshi = key.substring(key.indexOf("}")+1);
@@ -192,7 +191,7 @@ public class JwtUtil {
 				returnValue = user.getSysUserName();
 			}
 		}
-		
+
 		//替换为系统用户登录所使用的机构编码
 		else if (key.equals(DataBaseConstant.SYS_ORG_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_ORG_CODE_TABLE)) {
 			if(user==null) {
@@ -237,7 +236,7 @@ public class JwtUtil {
 		if(returnValue!=null){returnValue = returnValue + moshi;}
 		return returnValue;
 	}
-	
+
 //	public static void main(String[] args) {
 //		 String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjUzMzY1MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.xjhud_tWCNYBOg_aRlMgOdlZoWFFKB_givNElHNw3X0";
 //		 System.out.println(JwtUtil.getUsername(token));
