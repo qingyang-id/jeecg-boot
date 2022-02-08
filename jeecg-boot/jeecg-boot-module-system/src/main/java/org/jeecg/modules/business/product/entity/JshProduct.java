@@ -87,6 +87,12 @@ public class JshProduct implements Serializable {
   @ApiModelProperty(value = "采购价格")
   private java.lang.Long purchasePrice;
   /**
+   * 采购价格
+   */
+  @Excel(name = "销售价格", width = 15)
+  @ApiModelProperty(value = "销售价格")
+  private java.lang.Long wholesalePrice;
+  /**
    * 铝材高差值
    */
   @Excel(name = "铝材高差值", width = 15)
