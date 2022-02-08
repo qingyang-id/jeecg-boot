@@ -19,63 +19,81 @@ import java.io.Serializable;
 /**
  * @Description: jsh_order_product_extend
  * @Author: jeecg-boot
- * @Date:   2022-02-04
+ * @Date: 2022-02-04
  * @Version: V1.0
  */
 @Data
 @TableName("jsh_order_product_extend")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="jsh_order_product_extend对象", description="jsh_order_product_extend")
+@ApiModel(value = "jsh_order_product_extend对象", description = "jsh_order_product_extend")
 public class JshOrderProductExtend implements Serializable {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-  /**主键*/
+  /**
+   * 主键
+   */
   @TableId(type = IdType.ASSIGN_ID)
   @ApiModelProperty(value = "主键")
-  private java.math.BigInteger id;
-	/**创建人*/
-    @ApiModelProperty(value = "创建人")
-    private java.lang.String createBy;
-	/**创建时间*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "创建时间")
-    private java.util.Date createTime;
-	/**更新人*/
-    @ApiModelProperty(value = "更新人")
-    private java.lang.String updateBy;
-	/**更新时间*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "更新时间")
-    private java.util.Date updateTime;
+  private java.lang.Long id;
+  /**
+   * 创建人
+   */
+  @ApiModelProperty(value = "创建人")
+  private java.lang.String createBy;
+  /**
+   * 创建时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @ApiModelProperty(value = "创建时间")
+  private java.util.Date createTime;
+  /**
+   * 更新人
+   */
+  @ApiModelProperty(value = "更新人")
+  private java.lang.String updateBy;
+  /**
+   * 更新时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @ApiModelProperty(value = "更新时间")
+  private java.util.Date updateTime;
 
   /**
    * 删除状态（0，正常，1已删除）
    */
-  @Excel(name = "删除状态", width = 15,dicCode="del_flag")
+  @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
   @TableLogic
   private Integer delFlag;
 
-  /**订单ID*/
+  /**
+   * 订单ID
+   */
   @Excel(name = "订单ID", width = 15)
   @ApiModelProperty(value = "订单ID")
-  private java.math.BigInteger orderId;
+  private java.lang.Long orderId;
 
-	/**订单产品表ID*/
-	@Excel(name = "订单产品表ID", width = 15)
-    @ApiModelProperty(value = "订单产品表ID")
-    private java.math.BigInteger orderProductId;
+  /**
+   * 订单产品表ID
+   */
+  @Excel(name = "订单产品表ID", width = 15)
+  @ApiModelProperty(value = "订单产品表ID")
+  private java.lang.Long orderProductId;
 
-  /**类型:1拉,2抽,3条*/
+  /**
+   * 类型:1拉,2抽,3条
+   */
   @Excel(name = "类型:1拉,2抽,3条", width = 15, dicCode = "1,2,3")
   @Dict(dicCode = "1,2,3")
   @ApiModelProperty(value = "类型:1拉,2抽,3条")
   private java.lang.Integer type;
 
-	/**数量*/
-	@Excel(name = "数量", width = 15)
-    @ApiModelProperty(value = "数量")
-    private java.lang.Integer num;
+  /**
+   * 数量
+   */
+  @Excel(name = "数量", width = 15)
+  @ApiModelProperty(value = "数量")
+  private java.lang.Integer num;
 }

@@ -5,7 +5,6 @@ import org.jeecg.modules.business.order.entity.JshOrder;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 
 /**
@@ -31,7 +30,7 @@ public interface IJshOrderService extends IService<JshOrder> {
 	/**
 	 * 删除一对多
 	 */
-	public void delMain (BigInteger id);
+	public void delMain (Long id);
 
 	/**
 	 * 批量删除一对多

@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @Description: jsh_order_product_detail
  * @Author: jeecg-boot
- * @Date:   2022-02-04
+ * @Date: 2022-02-04
  * @Version: V1.0
  */
 @Service
@@ -24,7 +24,7 @@ public class JshOrderProductDetailServiceImpl extends ServiceImpl<JshOrderProduc
   private JshOrderProductDetailMapper jshOrderProductDetailMapper;
 
   @Override
-  public List<JshOrderProductDetail> selectByMainId(BigInteger mainId) {
+  public List<JshOrderProductDetail> selectByMainId(Long mainId) {
     return jshOrderProductDetailMapper.selectByMainId(mainId);
   }
 }

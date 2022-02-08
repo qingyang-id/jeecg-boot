@@ -6,7 +6,6 @@ import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
 import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public interface IJshOrderProductService extends IService<JshOrderProduct> {
 
-	public List<JshOrderProduct> selectByMainId(BigInteger mainId);
+	public List<JshOrderProduct> selectByMainId(Long mainId);
 
   /**
    * 添加一对多
@@ -35,7 +34,7 @@ public interface IJshOrderProductService extends IService<JshOrderProduct> {
   /**
    * 删除一对多
    */
-  public void delMain (String id);
+  public void delMain (Long id);
 
   /**
    * 批量删除一对多

@@ -7,7 +7,6 @@ import org.jeecg.modules.business.order.service.IJshOrderProductExtendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public class JshOrderProductExtendServiceImpl extends ServiceImpl<JshOrderProduc
   private JshOrderProductExtendMapper jshOrderProductExtendMapper;
 
   @Override
-  public List<JshOrderProductExtend> selectByMainId(BigInteger mainId) {
+  public List<JshOrderProductExtend> selectByMainId(Long mainId) {
     return jshOrderProductExtendMapper.selectByMainId(mainId);
   }
 }

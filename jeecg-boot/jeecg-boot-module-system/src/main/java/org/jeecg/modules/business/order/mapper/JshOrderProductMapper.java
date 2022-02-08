@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.business.order.entity.JshOrderProduct;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public interface JshOrderProductMapper extends BaseMapper<JshOrderProduct> {
 
-	public boolean deleteByMainId(@Param("mainId") BigInteger mainId);
+	public boolean deleteByMainId(@Param("mainId") Long mainId);
 
-	public List<JshOrderProduct> selectByMainId(@Param("mainId") BigInteger mainId);
+	public List<JshOrderProduct> selectByMainId(@Param("mainId") Long mainId);
 }

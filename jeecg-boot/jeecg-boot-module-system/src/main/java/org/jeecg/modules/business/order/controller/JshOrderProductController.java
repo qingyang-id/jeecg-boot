@@ -34,7 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -126,7 +125,7 @@ public class JshOrderProductController {
    @AutoLog(value = "jsh_order_product-通过id删除")
    @ApiOperation(value="jsh_order_product-通过id删除", notes="jsh_order_product-通过id删除")
    @DeleteMapping(value = "/delete")
-   public Result<?> delete(@RequestParam(name="id",required=true) String id) {
+   public Result<?> delete(@RequestParam(name="id",required=true) Long id) {
        jshOrderProductService.delMain(id);
        return Result.OK("删除成功!");
    }
@@ -172,7 +171,7 @@ public class JshOrderProductController {
    @AutoLog(value = "jsh_order_product_detail-通过主表ID查询")
    @ApiOperation(value="jsh_order_product_detail-通过主表ID查询", notes="jsh_order_product_detail-通过主表ID查询")
    @GetMapping(value = "/queryJshOrderProductDetailByMainId")
-   public Result<?> queryJshOrderProductDetailListByMainId(@RequestParam(name="id",required=true) BigInteger id) {
+   public Result<?> queryJshOrderProductDetailListByMainId(@RequestParam(name="id",required=true) Long id) {
        List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(id);
        IPage <JshOrderProductDetail> page = new Page<>();
        page.setRecords(jshOrderProductDetailList);
@@ -188,7 +187,7 @@ public class JshOrderProductController {
    @AutoLog(value = "jsh_order_product_extend-通过主表ID查询")
    @ApiOperation(value="jsh_order_product_extend-通过主表ID查询", notes="jsh_order_product_extend-通过主表ID查询")
    @GetMapping(value = "/queryJshOrderProductExtendByMainId")
-   public Result<?> queryJshOrderProductExtendListByMainId(@RequestParam(name="id",required=true) BigInteger id) {
+   public Result<?> queryJshOrderProductExtendListByMainId(@RequestParam(name="id",required=true) Long id) {
        List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderProductExtendService.selectByMainId(id);
        IPage <JshOrderProductExtend> page = new Page<>();
        page.setRecords(jshOrderProductExtendList);

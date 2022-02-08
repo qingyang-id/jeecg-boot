@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,15 +35,11 @@ public class JshOrderProductServiceImpl extends ServiceImpl<JshOrderProductMappe
   private JshOrderProductExtendMapper jshOrderProductExtendMapper;
 
 	@Override
-	public List<JshOrderProduct> selectByMainId(BigInteger mainId) {
+	public List<JshOrderProduct> selectByMainId(Long mainId) {
 		return jshOrderProductMapper.selectByMainId(mainId);
 	}
 
-
-  @Override
-  @Transactional
-  public void saveMain(JshOrderProduct jshOrderProduct, List<JshOrderProductDetail> jshOrderProductDetailList,List<JshOrderProductExtend> jshOrderProductExtendList) {
-    jshOrderProductMapper.insert(jshOrderProduct);
+  void saveSubs(JshOrderProduct jshOrderProduct, List<JshOrderProductDetail> jshOrderProductDetailList, List<JshOrderProductExtend> jshOrderProductExtendList) {
     if(jshOrderProductDetailList!=null && jshOrderProductDetailList.size()>0) {
       for(JshOrderProductDetail entity:jshOrderProductDetailList) {
         //外键设置
@@ -59,6 +54,13 @@ public class JshOrderProductServiceImpl extends ServiceImpl<JshOrderProductMappe
         jshOrderProductExtendMapper.insert(entity);
       }
     }
+  }
+
+  @Override
+  @Transactional
+  public void saveMain(JshOrderProduct jshOrderProduct, List<JshOrderProductDetail> jshOrderProductDetailList,List<JshOrderProductExtend> jshOrderProductExtendList) {
+    jshOrderProductMapper.insert(jshOrderProduct);
+    this.saveSubs(jshOrderProduct, jshOrderProductDetailList, jshOrderProductExtendList);
   }
 
   @Override
@@ -71,28 +73,14 @@ public class JshOrderProductServiceImpl extends ServiceImpl<JshOrderProductMappe
     jshOrderProductExtendMapper.deleteByMainId(jshOrderProduct.getId());
 
     //2.子表数据重新插入
-    if(jshOrderProductDetailList!=null && jshOrderProductDetailList.size()>0) {
-      for(JshOrderProductDetail entity:jshOrderProductDetailList) {
-        //外键设置
-        entity.setOrderProductId(jshOrderProduct.getId());
-        jshOrderProductDetailMapper.insert(entity);
-      }
-    }
-    if(jshOrderProductExtendList!=null && jshOrderProductExtendList.size()>0) {
-      for(JshOrderProductExtend entity:jshOrderProductExtendList) {
-        //外键设置
-        entity.setOrderProductId(jshOrderProduct.getId());
-        jshOrderProductExtendMapper.insert(entity);
-      }
-    }
+    this.saveSubs(jshOrderProduct, jshOrderProductDetailList, jshOrderProductExtendList);
   }
 
   @Override
   @Transactional
-  public void delMain(String id) {
-    BigInteger mainId = new BigInteger(id.toString());
-    jshOrderProductDetailMapper.deleteByMainId(mainId);
-    jshOrderProductExtendMapper.deleteByMainId(mainId);
+  public void delMain(Long id) {
+    jshOrderProductDetailMapper.deleteByMainId(id);
+    jshOrderProductExtendMapper.deleteByMainId(id);
     jshOrderProductMapper.deleteById(id);
   }
 
@@ -100,7 +88,7 @@ public class JshOrderProductServiceImpl extends ServiceImpl<JshOrderProductMappe
   @Transactional
   public void delBatchMain(Collection<? extends Serializable> idList) {
     for(Serializable id:idList) {
-      BigInteger mainId = new BigInteger(id.toString());
+      Long mainId = Long.parseLong(id.toString());
       jshOrderProductDetailMapper.deleteByMainId(mainId);
       jshOrderProductExtendMapper.deleteByMainId(mainId);
       jshOrderProductMapper.deleteById(id);

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.sequence.mapper.JshSequenceMapper">
+
+  <update id="updateBuildOnlyNumber">
+    UPDATE jsh_sequence
+    SET current_val = current_val + 1
+    WHERE seq_name = #{seqName}
+  </update>
+
+  <select id="getBuildOnlyNumber" resultType="java.lang.Long">
+    SELECT current_val
+    FROM jsh_sequence
+    WHERE seq_name = #{seqName}
+  </select>
+
+</mapper>

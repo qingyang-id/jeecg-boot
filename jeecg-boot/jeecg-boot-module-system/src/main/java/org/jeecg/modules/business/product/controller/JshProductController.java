@@ -93,7 +93,7 @@ public class JshProductController extends JeecgController<JshProduct, IJshProduc
 	@AutoLog(value = "jsh_product-通过id删除")
 	@ApiOperation(value="jsh_product-通过id删除", notes="jsh_product-通过id删除")
 	@DeleteMapping(value = "/delete")
-	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
+	public Result<?> delete(@RequestParam(name="id",required=true) Long id) {
 		jshProductService.removeById(id);
 		return Result.OK("删除成功!");
 	}
@@ -121,7 +121,7 @@ public class JshProductController extends JeecgController<JshProduct, IJshProduc
 	@AutoLog(value = "jsh_product-通过id查询")
 	@ApiOperation(value="jsh_product-通过id查询", notes="jsh_product-通过id查询")
 	@GetMapping(value = "/queryById")
-	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
+	public Result<?> queryById(@RequestParam(name="id",required=true) Long id) {
 		JshProduct jshProduct = jshProductService.getById(id);
 		if(jshProduct==null) {
 			return Result.error("未找到对应数据");
