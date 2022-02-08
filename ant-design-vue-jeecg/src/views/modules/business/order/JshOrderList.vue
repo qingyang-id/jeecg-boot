@@ -212,7 +212,7 @@ export default {
         exportXlsUrl: "/business/order/jshOrder/exportXls",
         importExcelUrl: "/business/order/jshOrder/importExcel",
       },
-      selectedMainId: '', // 选中的ID
+      selectedMainId: 0, // 选中的ID
       superFieldList: [],
     };
   },
@@ -248,10 +248,10 @@ export default {
     onClearSelected() {
       this.selectedRowKeys = [];
       this.selectionRows = [];
-      this.selectedMainId = '';
+      this.selectedMainId = 0;
     },
     onSelectChange(selectedRowKeys, selectionRows) {
-      this.selectedMainId = selectedRowKeys[0];
+      this.selectedMainId = selectedRowKeys[0] || 0;
       this.selectedRowKeys = selectedRowKeys;
       this.selectionRows = selectionRows;
     },

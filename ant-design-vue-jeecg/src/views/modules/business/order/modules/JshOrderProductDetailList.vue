@@ -35,7 +35,7 @@ export default {
   components: {},
   props: {
     orderId: {
-      type: String,
+      type: Number,
       default: '',
       required: false
     },
@@ -77,11 +77,6 @@ export default {
           }
         },
         {
-          title: '客户id',
-          align: "center",
-          dataIndex: 'customerId'
-        },
-        {
           title: '订单ID',
           align: "center",
           dataIndex: 'orderId'
@@ -92,9 +87,9 @@ export default {
           dataIndex: 'orderProductId'
         },
         {
-          title: '产品id',
+          title: '产品',
           align: "center",
-          dataIndex: 'productId'
+          dataIndex: 'productId_dictText'
         },
         {
           title: '参考宽度',
@@ -134,7 +129,6 @@ export default {
     };
   },
   created() {
-    this.getSuperFieldList();
   },
   computed: {
     importExcelUrl() {
@@ -147,21 +141,6 @@ export default {
       this.selectedRowKeys = [];
       this.ipagination.current = 1;
     },
-    getSuperFieldList() {
-      let fieldList = [];
-      fieldList.push({ type: 'int', value: 'delFlag', text: '删除状态:0未删除,1删除', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'customerId', text: '客户id', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'orderId', text: '订单ID', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'productId', text: '产品id', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'width', text: '宽', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'height', text: '高', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'num', text: '数量', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'direction', text: '方向:0其他,1双开,2左开,3右开', dictCode: '' });
-      fieldList.push({ type: 'string', value: 'color', text: '颜色', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'price', text: '单价', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'totalPrice', text: '总价', dictCode: '' });
-      this.superFieldList = fieldList;
-    }
   }
 };
 </script>

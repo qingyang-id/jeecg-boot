@@ -168,20 +168,20 @@ export default {
           },
           {
             title: '抽/拉/提',
-            key: 'product_extend_type',
+            key: 'extendType',
             type: FormTypes.select,
             options: [{
               text: '无',
-              value: ''
+              value: 0
             }],
             dictCode: "product_extend",
             width: "10%",
             placeholder: '请选择${title}',
-            defaultValue: '',
+            defaultValue: 0,
           },
           {
             title: '抽/拉/提数量',
-            key: 'product_extend_num',
+            key: 'extendNum',
             type: FormTypes.inputNumber,
             width: "10%",
             placeholder: '请输入${title}',
@@ -204,6 +204,7 @@ export default {
             placeholder: '${title}',
             defaultValue: 0,
             customRender: function (t, r) {
+              console.log('\n\n t', t);
               return r.price ? r.price / 100 : 0;
             }
           },
@@ -263,34 +264,35 @@ export default {
     updatePrices({ row, target }) {
       // 更新当列信息
       let extendPrice = 0;
-      switch (Number(row.product_extend_type)) {
+      switch (Number(row.extendType)) {
         case 1: {
           // 抽 20元/3抽
-          if (row.product_extend_num && row.product_extend_num % 3 !== 0) {
+          if (Number(row.extendNum) && row.extendNum % 3 !== 0) {
             // 重置抽的数量
-            console.log('row.product_extend_num', row.product_extend_num);
+            console.log('row.extendNum', row.extendNum);
             target.setValues([{
               rowKey: row.id,
-              values: { product_extend_num: Math.floor(row.product_extend_num / 3) * 3 }
+              values: { extendNum: Math.floor(row.extendNum / 3) * 3 }
             }]);
             return;
           }
-          extendPrice = (row.product_extend_num || 0) * 2000 / 3;
+          extendPrice = (row.extendNum || 0) * 2000 / 3;
           break;
         }
         case 2: {
           // 拉 10/拉
-          extendPrice = (row.product_extend_num || 0) * 1000;
+          extendPrice = (row.extendNum || 0) * 1000;
           break;
         }
         case 3: {
           // 条 12/条
-          extendPrice = (row.product_extend_num || 0) * 1200;
+          extendPrice = (row.extendNum || 0) * 1200;
           break;
         }
         default: {
         }
       }
+      console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId)
       const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0) + extendPrice;
       const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 1000000;
       // 设置商品价格和总价
@@ -300,7 +302,7 @@ export default {
       }]);
       // 更新汇总信息
       let { values } = target.getValuesSync({ validate: false });
-      console.log('row', row.product_extend_num, values);
+      console.log('row', row.extendNum, values);
 
       let sum = 0;
       values.forEach(item => sum += (item.totalPrice || 0) * 100);
@@ -333,12 +335,12 @@ export default {
           this.updatePrices(event);
           break;
         }
-        case 'product_extend_type': {
+        case 'extendType': {
           if (!value) {
             // 设置抽拉条数量
             target.setValues([{
               rowKey: row.id,
-              values: { product_extend_num: 0 }
+              values: { extendNum: 0 }
             }]);
             return;
           }
@@ -346,8 +348,8 @@ export default {
           this.updatePrices(event);
           break;
         }
-        case 'product_extend_num': {
-          if (!value || !row.product_extend_type) return;
+        case 'extendNum': {
+          if (!value || !row.extendType) return;
           // 更新价格信息
           this.updatePrices(event);
           break;
@@ -390,7 +392,24 @@ export default {
       // 加载子表数据
       if (this.model.id) {
         let params = { id: this.model.id };
-        this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+        // id bug
+        // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+        this.jshOrderProductTable.loading = true;
+        getAction(this.url.jshOrderProduct.list, params).then(res => {
+          let { result } = res;
+          let dataSource = [];
+          if (result) {
+            if (Array.isArray(result)) {
+              dataSource = result;
+            } else if (Array.isArray(result.records)) {
+              dataSource = result.records;
+            }
+          }
+          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, { id: undefined }));
+        }).finally(() => {
+          this.jshOrderProductTable.loading = false;
+        });
+        console.log('\n\n\n jsh', this.jshOrderProductTable);
       }
     },
     // 校验所有一对一子表表单
@@ -418,7 +437,7 @@ export default {
             num: Number(item.num),
             color: item.color,
           };
-          switch (Number(item.product_extend_type)) {
+          switch (Number(item.extendType)) {
             case 1: {
               // 抽 高/3 - 2
               Object.assign(productDetail, {
@@ -426,8 +445,8 @@ export default {
                 num: item.num * 3
               });
               jshOrderProductExtendList.push({
-                type: item.product_extend_type,
-                num: item.product_extend_num,
+                type: item.extendType,
+                num: item.extendNum,
               });
               break;
             }
@@ -438,15 +457,15 @@ export default {
                 num: item.num * 2
               });
               jshOrderProductExtendList.push({
-                type: item.product_extend_type,
-                num: item.product_extend_num,
+                type: item.extendType,
+                num: item.extendNum,
               });
               break;
             }
             case 3: {
               jshOrderProductExtendList.push({
-                type: item.product_extend_type,
-                num: item.product_extend_num,
+                extendType: item.extendType,
+                extendNum: item.extendNum,
               });
               break;
             }
@@ -467,7 +486,7 @@ export default {
             id: '',
             jshOrderProductExtendList,
             jshOrderProductDetailList,
-          })
+          });
         });
       }
       console.log('\n\n\n product list ', jshOrderProductPageList);
