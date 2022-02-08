@@ -85,8 +85,8 @@
            ],
         },
         url: {
-          add: "/business/order/jshOrderProduct/addJshOrderProductExtend",
-          edit: "/business/order/jshOrderProduct/editJshOrderProductExtend",
+          add: "/order6/jshOrderProduct/addJshOrderProductExtend",
+          edit: "/order6/jshOrderProduct/editJshOrderProductExtend",
         }
 
       }

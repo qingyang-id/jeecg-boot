@@ -16,8 +16,8 @@
     </template>
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="请输入数量">
-          <a-input placeholder="请输入数量" v-decorator.trim="[ 'number', validatorRules.number]" />
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="请输入尺寸">
+          <a-input placeholder="请输入尺寸" v-decorator.trim="[ 'number', validatorRules.number]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    name: 'BatchSetStockModal',
+    name: 'BatchSetSizeModal',
     data () {
       return {
         title:"批量设置",
@@ -47,7 +47,7 @@
         validatorRules:{
           number:{
             rules: [
-              { required: true, message: '请输入数量!' }
+              { required: true, message: '请输入尺寸!' }
             ]}
         }
       }
@@ -57,12 +57,10 @@
     methods: {
       add (type) {
         this.batchType = type
-        if(type === 'initStock') {
-          this.title = '期初库存-批量设置'
-        } else if(type === 'lowSafeStock') {
-          this.title = '最低安全库存-批量设置'
-        } else if(type === 'highSafeStock') {
-          this.title = '最高安全库存-批量设置'
+        if(type === 'height') {
+          this.title = '高-批量设置'
+        } else if(type === 'width') {
+          this.title = '宽-批量设置'
         }
         this.edit({});
       },

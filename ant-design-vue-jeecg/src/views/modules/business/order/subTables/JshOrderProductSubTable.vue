@@ -8,32 +8,6 @@
     :dataSource="dataSource"
     :pagination="false"
   >
-
-    <template slot="htmlSlot" slot-scope="text">
-      <div v-html="text"></div>
-    </template>
-
-    <template slot="imgSlot" slot-scope="text">
-      <div style="font-size: 12px;font-style: italic;">
-        <span v-if="!text">无图片</span>
-        <img v-else :src="getImgView(text)" alt="" style="max-width:80px;height:25px;"/>
-      </div>
-    </template>
-
-    <template slot="fileSlot" slot-scope="text">
-      <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
-      <a-button
-              v-else
-              ghost
-              type="primary"
-              icon="download"
-              size="small"
-              @click="downloadFile(text)"
-      >
-        <span>下载</span>
-      </a-button>
-    </template>
-
   </a-table>
 </template>
 
@@ -42,7 +16,7 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
-    name: 'JshOrderProductDetailSubTable',
+    name: 'JshOrderProductSubTable',
     mixins: [JeecgListMixin],
     props: {
       record: {
@@ -52,64 +26,59 @@
     },
     data() {
       return {
-        description: 'jsh_order_product_detail内嵌列表',
+        description: '产品列表',
         disableMixinCreated: true,
         loading: false,
         dataSource: [],
         columns: [
           {
-            title: '客户id',
-            align: 'center',
-            dataIndex: 'customerId',
-          },
-          {
             title: '订单ID',
-            align: 'center',
-            dataIndex: 'orderId',
+            align: "center",
+            dataIndex: 'orderId'
           },
           {
-            title: '订单产品表ID',
-            align: 'center',
-            dataIndex: 'orderProductId',
-          },
-          {
-            title: '产品id',
-            align: 'center',
-            dataIndex: 'productId',
-          },
-          {
-            title: '类型:1铝材,2玻璃',
-            align: 'center',
-            dataIndex: 'type',
-          },
-          {
-            title: '参考宽度',
-            align: 'center',
-            dataIndex: 'referenceWidth',
-          },
-          {
-            title: '参考高度',
-            align: 'center',
-            dataIndex: 'referenceHeight',
+            title: '产品',
+            align: "center",
+            dataIndex: 'productId_dictText'
           },
           {
             title: '宽',
-            align: 'center',
-            dataIndex: 'width',
+            align: "center",
+            dataIndex: 'width'
           },
           {
             title: '高',
-            align: 'center',
-            dataIndex: 'height',
+            align: "center",
+            dataIndex: 'height'
           },
           {
             title: '数量',
-            align: 'center',
-            dataIndex: 'num',
+            align: "center",
+            dataIndex: 'num'
+          },
+          {
+            title: '方向',
+            align: "center",
+            dataIndex: 'direction_dictText'
+          },
+          {
+            title: '颜色',
+            align: "center",
+            dataIndex: 'color'
+          },
+          {
+            title: '单价',
+            align: "center",
+            dataIndex: 'price'
+          },
+          {
+            title: '总价',
+            align: "center",
+            dataIndex: 'totalPrice'
           },
         ],
         url: {
-          listByMainId: '/order10/jshOrderProduct/queryJshOrderProductDetailByMainId',
+          listByMainId: '/business/order/jshOrder/queryJshOrderProductByMainId',
         },
       }
     },

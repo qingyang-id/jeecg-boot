@@ -33,10 +33,12 @@
 
   import { httpAction, getAction } from '@api/manage'
   import { validateDuplicateValue } from '@/utils/util'
+  import JFormContainer from '@/components/jeecg/JFormContainer'
 
   export default {
     name: 'JshCustomerForm',
     components: {
+      JFormContainer
     },
     props: {
       //表单禁用
