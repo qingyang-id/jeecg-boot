@@ -5,13 +5,26 @@
   <delete id="deleteByMainId" parameterType="java.lang.Long">
     DELETE
     FROM jsh_order_product_detail
-    WHERE order_id = #{mainId}
+    WHERE order_product_id = #{mainId}
   </delete>
 
   <select id="selectByMainId" parameterType="java.lang.Long"
           resultType="org.jeecg.modules.business.order.entity.JshOrderProductDetail">
     SELECT *
     FROM jsh_order_product_detail
-    WHERE order_id = #{mainId}
+    WHERE order_product_id = #{mainId}
+  </select>
+
+  <delete id="deleteByOrderId" parameterType="java.lang.Long">
+    DELETE
+    FROM jsh_order_product_detail
+    WHERE order_id = #{orderId}
+  </delete>
+
+  <select id="selectByOrderId" parameterType="java.lang.Long"
+          resultType="org.jeecg.modules.business.order.entity.JshOrderProductDetail">
+    SELECT *
+    FROM jsh_order_product_detail
+    WHERE order_id = #{orderId}
   </select>
 </mapper>

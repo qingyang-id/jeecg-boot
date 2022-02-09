@@ -1,4 +1,4 @@
-package org.jeecg.modules.business.order.entity;
+package org.jeecg.modules.business.customer.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -8,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,23 +15,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 
 /**
- * @Description: jsh_order_product_extend
+ * @Description: jsh_customer_address
  * @Author: jeecg-boot
- * @Date: 2022-02-04
+ * @Date: 2022-02-09
  * @Version: V1.0
  */
+@ApiModel(value = "jsh_customer_address对象", description = "jsh_customer_address")
 @Data
-@TableName("jsh_order_product_extend")
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "jsh_order_product_extend对象", description = "jsh_order_product_extend")
-public class JshOrderProductExtend implements Serializable {
+@TableName("jsh_customer_address")
+public class JshCustomerAddress implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
    * 主键
    */
-  @TableId(type = IdType.ASSIGN_ID)
+  @TableId(type = IdType.AUTO)
   @ApiModelProperty(value = "主键")
   private java.lang.Long id;
 
@@ -73,32 +69,16 @@ public class JshOrderProductExtend implements Serializable {
   private Integer delFlag;
 
   /**
-   * 订单ID
+   * 客户id
    */
-  @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-  @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-  @ApiModelProperty(value = "订单ID")
-  private java.lang.Long orderId;
+  @Dict(dicCode = "id",dicText = "name",dictTable = "jsh_customer")
+  @ApiModelProperty(value = "客户id")
+  private java.lang.Long customerId;
 
   /**
-   * 订单产品表ID
+   * 地址
    */
-  @Excel(name = "订单产品表ID", width = 15)
-  @ApiModelProperty(value = "订单产品表ID")
-  private java.lang.Long orderProductId;
-
-  /**
-   * 类型:1拉,2抽,3条
-   */
-  @Excel(name = "类型:1拉,2抽,3条", width = 15, dicCode = "1,2,3")
-  @Dict(dicCode = "1,2,3")
-  @ApiModelProperty(value = "类型:1拉,2抽,3条")
-  private java.lang.Integer type;
-
-  /**
-   * 数量
-   */
-  @Excel(name = "数量", width = 15)
-  @ApiModelProperty(value = "数量")
-  private java.lang.Integer num;
+  @Excel(name = "地址", width = 15)
+  @ApiModelProperty(value = "地址")
+  private String address;
 }

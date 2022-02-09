@@ -22,8 +22,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
-        @change="handleTableChange">
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange}">
       </a-table>
     </div>
     <!-- table区域 end -->
@@ -44,7 +43,7 @@ export default {
   props: {
     orderId: {
       type: Number,
-      default: '',
+      default: 0,
       required: false
     },
     type: {
@@ -58,10 +57,10 @@ export default {
       immediate: true,
       handler(val) {
         if (!this.orderId) {
-          // this.clearList();
-          this.loadData(1);
+          this.clearList();
         } else {
           this.queryParam['orderId'] = val;
+          this.queryParam['type'] = this.type;
           console.log(this.queryParam);
           this.loadData(1);
         }
@@ -82,9 +81,14 @@ export default {
           customRender: (t, r, index) => parseInt(index) + 1
         },
         {
-          title: '订单ID',
+          title: '原尺寸ID',
           align: "center",
-          dataIndex: 'orderId'
+          dataIndex: 'id'
+        },
+        {
+          title: '订单号',
+          align: "center",
+          dataIndex: 'orderId_dictText'
         },
         {
           title: '产品',
@@ -92,12 +96,12 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '宽',
+          title: '宽(cm)',
           align: "center",
           dataIndex: 'width'
         },
         {
-          title: '高',
+          title: '高(cm)',
           align: "center",
           dataIndex: 'height'
         },
@@ -127,24 +131,38 @@ export default {
           dataIndex: 'color'
         },
         {
-          title: '单价',
+          title: '单价(元)',
           align: "center",
-          dataIndex: 'price'
+          dataIndex: 'price',
+          customRender: function (t) {
+            return t / 100;
+          }
         },
         {
-          title: '总价',
+          title: '总价(元)',
           align: "center",
-          dataIndex: 'totalPrice'
+          dataIndex: 'totalPrice',
+          customRender: function (t) {
+            return t / 100;
+          }
         },
       ],
+      /* 分页参数 */
+      ipagination: {
+        current: 1,
+        pageSize: 10,
+        pageSizeOptions: ['5', '10', '50'],
+        showTotal: (total, range) => {
+          return range[0] + "-" + range[1] + " 共" + total + "条";
+        },
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0
+      },
       // 字典选项
       dictOptions: {},
       url: {
         list: '/business/order/jshOrderProduct/list',
-        delete: '/order10/jshOrderProduct/delete',
-        deleteBatch: '/order10/jshOrderProduct/deleteBatch',
-        exportXlsUrl: '/order10/jshOrderProduct/exportXls',
-        importExcelUrl: '/order10/jshOrderProduct/importExcel',
       },
       superFieldList: [],
     };

@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface IJshOrderProductDetailService extends IService<JshOrderProductDetail> {
   public List<JshOrderProductDetail> selectByMainId(Long mainId);
+
+  public List<JshOrderProductDetail> selectByOrderId(Long orderId);
 }

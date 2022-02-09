@@ -3,6 +3,7 @@
     :title="title"
     :width="width"
     :visible="visible"
+    :confirmLoading="confirmLoading"
     switchFullscreen
     @ok="handleOk"
     @cancel="handleCancel"
@@ -11,24 +12,13 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="客户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="name">
-              <j-search-select-tag v-model="model.name" dict=""/>
+            <a-form-model-item label="客户id" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
+              <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="性别" :labelCol="labelCol" :wrapperCol="wrapperCol">
-              <j-dict-select-tag v-model="model.sex" type="radioButton" title="性别" dictCode="sex"
-                                 placeholder="请选择性别"/>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="常用地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-              <a-input v-model="model.address" placeholder="请输入常用地址"></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="手机" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="phone">
-              <a-input v-model="model.phone" placeholder="请输入手机"></a-input>
+            <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
+              <a-input v-model="model.address" placeholder="请输入地址"></a-input>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -38,14 +28,23 @@
 </template>
 
 <script>
+
 import { httpAction } from '@/api/manage';
+import { validateDuplicateValue } from '@/utils/util';
 
 export default {
-  name: 'JshCustomerModal',
+  name: "JshCustomerAddressModal",
   components: {},
+  props: {
+    mainId: {
+      type: Number,
+      required: false,
+      default: 0
+    }
+  },
   data() {
     return {
-      title: '',
+      title: "操作",
       width: 800,
       visible: false,
       model: {},
@@ -57,27 +56,26 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 },
       },
+
       confirmLoading: false,
       validatorRules: {
-        name: [
-          { required: true, message: '请输入客户名字!' },
-        ],
-        sex: [
-          { required: true, message: '请选择性别!' },
+        customerId: [
+          { required: true, message: '请选择客户!' },
         ],
         address: [
-          { required: true, message: '请输入常用地址!' },
-        ],
-        phone: [
-          { required: true, message: '请输入手机!' },
-          { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码!' },
+          { required: true, message: '请输入地址!' },
         ],
       },
       url: {
-        add: "/business/customer/jshCustomer/add",
-        edit: "/business/customer/jshCustomer/edit",
+        add: "/business/customer/jshCustomer/addJshCustomerAddress",
+        edit: "/business/customer/jshCustomer/editJshCustomerAddress",
       }
+
     };
+  },
+  created() {
+    //备份model原始值
+    this.modelDefault = JSON.parse(JSON.stringify(this.model));
   },
   methods: {
     add() {
@@ -107,6 +105,7 @@ export default {
             httpurl += this.url.edit;
             method = 'put';
           }
+          this.model['customerId'] = this.mainId;
           httpAction(httpurl, this.model, method).then((res) => {
             if (res.success) {
               that.$message.success(res.message);
@@ -126,9 +125,8 @@ export default {
     handleCancel() {
       this.close();
     },
-    popupCallback(value, row) {
-      this.model = Object.assign(this.model, row);
-    },
+
+
   }
 };
 </script>

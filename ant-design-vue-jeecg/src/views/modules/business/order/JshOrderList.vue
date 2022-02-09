@@ -15,9 +15,15 @@
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
-            <a-col :xl="6" :lg="7" :md="8" :sm="24">
-              <a-form-item label="下单时间">
-                <j-date placeholder="请选择下单时间" v-model="queryParam.orderTime"></j-date>
+            <a-col :xl="12" :lg="14" :md="16" :sm="24">
+              <a-form-item label="订单日期">
+                <a-range-picker
+                  style="width:100%"
+                  v-model="queryParam.orderTimeRange"
+                  format="YYYY-MM-DD"
+                  :placeholder="['开始时间', '结束时间']"
+                  @change="onOrderTimeChange"
+                />
               </a-form-item>
             </a-col>
           </template>
@@ -79,7 +85,10 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}">
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange, type:'radio'}"
+        :customRow="clickThenSelect"
+        @change="handleTableChange">
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -121,7 +130,6 @@
 
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshOrderModal from './modules/JshOrderModal';
-import JshOrderProductSubTable from './subTables/JshOrderProductSubTable';
 import JshOrderProductDetailList from './modules/JshOrderProductDetailList';
 import JshOrderProductList from './modules/JshOrderProductList';
 import '@/assets/less/TableExpand.less';
@@ -131,7 +139,7 @@ export default {
   name: "JshOrderList",
   mixins: [JeecgListMixin],
   components: {
-    JshOrderModal, JshOrderProductList, JshOrderProductSubTable, JshOrderProductDetailList
+    JshOrderModal, JshOrderProductList, JshOrderProductDetailList
   },
   data() {
     return {
@@ -151,6 +159,7 @@ export default {
         {
           title: '订单编码',
           align: "center",
+          sorter: true,
           dataIndex: 'orderCode'
         },
         {
@@ -159,7 +168,7 @@ export default {
           dataIndex: 'customerId_dictText'
         },
         {
-          title: '订单总额',
+          title: '订单总额(元)',
           align: "center",
           dataIndex: 'totalPrice',
           customRender: function (t) {
@@ -206,6 +215,18 @@ export default {
       },
       selectedMainId: 0, // 选中的ID
       superFieldList: [],
+      /* 分页参数 */
+      ipagination: {
+        current: 1,
+        pageSize: 5,
+        pageSizeOptions: ['5', '10', '50'],
+        showTotal: (total, range) => {
+          return range[0] + "-" + range[1] + " 共" + total + "条";
+        },
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0
+      },
     };
   },
   created() {
@@ -220,11 +241,10 @@ export default {
     }
   },
   methods: {
-    handleExpand(expanded, record) {
-      this.expandedRowKeys = [];
-      if (expanded === true) {
-        this.expandedRowKeys.push(record.id);
-      }
+    onOrderTimeChange(value, dateString) {
+      console.log(dateString[0], dateString[1]);
+      this.queryParam.orderTime_begin = dateString[0];
+      this.queryParam.orderTime_end = dateString[1];
     },
     initDictConfig() {
     },
@@ -232,7 +252,7 @@ export default {
       return {
         on: {
           click: () => {
-            this.onSelectChange(record.id.split(","), [record]);
+            this.onSelectChange([record.id], [record]);
           }
         }
       };
@@ -246,6 +266,29 @@ export default {
       this.selectedMainId = selectedRowKeys[0] || 0;
       this.selectedRowKeys = selectedRowKeys;
       this.selectionRows = selectionRows;
+    },
+    loadData(arg) {
+      if (!this.url.list) {
+        this.$message.error("请设置url.list属性!");
+        return;
+      }
+      // 加载数据 若传入参数1则加载第一页的内容
+      if (arg === 1) {
+        this.ipagination.current = 1;
+      }
+      this.onClearSelected();
+      const params = this.getQueryParams();//查询条件
+      this.loading = true;
+      getAction(this.url.list, params).then((res) => {
+        if (res.success) {
+          this.dataSource = res.result.records;
+          this.ipagination.total = res.result.total;
+        }
+        if (res.code === 510) {
+          this.$message.warning(res.message);
+        }
+        this.loading = false;
+      });
     },
     getSuperFieldList() {
       let fieldList = [];

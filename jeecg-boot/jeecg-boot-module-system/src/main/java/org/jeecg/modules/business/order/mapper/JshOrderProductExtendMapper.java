@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @Description: jsh_order_product_extend
  * @Author: jeecg-boot
- * @Date:   2022-02-04
+ * @Date: 2022-02-04
  * @Version: V1.0
  */
 public interface JshOrderProductExtendMapper extends BaseMapper<JshOrderProductExtend> {
@@ -17,4 +17,8 @@ public interface JshOrderProductExtendMapper extends BaseMapper<JshOrderProductE
   public boolean deleteByMainId(@Param("mainId") Long mainId);
 
   public List<JshOrderProductExtend> selectByMainId(@Param("mainId") Long mainId);
+
+  public boolean deleteByOrderId(@Param("orderId") Long orderId);
+
+  public List<JshOrderProductExtend> selectByOrderId(@Param("orderId") Long orderId);
 }

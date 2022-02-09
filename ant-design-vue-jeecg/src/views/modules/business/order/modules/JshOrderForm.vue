@@ -10,12 +10,12 @@
         </a-col>
         <a-col :span="24">
           <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
-            <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id"/>
+            <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id" @change="updateAddresses"/>
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
-          <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
-            <a-input-number v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
+          <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
+            <j-search-select-tag v-model="model.address" :dictOptions="addressDictOptions"/>
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
@@ -25,8 +25,8 @@
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
-          <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-            <a-input v-model="model.address" placeholder="请输入订单总额" style="width: 100%"/>
+          <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
+            <a-input-number v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
           </a-form-model-item>
         </a-col>
         <a-col :span="24">
@@ -78,6 +78,7 @@ export default {
   },
   data() {
     return {
+      addressDictOptions: [],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 6 },
@@ -203,10 +204,6 @@ export default {
             width: "8%",
             placeholder: '${title}',
             defaultValue: 0,
-            customRender: function (t, r) {
-              console.log('\n\n t', t);
-              return r.price ? r.price / 100 : 0;
-            }
           },
           {
             title: '总价(元)',
@@ -216,9 +213,6 @@ export default {
             width: "10%",
             placeholder: '${title}',
             defaultValue: 0,
-            customRender: function (t, r) {
-              return (r.price || 0) * (r.num || 0) * (r.width || 0) * (r.height || 0) / 1000000;
-            }
           },
         ],
       },
@@ -234,6 +228,9 @@ export default {
         jshProduct: {
           list: "/business/product/jshProduct/list",
           queryById: "/business/product/jshProduct/queryById"
+        },
+        jshCustomer: {
+          listJshCustomerAddressByMainId: "/business/customer/jshCustomer/listJshCustomerAddressByMainId"
         },
       }
     };
@@ -261,6 +258,17 @@ export default {
       });
   },
   methods: {
+    updateAddresses(customerId) {
+      if (!customerId) {
+        this.addressDictOptions = [{ text: '请先去用户管理页面为该用户添加地址', value: '' }];
+      }
+      console.log('\n\n\n customerId', customerId);
+      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { id: customerId })
+        .then((res) => {
+          this.addressDictOptions = res.success && res.result.records.length ? res.result.records
+            .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
+        });
+    },
     updatePrices({ row, target }) {
       // 更新当列信息
       let extendPrice = 0;
@@ -292,7 +300,7 @@ export default {
         default: {
         }
       }
-      console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId)
+      console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId);
       const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0) + extendPrice;
       const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 1000000;
       // 设置商品价格和总价
@@ -392,6 +400,9 @@ export default {
       // 加载子表数据
       if (this.model.id) {
         let params = { id: this.model.id };
+        this.model.totalPrice = this.model.totalPrice / 100;
+        // 更新地址列表
+        this.updateAddresses(this.model.customerId);
         // id bug
         // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
         this.jshOrderProductTable.loading = true;
@@ -405,11 +416,14 @@ export default {
               dataSource = result.records;
             }
           }
-          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, { id: undefined }));
+          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+            id: undefined,
+            price: item.price / 100,
+            totalPrice: item.totalPrice / 100,
+          }));
         }).finally(() => {
           this.jshOrderProductTable.loading = false;
         });
-        console.log('\n\n\n jsh', this.jshOrderProductTable);
       }
     },
     // 校验所有一对一子表表单

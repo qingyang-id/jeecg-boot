@@ -2,14 +2,11 @@ package org.jeecg.modules.business.order.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
-import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
-import org.jeecg.modules.business.order.mapper.JshOrderProductDetailMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderProductDetailMapper;
 import org.jeecg.modules.business.order.service.IJshOrderProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -26,5 +23,10 @@ public class JshOrderProductDetailServiceImpl extends ServiceImpl<JshOrderProduc
   @Override
   public List<JshOrderProductDetail> selectByMainId(Long mainId) {
     return jshOrderProductDetailMapper.selectByMainId(mainId);
+  }
+
+  @Override
+  public List<JshOrderProductDetail> selectByOrderId(Long orderId) {
+    return jshOrderProductDetailMapper.selectByOrderId(orderId);
   }
 }

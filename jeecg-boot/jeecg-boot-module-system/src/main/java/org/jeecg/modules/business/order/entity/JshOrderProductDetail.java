@@ -33,31 +33,35 @@ public class JshOrderProductDetail implements Serializable {
   /**
    * 主键
    */
-  @TableId(type = IdType.AUTO)
+  @TableId(type = IdType.ASSIGN_ID)
   @ApiModelProperty(value = "主键")
   private java.lang.Long id;
+
   /**
    * 创建人
    */
   @ApiModelProperty(value = "创建人")
   private java.lang.String createBy;
+
   /**
    * 创建时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @ApiModelProperty(value = "创建时间")
   private java.util.Date createTime;
+
   /**
    * 更新人
    */
   @ApiModelProperty(value = "更新人")
   private java.lang.String updateBy;
+
   /**
    * 更新时间
    */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @ApiModelProperty(value = "更新时间")
   private java.util.Date updateTime;
 
@@ -77,7 +81,8 @@ public class JshOrderProductDetail implements Serializable {
   /**
    * 订单ID
    */
-  @Excel(name = "订单ID", width = 15)
+  @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+  @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
   @ApiModelProperty(value = "订单ID")
   private java.lang.Long orderId;
   /**
@@ -89,15 +94,16 @@ public class JshOrderProductDetail implements Serializable {
   /**
    * 产品id
    */
-  @Excel(name = "产品id", width = 15)
+  @Excel(name = "产品id", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+  @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
   @ApiModelProperty(value = "产品id")
   private java.lang.Long productId;
 
   /**
    * 类型:1铝材,2玻璃
    */
-  @Excel(name = "类型:1铝材,2玻璃", width = 15, dicCode = "1,2")
-  @Dict(dicCode = "1,2")
+  @Excel(name = "类型:1铝材,2玻璃", width = 15, dicCode = "product_type")
+  @Dict(dicCode = "product_type")
   @ApiModelProperty(value = "类型:1铝材,2玻璃")
   private java.lang.Integer type;
 

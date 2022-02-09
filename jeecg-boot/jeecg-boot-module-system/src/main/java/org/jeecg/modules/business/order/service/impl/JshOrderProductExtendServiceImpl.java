@@ -24,4 +24,8 @@ public class JshOrderProductExtendServiceImpl extends ServiceImpl<JshOrderProduc
   public List<JshOrderProductExtend> selectByMainId(Long mainId) {
     return jshOrderProductExtendMapper.selectByMainId(mainId);
   }
+  @Override
+  public List<JshOrderProductExtend> selectByOrderId(Long orderId) {
+    return jshOrderProductExtendMapper.selectByOrderId(orderId);
+  }
 }

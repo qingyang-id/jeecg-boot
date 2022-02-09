@@ -53,7 +53,7 @@ CREATE TABLE `jsh_customer`  (
                                        `del_flag`  int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
                                        `name` varchar(32) NOT NULL DEFAULT '' COMMENT '客户名字',
                                        `sex` tinyint(1) NOT NULL DEFAULT 0 COMMENT '客户性别:1男,2女,0未知',
-                                       `address` varchar(300) NOT NULL DEFAULT '' COMMENT '常用地址',
+                                       `address` varchar(300) NOT NULL DEFAULT '' COMMENT '地址',
                                        `phone` varchar(32) NOT NULL DEFAULT '' COMMENT '手机',
                                        `tenant_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
                                        PRIMARY KEY (`id`) USING BTREE,
@@ -98,6 +98,23 @@ INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, 
 INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周磊', 1, '', '', 0);
 INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周萌', 1, '', '', 0);
 INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周羽', 1, '', '', 0);
+
+-- ----------------------------
+-- Table structure for jsh_customer_address
+-- ----------------------------
+DROP TABLE IF EXISTS `jsh_customer_address`;
+CREATE TABLE `jsh_customer_address`  (
+                               `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+                               `create_by` varchar(50) NOT NULL DEFAULT '' COMMENT '创建人',
+                               `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               `update_by` varchar(50) NOT NULL DEFAULT '' COMMENT '更新人',
+                               `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                               `del_flag`  int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
+                               `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id',
+                               `address` varchar(300) NOT NULL DEFAULT '' COMMENT '地址',
+                               PRIMARY KEY (`id`) USING BTREE,
+                               KEY `idx_customer_id` (`customer_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户地址表';
 
 -- ----------------------------
 -- Table structure for jsh_order

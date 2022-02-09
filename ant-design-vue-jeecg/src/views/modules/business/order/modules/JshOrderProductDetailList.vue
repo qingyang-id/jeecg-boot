@@ -18,8 +18,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
-        @change="handleTableChange">
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange}">
       </a-table>
     </div>
   </a-card>
@@ -36,7 +35,7 @@ export default {
   props: {
     orderId: {
       type: Number,
-      default: '',
+      default: 0,
       required: false
     },
     type: {
@@ -50,12 +49,10 @@ export default {
       immediate: true,
       handler(val) {
         if (!this.orderId) {
-          // this.clearList();
-          this.loadData(1);
+          this.clearList();
         } else {
           this.queryParam['orderId'] = val;
           this.queryParam['type'] = this.type;
-          console.log(this.queryParam);
           this.loadData(1);
         }
       }
@@ -78,14 +75,14 @@ export default {
           }
         },
         {
-          title: '订单ID',
-          align: "center",
-          dataIndex: 'orderId'
-        },
-        {
-          title: '订单产品表ID',
+          title: '原尺寸ID',
           align: "center",
           dataIndex: 'orderProductId'
+        },
+        {
+          title: '订单号',
+          align: "center",
+          dataIndex: 'orderId_dictText'
         },
         {
           title: '产品',
@@ -93,24 +90,29 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '参考宽度',
+          title: '参考宽度(cm)',
           align: "center",
           dataIndex: 'referenceWidth'
         },
         {
-          title: '参考高度',
+          title: '参考高度(cm)',
           align: "center",
           dataIndex: 'referenceHeight'
         },
         {
-          title: '宽',
+          title: '宽(cm)',
           align: "center",
           dataIndex: 'width'
         },
         {
-          title: '高',
+          title: '高(cm)',
           align: "center",
           dataIndex: 'height'
+        },
+        {
+          title: '颜色',
+          align: "center",
+          dataIndex: 'color'
         },
         {
           title: '数量',
@@ -118,12 +120,20 @@ export default {
           dataIndex: 'num'
         }
       ],
+      /* 分页参数 */
+      ipagination: {
+        current: 1,
+        pageSize: 10,
+        pageSizeOptions: ['5', '10', '50'],
+        showTotal: (total, range) => {
+          return range[0] + "-" + range[1] + " 共" + total + "条";
+        },
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0
+      },
       url: {
-        list: "/business/order/jshOrderProduct/list",
-        delete: "/business/order/jshOrderProduct/deleteJshOrderProductDetail",
-        deleteBatch: "/business/order/jshOrderProduct/deleteBatchJshOrderProductDetail",
-        exportXlsUrl: "/business/order/jshOrderProduct/exportJshOrderProductDetail",
-        importUrl: "/business/order/jshOrderProduct/importJshOrderProductDetail",
+        list: "/business/order/jshOrderProductDetail/list",
       },
       dictOptions: {},
       superFieldList: [],
@@ -131,11 +141,7 @@ export default {
   },
   created() {
   },
-  computed: {
-    importExcelUrl() {
-      return `${window._CONFIG['domianURL']}/${this.url.importUrl}/${this.mainId}`;
-    }
-  },
+  computed: {},
   methods: {
     clearList() {
       this.dataSource = [];
