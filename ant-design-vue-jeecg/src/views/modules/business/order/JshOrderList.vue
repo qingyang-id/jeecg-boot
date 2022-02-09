@@ -74,24 +74,12 @@
         bordered
         rowKey="id"
         class="j-table-force-nowrap"
+        :scroll="{x:true}"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        @change="handleTableChange"
-        @expand="handleExpand">
-
-        <!-- 内嵌table区域 begin -->
-        <template slot="expandedRowRender" slot-scope="record">
-          <a-tabs tabPosition="top">
-            <a-tab-pane tab="商品信息" key="jshOrderProduct" forceRender>
-              <jsh-order-product-sub-table :record="record"/>
-            </a-tab-pane>
-          </a-tabs>
-        </template>
-        <!-- 内嵌table区域 end -->
-
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}">
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -113,7 +101,10 @@
       </a-table>
     </div>
 
-    <a-tabs defaultActiveKey="1">
+    <a-tabs defaultActiveKey="0">
+      <a-tab-pane tab="原尺寸" key="0">
+        <JshOrderProductList :orderId="selectedMainId"/>
+      </a-tab-pane>
       <a-tab-pane tab="铝材" key="1">
         <JshOrderProductDetailList :orderId="selectedMainId" :type="1"/>
       </a-tab-pane>
@@ -132,6 +123,7 @@ import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshOrderModal from './modules/JshOrderModal';
 import JshOrderProductSubTable from './subTables/JshOrderProductSubTable';
 import JshOrderProductDetailList from './modules/JshOrderProductDetailList';
+import JshOrderProductList from './modules/JshOrderProductList';
 import '@/assets/less/TableExpand.less';
 import { getAction } from "@api/manage";
 
@@ -139,7 +131,7 @@ export default {
   name: "JshOrderList",
   mixins: [JeecgListMixin],
   components: {
-    JshOrderModal, JshOrderProductSubTable, JshOrderProductDetailList
+    JshOrderModal, JshOrderProductList, JshOrderProductSubTable, JshOrderProductDetailList
   },
   data() {
     return {

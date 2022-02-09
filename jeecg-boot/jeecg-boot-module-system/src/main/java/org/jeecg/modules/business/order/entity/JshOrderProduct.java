@@ -78,7 +78,8 @@ public class JshOrderProduct implements Serializable {
   /**
    * 产品id
    */
-  @Excel(name = "产品id", width = 15)
+  @Excel(name = "产品id", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+  @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
   @ApiModelProperty(value = "产品id")
   private java.lang.Long productId;
   /**
@@ -118,9 +119,9 @@ public class JshOrderProduct implements Serializable {
   /**
    * 类型:1抽,2拉,3条
    */
-  @Excel(name = "类型:1抽,2拉,3条", width = 15, dicCode = "product_extend")
+  @Excel(name = "类型:0无,1抽,2拉,3条", width = 15, dicCode = "product_extend")
   @Dict(dicCode = "product_extend")
-  @ApiModelProperty(value = "类型:1抽,2拉,3条")
+  @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
   private java.lang.Integer extendType;
 
   /**

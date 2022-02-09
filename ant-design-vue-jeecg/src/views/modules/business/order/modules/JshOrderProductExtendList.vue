@@ -134,7 +134,7 @@
             dataIndex: 'orderProductId'
           },
           {
-            title:'类型:1拉,2抽,3条',
+            title:'类型',
             align:"center",
             dataIndex: 'type_dictText',
           },

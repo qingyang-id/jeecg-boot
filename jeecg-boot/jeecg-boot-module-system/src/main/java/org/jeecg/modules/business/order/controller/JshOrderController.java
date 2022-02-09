@@ -103,7 +103,7 @@ public class JshOrderController {
     BeanUtils.copyProperties(jshOrderPage, jshOrder);
     // 获取order code
     String orderCode = jshSequenceService.buildOnlyNumber(SequenceConstant.ORDER_NUMBER_SEQ);
-    jshOrderPage.setOrderCode(orderCode);
+    jshOrderPage.setOrderCode(String.format("T%s", orderCode));
     jshOrderService.saveMain(jshOrderPage);
     return Result.OK("添加成功！");
   }

@@ -167,7 +167,7 @@ export default {
             defaultValue: '',
           },
           {
-            title: '抽/拉/提',
+            title: '抽/拉/条',
             key: 'extendType',
             type: FormTypes.select,
             options: [{
@@ -180,7 +180,7 @@ export default {
             defaultValue: 0,
           },
           {
-            title: '抽/拉/提数量',
+            title: '抽/拉/条数量',
             key: 'extendNum',
             type: FormTypes.inputNumber,
             width: "10%",
@@ -486,12 +486,15 @@ export default {
             id: '',
             jshOrderProductExtendList,
             jshOrderProductDetailList,
+            price: item.price * 100,
+            totalPrice: item.totalPrice * 100,
           });
         });
       }
       console.log('\n\n\n product list ', jshOrderProductPageList);
       return {
         ...main, // 展开
+        totalPrice: main.totalPrice * 100,
         jshOrderProductPageList,
       };
     },

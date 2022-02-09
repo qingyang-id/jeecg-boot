@@ -18,7 +18,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
       </a-table>
     </div>
@@ -50,7 +50,8 @@ export default {
       immediate: true,
       handler(val) {
         if (!this.orderId) {
-          this.clearList();
+          // this.clearList();
+          this.loadData(1);
         } else {
           this.queryParam['orderId'] = val;
           this.queryParam['type'] = this.type;
