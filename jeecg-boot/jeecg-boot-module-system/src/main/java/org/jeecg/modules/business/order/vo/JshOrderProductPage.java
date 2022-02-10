@@ -110,6 +110,13 @@ public class JshOrderProductPage {
   private java.lang.String color;
 
   /**
+   * 玻璃颜色
+   */
+  @Excel(name = "玻璃颜色", width = 15)
+  @ApiModelProperty(value = "玻璃颜色")
+  private java.lang.String glassColor;
+
+  /**
    * 类型:1抽,2拉,3条
    */
   @Excel(name = "类型:1抽,2拉,3条", width = 15, dicCode = "product_extend")

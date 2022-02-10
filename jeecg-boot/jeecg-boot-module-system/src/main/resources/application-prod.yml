@@ -7,7 +7,7 @@ server:
     include-stacktrace: ALWAYS
     include-message: ALWAYS
   servlet:
-    context-path: /jeecg-boot
+    context-path: /portal
   compression:
     enabled: true
     min-response-size: 1024
@@ -198,7 +198,7 @@ jeecg :
   elasticsearch:
     cluster-name: jeecg-ES
     cluster-nodes: 81.70.47.128:9200
-    check-enabled: true
+    check-enabled: false
   # 表单设计器配置
   desform:
     # 主题颜色（仅支持 16进制颜色代码）
@@ -318,3 +318,5 @@ third-app:
       # appSecret
       client-secret: ??
       agent-id: ??
+# redis listener
+redis-listener-enabled: false

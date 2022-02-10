@@ -14,13 +14,33 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="采购价格" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="purchasePrice">
+            <a-form-model-item label="采购价格(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="purchasePrice">
               <a-input-number v-model="model.purchasePrice" placeholder="请输入采购价格" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="销售价格" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="wholesalePrice">
+            <a-form-model-item label="销售价格(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="wholesalePrice">
               <a-input-number v-model="model.wholesalePrice" placeholder="请输入销售价格" style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="铝材宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumWidthDiff">
+              <a-input-number v-model="model.aluminumWidthDiff" placeholder="请输入铝材宽度差" style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="铝材高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumHeightDiff">
+              <a-input-number v-model="model.aluminumHeightDiff" placeholder="请输入铝材高度差" style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="玻璃宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumWidthDiff">
+              <a-input-number v-model="model.aluminumWidthDiff" placeholder="请输入玻璃宽度差" style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="玻璃高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassHeightDiff">
+              <a-input-number v-model="model.glassHeightDiff" placeholder="请输入玻璃高度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -79,9 +99,21 @@ export default {
           { required: true, message: '请输入采购价格!' },
           { pattern: /^(([1-9][0-9]*)|([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2}))$/, message: '请输入正确的金额!' },
         ],
-        wholesalePrice: [
-          { required: true, message: '请输入销售价格!' },
-          { pattern: /^(([1-9][0-9]*)|([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2}))$/, message: '请输入正确的金额!' },
+        aluminumWidthDiff: [
+          { required: true, message: '请属于铝材宽度差!' },
+          { pattern: /^-?\d+$/, message: '请输入正确的数量!' },
+        ],
+        aluminumHeightDiff: [
+          { required: true, message: '请属于铝材高度差!' },
+          { pattern: /^-?\d+$/, message: '请输入正确的数量!' },
+        ],
+        glassWidthDiff: [
+          { required: true, message: '请属于玻璃宽度差!' },
+          { pattern: /^-?\d+$/, message: '请输入正确的数量!' },
+        ],
+        glassHeightDiff: [
+          { required: true, message: '请属于玻璃高度差!' },
+          { pattern: /^-?\d+$/, message: '请输入正确的数量!' },
         ],
       },
       url: {

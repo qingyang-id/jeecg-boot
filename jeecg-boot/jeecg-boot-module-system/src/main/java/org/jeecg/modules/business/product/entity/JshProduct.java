@@ -113,13 +113,13 @@ public class JshProduct implements Serializable {
    */
   @Excel(name = "玻璃高差值", width = 15)
   @ApiModelProperty(value = "玻璃高差值")
-  private java.lang.Long grassHeightDiff;
+  private java.lang.Long glassHeightDiff;
   /**
    * 玻璃宽差值
    */
   @Excel(name = "玻璃宽差值", width = 15)
   @ApiModelProperty(value = "玻璃宽差值")
-  private java.lang.Long grassWidthDiff;
+  private java.lang.Long glassWidthDiff;
   /**
    * 备注
    */

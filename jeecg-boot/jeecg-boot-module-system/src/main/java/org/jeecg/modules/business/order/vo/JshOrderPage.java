@@ -66,8 +66,7 @@ public class JshOrderPage {
   /**
    * 客户id
    */
-  @Excel(name = "客户id", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
-  @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+  @Excel(name = "客户id", width = 15)
   @ApiModelProperty(value = "客户id")
   private java.lang.Long customerId;
   /**

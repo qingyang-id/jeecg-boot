@@ -126,9 +126,14 @@ export default {
           dataIndex: 'extendNum'
         },
         {
-          title: '颜色',
+          title: '铝材颜色',
           align: "center",
           dataIndex: 'color'
+        },
+        {
+          title: '玻璃色号',
+          align: "center",
+          dataIndex: 'glassColor'
         },
         {
           title: '单价(元)',

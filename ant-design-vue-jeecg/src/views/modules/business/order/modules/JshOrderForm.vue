@@ -125,7 +125,7 @@ export default {
             options: [],
             dictCode: 'jsh_product,name,id',
             allowSearch: true,
-            width: "15%",
+            width: "12%",
             placeholder: '请选择${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -189,8 +189,16 @@ export default {
             defaultValue: 0,
           },
           {
-            title: '颜色',
+            title: '铝材颜色',
             key: 'color',
+            type: FormTypes.input,
+            width: "10%",
+            placeholder: '请输入${title}',
+            defaultValue: '',
+          },
+          {
+            title: '玻璃色号',
+            key: 'glassColor',
             type: FormTypes.input,
             width: "10%",
             placeholder: '请输入${title}',
@@ -210,7 +218,7 @@ export default {
             key: 'totalPrice',
             type: FormTypes.inputNumber,
             disabled: true,
-            width: "10%",
+            width: "8%",
             placeholder: '${title}',
             defaultValue: 0,
           },
@@ -456,7 +464,8 @@ export default {
               // 抽 高/3 - 2
               Object.assign(productDetail, {
                 referenceHeight: Math.ceil(item.height / 3) - 2,
-                num: item.num * 3
+                num: item.num * 3,
+                color: item.color,
               });
               jshOrderProductExtendList.push({
                 type: item.extendType,
@@ -468,7 +477,8 @@ export default {
               // 拉 原尺寸高/2 - 2
               Object.assign(productDetail, {
                 referenceHeight: Math.ceil(item.height / 2) - 2,
-                num: item.num * 2
+                num: item.num * 2,
+                color: item.glassColor,
               });
               jshOrderProductExtendList.push({
                 type: item.extendType,
@@ -508,6 +518,7 @@ export default {
       console.log('\n\n\n product list ', jshOrderProductPageList);
       return {
         ...main, // 展开
+        customerId_dictText: undefined,
         totalPrice: main.totalPrice * 100,
         jshOrderProductPageList,
       };

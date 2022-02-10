@@ -138,6 +138,13 @@ public class JshOrderProductDetail implements Serializable {
   @ApiModelProperty(value = "数量")
   private java.lang.Integer num;
   /**
+   * 方向:0其他,1双开,2左开,3右开
+   */
+  @Excel(name = "方向:0其他,1双开,2左开,3右开", width = 15, dicCode = "direction")
+  @Dict(dicCode = "direction")
+  @ApiModelProperty(value = "方向:0其他,1双开,2左开,3右开")
+  private java.lang.Integer direction;
+  /**
    * 颜色
    */
   @Excel(name = "颜色", width = 15)

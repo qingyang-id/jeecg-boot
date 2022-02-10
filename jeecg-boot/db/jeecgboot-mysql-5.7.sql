@@ -3551,9 +3551,9 @@ CREATE TABLE `sys_dict`  (
   `description` varchar(255) NULL DEFAULT NULL COMMENT '描述',
   `del_flag` int(1) NULL DEFAULT NULL COMMENT '删除状态',
   `create_by` varchar(32) NULL DEFAULT NULL COMMENT '创建人',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_by` varchar(32) NULL DEFAULT NULL COMMENT '更新人',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `type` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '字典类型0为string,1为number',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `indextable_dict_code`(`dict_code`) USING BTREE,
@@ -3605,6 +3605,11 @@ INSERT INTO `sys_dict` VALUES ('c5a14c75172783d72cbee6ee7f5df5d1', 'Online图表
 INSERT INTO `sys_dict` VALUES ('d6e1152968b02d69ff358c75b48a6ee1', '流程类型', 'bpm_process_type', NULL, 0, 'admin', '2021-02-22 19:26:54', 'admin', '2019-03-30 18:14:44', 0);
 INSERT INTO `sys_dict` VALUES ('fc6cd58fde2e8481db10d3a1e68ce70c', '用户状态', 'user_status', NULL, 0, 'admin', '2019-03-18 21:57:25', 'admin', '2019-03-18 23:11:58', 1);
 
+INSERT INTO `sys_dict`(`id`, `dict_name`, `dict_code`, `description`, `del_flag`, `create_by`, `update_by`, `type`) VALUES ('1491400616654225410', '产品类型', 'product_type', '铝材/玻璃', 0, 'admin', 'admin', 0);
+INSERT INTO `sys_dict`(`id`, `dict_name`, `dict_code`, `description`, `del_flag`, `create_by`, `update_by`, `type`) VALUES ('1490217214244601858', '商品扩展属性', 'product_extend', '商品扩展属性: 拉/抽/条', 0, 'admin', 'admin', 0);
+INSERT INTO `sys_dict`(`id`, `dict_name`, `dict_code`, `description`, `del_flag`, `create_by`, `update_by`, `type`) VALUES ('1489753899752067074', '方向', 'direction', '柜门方向', 0, 'admin', 'admin', 0);
+INSERT INTO `sys_dict`(`id`, `dict_name`, `dict_code`, `description`, `del_flag`, `create_by`, `update_by`, `type`) VALUES ('1489640150625984513', '状态', 'record_status', '通用记录状态', 0, 'admin', 'admin', 0);
+
 -- ----------------------------
 -- Table structure for sys_dict_item
 -- ----------------------------
@@ -3618,9 +3623,9 @@ CREATE TABLE `sys_dict_item`  (
   `sort_order` int(10) NULL DEFAULT NULL COMMENT '排序',
   `status` int(11) NULL DEFAULT NULL COMMENT '状态（1启用 0不启用）',
   `create_by` varchar(32) NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL,
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `update_by` varchar(32) NULL DEFAULT NULL,
-  `update_time` datetime NULL DEFAULT NULL,
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `index_table_dict_id`(`dict_id`) USING BTREE,
   INDEX `index_table_sort_order`(`sort_order`) USING BTREE,
@@ -3768,6 +3773,18 @@ INSERT INTO `sys_dict_item` VALUES ('f80a8f6838215753b05e1a5ba3346d22', '880a895
 INSERT INTO `sys_dict_item` VALUES ('fcec03570f68a175e1964808dc3f1c91', '4c03fca6bf1f0299c381213961566349', 'Tab风格', 'tab', NULL, 1, 1, 'admin', '2019-04-12 17:43:31', NULL, NULL);
 INSERT INTO `sys_dict_item` VALUES ('fe50b23ae5e68434def76f67cef35d2d', '78bda155fe380b1b3f175f1e88c284c6', '已作废', '4', '已作废', 4, 1, 'admin', '2021-09-09 16:33:43', 'admin', '2019-05-09 16:34:40');
 
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1491400706177449986', '1491400616654225410', '玻璃', '2', '', 1, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1491400666226704386', '1491400616654225410', '铝材', '1', '', 1, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1491253079385354241', '1490217214244601858', '无', '0', '', 1, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1490217351255736322', '1490217214244601858', '条', '3', '', 4, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1490217319085424642', '1490217214244601858', '抽', '1', '', 2, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1490217282473345026', '1490217214244601858', '拉', '2', '', 3, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489754206141779969', '1489753899752067074', '其它', '0', '', 1, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489754157915672577', '1489753899752067074', '右开', '3', '', 4, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489754120234045441', '1489753899752067074', '左开', '2', '', 3, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489754075728285698', '1489753899752067074', '双开', '1', '', 2, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489640322613420033', '1489640150625984513', '禁用', '0', '禁用', 2, 1, 'admin', 'admin');
+INSERT INTO `sys_dict_item`(`id`, `dict_id`, `item_text`, `item_value`, `description`, `sort_order`, `status`, `create_by`, `update_by`) VALUES ('1489640253197688834', '1489640150625984513', '启用', '1', '', 1, 1, 'admin', 'admin');
 -- ----------------------------
 -- Table structure for sys_fill_rule
 -- ----------------------------

@@ -1,17 +1,14 @@
 package org.jeecg.common.modules.redis.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import lombok.extern.slf4j.Slf4j;
-
 import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.GlobalConstants;
-
 import org.jeecg.common.modules.redis.receiver.RedisReceiver;
 import org.jeecg.common.modules.redis.writer.JeecgRedisCacheWriter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -26,7 +23,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-import org.springframework.data.redis.serializer.*;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.annotation.Resource;
 import java.time.Duration;
@@ -133,6 +133,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 	 * @return
 	 */
 	@Bean
+  @ConditionalOnProperty(name = "redis-listener-enabled", havingValue = "true")
 	public RedisMessageListenerContainer redisContainer(RedisConnectionFactory redisConnectionFactory, RedisReceiver redisReceiver, MessageListenerAdapter commonListenerAdapter) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(redisConnectionFactory);
@@ -142,6 +143,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 
 	@Bean
+  @ConditionalOnProperty(name = "redis-listener-enabled", havingValue = "true")
 	MessageListenerAdapter commonListenerAdapter(RedisReceiver redisReceiver) {
 		MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(redisReceiver, "onMessage");
 		messageListenerAdapter.setSerializer(jacksonSerializer());

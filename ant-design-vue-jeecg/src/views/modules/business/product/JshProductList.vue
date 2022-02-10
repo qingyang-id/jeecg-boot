@@ -167,7 +167,7 @@
             dataIndex: 'barCode'
           },
           {
-            title:'采购价格',
+            title:'采购价格(元)',
             align:"center",
             dataIndex: 'purchasePrice',
             customRender: function (t) {
@@ -175,12 +175,32 @@
             }
           },
           {
-            title:'销售价格',
+            title:'销售价格(元)',
             align:"center",
             dataIndex: 'wholesalePrice',
             customRender: function (t) {
               return t / 100;
             }
+          },
+          {
+            title:'铝材宽度差(cm)',
+            align:"center",
+            dataIndex: 'aluminumWidthDiff'
+          },
+          {
+            title:'铝材高度差(cm)',
+            align:"center",
+            dataIndex: 'aluminumHeightDiff'
+          },
+          {
+            title:'玻璃宽度差(cm)',
+            align:"center",
+            dataIndex: 'glassWidthDiff'
+          },
+          {
+            title:'玻璃高度差(cm)',
+            align:"center",
+            dataIndex: 'glassHeightDiff'
           },
           {
             title:'备注',
@@ -228,8 +248,12 @@
         let fieldList=[];
         fieldList.push({type:'string',value:'name',text:'名称',dictCode:''})
         fieldList.push({type:'string',value:'barCode',text:'商品条码',dictCode:''})
-        fieldList.push({type:'int',value:'purchasePrice',text:'采购价格',dictCode:''})
-        fieldList.push({type:'int',value:'wholesalePrice',text:'销售价格',dictCode:''})
+        fieldList.push({type:'double',value:'purchasePrice',text:'采购价格',dictCode:''})
+        fieldList.push({type:'double',value:'wholesalePrice',text:'销售价格',dictCode:''})
+        fieldList.push({type:'int',value:'aluminumWidthDiff',text:'铝材宽度差(cm)',dictCode:''})
+        fieldList.push({type:'int',value:'aluminumHeightDiff',text:'铝材高度差(cm)',dictCode:''})
+        fieldList.push({type:'int',value:'glassWidthDiff',text:'玻璃宽度差(cm)',dictCode:''})
+        fieldList.push({type:'int',value:'glassHeightDiff',text:'玻璃高度差(cm)',dictCode:''})
         fieldList.push({type:'string',value:'remark',text:'备注',dictCode:''})
         fieldList.push({type:'int',value:'status',text:'状态:1启用,0禁用',dictCode:'status'})
         this.superFieldList = fieldList
