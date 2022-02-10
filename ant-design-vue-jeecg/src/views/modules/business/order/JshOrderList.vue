@@ -45,11 +45,11 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
-                @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+<!--      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>-->
+<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+<!--                @change="handleImportExcel">-->
+<!--        <a-button type="primary" icon="import">导入</a-button>-->
+<!--      </a-upload>-->
       <!-- 高级查询区域 -->
       <j-super-query :fieldList="superFieldList" ref="superQueryModal"
                      @handleSuperQuery="handleSuperQuery"></j-super-query>
@@ -90,6 +90,10 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
+          <a @click="printDetail(record,1)">铝材打印</a>
+          <a-divider type="vertical"/>
+          <a @click="printDetail(record,2)">玻璃打印</a>
+          <a-divider type="vertical"/>
           <a @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical"/>
@@ -123,6 +127,8 @@
     </a-tabs>
 
     <jsh-order-modal ref="modalForm" @ok="modalFormOk"/>
+
+    <order-detail ref="modalDetail"></order-detail>
   </a-card>
 </template>
 
@@ -132,6 +138,7 @@ import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshOrderModal from './modules/JshOrderModal';
 import JshOrderProductDetailList from './modules/JshOrderProductDetailList';
 import JshOrderProductList from './modules/JshOrderProductList';
+import OrderDetail from './dialog/OrderDetail';
 import '@/assets/less/TableExpand.less';
 import { getAction } from "@api/manage";
 
@@ -139,7 +146,7 @@ export default {
   name: "JshOrderList",
   mixins: [JeecgListMixin],
   components: {
-    JshOrderModal, JshOrderProductList, JshOrderProductDetailList
+    JshOrderModal, JshOrderProductList, JshOrderProductDetailList, OrderDetail
   },
   data() {
     return {
@@ -241,6 +248,9 @@ export default {
     }
   },
   methods: {
+    printDetail(record, type) {
+      this.$refs.modalDetail.myHandleDetail(record, type);
+    },
     onOrderTimeChange(value, dateString) {
       console.log(dateString[0], dateString[1]);
       this.queryParam.orderTime_begin = dateString[0];
