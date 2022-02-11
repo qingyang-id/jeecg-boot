@@ -12,12 +12,18 @@
     <template slot="footer">
       <!--      <a-button v-if="orderPrintFlag" @click="handlePrint">三联打印预览</a-button>-->
       <!--此处为解决缓存问题-->
-      <a-button v-print="'#print'">普通打印</a-button>
+      <a-button v-print="'#orderDetailPrint'">普通打印</a-button>
       <a-button key="back" @click="handleCancel">取消</a-button>
     </template>
     <a-form :form="form">
       <!--销售订单-->
-      <section ref="print" id="saleOrderPrint">
+      <section ref="print" id="orderDetailPrint">
+        <a-row class="form-row" :gutter="24" style="text-align: center;margin: 10px">
+          <a-col :p="6" style="font-size: 24px;font-weight: 800">
+            <a-input v-decorator="['id', {}]" hidden/>
+            {{ title }}
+          </a-col>
+        </a-row>
         <a-row class="form-row" :gutter="24">
           <a-col :span="6">
             <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
@@ -58,14 +64,6 @@
             :dataSource="dataSource">
           </a-table>
         </div>
-        <a-row class="form-row" :gutter="24">
-          <a-col :lg="24" :md="24" :sm="24">
-            <a-form-item :labelCol="labelCol" :wrapperCol="{xs: { span: 24 },sm: { span: 24 }}" label=""
-                         style="padding:20px 10px;">
-              {{ model.remark }}
-            </a-form-item>
-          </a-col>
-        </a-row>
       </section>
     </a-form>
     <order-print-iframe ref="modalDetail"></order-print-iframe>
@@ -107,7 +105,6 @@ export default {
       form: this.$form.createForm(this),
       loading: false,
       dataSource: [],
-
       // 表头
       disableMixinCreated: true,
       // 表头
@@ -161,7 +158,7 @@ export default {
       /* 分页参数 */
       ipagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 50,
         pageSizeOptions: ['5', '10', '50'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条";
@@ -184,6 +181,7 @@ export default {
       this.dataSource = [];
       this.ipagination.current = 1;
       this.detailType = type;
+      this.title = type === 1 ? '铝材生产单' : '玻璃生产单';
       this.visible = true;
       this.model = Object.assign({}, record);
       this.$nextTick(() => {

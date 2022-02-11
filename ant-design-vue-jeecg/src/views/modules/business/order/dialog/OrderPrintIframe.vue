@@ -18,7 +18,7 @@
         <a-row>
           <a-col>
             <a-form-item>
-              <a-input v-decorator="['id']" hidden/>
+              <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
           </a-col>
         </a-row>

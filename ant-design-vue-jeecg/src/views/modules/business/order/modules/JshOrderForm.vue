@@ -96,7 +96,7 @@ export default {
         sm: { span: 20 },
       },
       model: {},
-      // 新增时子表默认添加几行空数据
+      // 新增时子表默认添加1行空数据
       addDefaultRowNum: 1,
       // confirmLoading: false,
       validatorRules: {
@@ -165,20 +165,17 @@ export default {
             dictCode: "direction",
             width: "8%",
             placeholder: '请选择${title}',
-            defaultValue: '',
+            defaultValue: '0'
           },
           {
             title: '抽/拉/条',
             key: 'extendType',
             type: FormTypes.select,
-            options: [{
-              text: '无',
-              value: 0
-            }],
+            options: [],
             dictCode: "product_extend",
             width: "10%",
             placeholder: '请选择${title}',
-            defaultValue: 0,
+            defaultValue: '0'
           },
           {
             title: '抽/拉/条数量',
@@ -257,6 +254,8 @@ export default {
     },
   },
   created() {
+    // 备份model原始值
+    this.modelDefault = JSON.parse(JSON.stringify(this.model));
     getAction(this.url.jshProduct.list)
       .then((res) => {
         res.result.records.forEach(item => {
@@ -326,6 +325,7 @@ export default {
     },
     /** 当选项被改变时，联动其他组件 */
     async handleValueChange(event) {
+      console.log('value changed')
       const { row, column, value, target } = event;
       switch (column.key) {
         case 'productId': {
@@ -394,46 +394,50 @@ export default {
         }
       })));
     },
-    addBefore() {
-      this.jshOrderProductTable.dataSource = [];
-    },
     getAllTable() {
       let values = this.tableKeys.map(key => getRefPromise(this, key));
       return Promise.all(values);
     },
-    /** 调用完edit()方法之后会自动调用此方法 */
-    editAfter() {
-      this.$nextTick(() => {
-      });
-      // 加载子表数据
-      if (this.model.id) {
-        let params = { id: this.model.id };
-        this.model.totalPrice = this.model.totalPrice / 100;
-        // 更新地址列表
-        this.updateAddresses(this.model.customerId);
-        // id bug
-        // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
-        this.jshOrderProductTable.loading = true;
-        getAction(this.url.jshOrderProduct.list, params).then(res => {
-          let { result } = res;
-          let dataSource = [];
-          if (result) {
-            if (Array.isArray(result)) {
-              dataSource = result;
-            } else if (Array.isArray(result.records)) {
-              dataSource = result.records;
-            }
-          }
-          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
-            id: undefined,
-            price: item.price / 100,
-            totalPrice: item.totalPrice / 100,
-          }));
-        }).finally(() => {
-          this.jshOrderProductTable.loading = false;
-        });
-      }
+    addBefore() {
+      console.log("\n\n\n form add before");
+      this.jshOrderProductTable.dataSource = [];
     },
+    add() {
+      console.log("\n\n\n form add", this.modelDefault);
+      this.edit(this.modelDefault);
+    },
+    edit(record) {
+      this.model = Object.assign({}, record);
+      this.visible = true;
+      console.log("\n\n\n form edit", this.model, this.model.id);
+      // 加载子表数据
+      let params = { id: this.model.id };
+      this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
+      // 更新地址列表
+      this.updateAddresses(this.model.customerId);
+      // id bug
+      // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+      this.jshOrderProductTable.loading = true;
+      getAction(this.url.jshOrderProduct.list, params).then(res => {
+        let { result } = res;
+        let dataSource = [];
+        if (result) {
+          if (Array.isArray(result)) {
+            dataSource = result;
+          } else if (Array.isArray(result.records)) {
+            dataSource = result.records;
+          }
+        }
+        this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+          id: undefined,
+          price: item.price / 100,
+          totalPrice: item.totalPrice / 100,
+        }));
+      }).finally(() => {
+        this.jshOrderProductTable.loading = false;
+      });
+    },
+
     // 校验所有一对一子表表单
     validateSubForm(allValues) {
       return new Promise((resolve, reject) => {
@@ -526,6 +530,7 @@ export default {
 
     /** 确定按钮点击事件 */
     handleOk() {
+      console.log("\n\n\n form handle ok");
       /** 触发表单验证 */
       this.getAllTable().then(tables => {
         console.log('tables ', tables);
@@ -555,6 +560,7 @@ export default {
       this.$message.error(msg);
     },
     close() {
+      console.log('\n\n\nclear order form');
       this.visible = false;
       this.$emit('close');
       this.$refs.form.clearValidate();
