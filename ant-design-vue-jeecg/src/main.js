@@ -1,5 +1,7 @@
 /** init domain config */
 import './config'
+// 按需引入所需组件，统一引入文件
+import './components/lazy_antd'
 
 import Vue from 'vue'
 import App from './App.vue'
@@ -11,8 +13,8 @@ import { VueAxios } from "@/utils/request"
 require('@jeecg/antd-online-mini')
 require('@jeecg/antd-online-mini/dist/OnlineForm.css')
 
-import Antd, { version } from 'ant-design-vue'
-console.log('ant-design-vue version:', version)
+// import Antd, { version } from 'ant-design-vue'
+// console.log('ant-design-vue version:', version)
 
 import Viser from 'viser-vue'
 import 'ant-design-vue/dist/antd.less';  // or 'ant-design-vue/dist/antd.less'
@@ -52,7 +54,7 @@ import { rules } from '@/utils/rules'
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
 Vue.use(Storage, config.storageOptions)
-Vue.use(Antd)
+// Vue.use(Antd)
 Vue.use(VueAxios, router)
 Vue.use(Viser)
 Vue.use(hasPermission)
