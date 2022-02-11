@@ -421,31 +421,33 @@ export default {
       this.visible = true;
       console.log("\n\n\n form edit", this.model, this.model.id);
       // 加载子表数据
-      let params = { id: this.model.id };
-      this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
-      // 更新地址列表
-      this.updateAddresses(this.model.customerId);
-      // id bug
-      // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
-      this.jshOrderProductTable.loading = true;
-      getAction(this.url.jshOrderProduct.list, params).then(res => {
-        let { result } = res;
-        let dataSource = [];
-        if (result) {
-          if (Array.isArray(result)) {
-            dataSource = result;
-          } else if (Array.isArray(result.records)) {
-            dataSource = result.records;
+      if (this.model.id) {
+        let params = { id: this.model.id };
+        this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
+        // 更新地址列表
+        this.updateAddresses(this.model.customerId);
+        // id bug
+        // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+        this.jshOrderProductTable.loading = true;
+        getAction(this.url.jshOrderProduct.list, params).then(res => {
+          let { result } = res;
+          let dataSource = [];
+          if (result) {
+            if (Array.isArray(result)) {
+              dataSource = result;
+            } else if (Array.isArray(result.records)) {
+              dataSource = result.records;
+            }
           }
-        }
-        this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
-          id: undefined,
-          price: item.price / 100,
-          totalPrice: item.totalPrice / 100,
-        }));
-      }).finally(() => {
-        this.jshOrderProductTable.loading = false;
-      });
+          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+            id: undefined,
+            price: item.price / 100,
+            totalPrice: item.totalPrice / 100,
+          }));
+        }).finally(() => {
+          this.jshOrderProductTable.loading = false;
+        });
+      }
     },
 
     // 校验所有一对一子表表单
