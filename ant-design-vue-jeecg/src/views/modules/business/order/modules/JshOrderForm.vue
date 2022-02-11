@@ -188,10 +188,20 @@ export default {
           {
             title: '铝材颜色',
             key: 'color',
-            type: FormTypes.input,
+            type: FormTypes.select,
             width: "10%",
             placeholder: '请输入${title}',
             defaultValue: '',
+            options: [{
+              text: '无',
+              value: ''
+            }, {
+              text: '金色',
+              value: '金色'
+            }, {
+              text: '银色',
+              value: '银色'
+            }],
           },
           {
             title: '玻璃色号',
@@ -325,7 +335,7 @@ export default {
     },
     /** 当选项被改变时，联动其他组件 */
     async handleValueChange(event) {
-      console.log('value changed')
+      console.log('value changed');
       const { row, column, value, target } = event;
       switch (column.key) {
         case 'productId': {

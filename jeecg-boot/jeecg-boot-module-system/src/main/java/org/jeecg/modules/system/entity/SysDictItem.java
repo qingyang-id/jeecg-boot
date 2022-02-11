@@ -1,17 +1,17 @@
 package org.jeecg.modules.system.entity;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -70,13 +70,33 @@ public class SysDictItem implements Serializable {
     @Dict(dicCode = "dict_item_status")
     private Integer status;
 
-    private String createBy;
+  /**
+   * 创建人
+   */
+  @ApiModelProperty(value = "创建人")
+  private java.lang.String createBy;
 
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @ApiModelProperty(value = "创建时间")
+  private java.util.Date createTime;
 
-    private String updateBy;
+  /**
+   * 更新人
+   */
+  @ApiModelProperty(value = "更新人")
+  private java.lang.String updateBy;
 
-    private Date updateTime;
+  /**
+   * 更新时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @ApiModelProperty(value = "更新时间")
+  private java.util.Date updateTime;
 
 
 }

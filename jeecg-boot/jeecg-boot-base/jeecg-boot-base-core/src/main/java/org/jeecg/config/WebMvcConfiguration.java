@@ -88,7 +88,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
 //    simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance); // 启用后，IPage分页参数被转为字符串
     objectMapper.registerModule(simpleModule)
-      .setSerializationInclusion(JsonInclude.Include.NON_DEFAULT) // 不存在时，用默认值
+      .setSerializationInclusion(JsonInclude.Include.NON_NULL) // 不存在时，用默认值
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     jackson2HttpMessageConverter.setObjectMapper(objectMapper);
     converters.add(0, jackson2HttpMessageConverter);

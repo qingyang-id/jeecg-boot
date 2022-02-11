@@ -1,15 +1,16 @@
 package org.jeecg.modules.system.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public class SysDict implements Serializable {
      */
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
-    
+
     /**
      * [预留字段，暂时无用]
      * 字典类型,0 string,1 number类型,2 boolean
@@ -39,7 +40,7 @@ public class SysDict implements Serializable {
      * 默认为string类型
      */
     private Integer type;
-    
+
     /**
      * 字典名称
      */
@@ -61,25 +62,33 @@ public class SysDict implements Serializable {
     @TableLogic
     private Integer delFlag;
 
-    /**
-     * 创建人
-     */
-    private String createBy;
+  /**
+   * 创建人
+   */
+  @ApiModelProperty(value = "创建人")
+  private java.lang.String createBy;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+  /**
+   * 创建时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @ApiModelProperty(value = "创建时间")
+  private java.util.Date createTime;
 
-    /**
-     * 更新人
-     */
-    private String updateBy;
+  /**
+   * 更新人
+   */
+  @ApiModelProperty(value = "更新人")
+  private java.lang.String updateBy;
 
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
+  /**
+   * 更新时间
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @ApiModelProperty(value = "更新时间")
+  private java.util.Date updateTime;
 
 
 }
