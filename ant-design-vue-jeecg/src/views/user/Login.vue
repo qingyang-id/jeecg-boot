@@ -6,9 +6,9 @@
           <login-account ref="alogin" @validateFail="validateFail" @success="requestSuccess" @fail="requestFailed"></login-account>
         </a-tab-pane>
 
-        <a-tab-pane key="tab2" tab="手机号登录">
-          <login-phone ref="plogin" @validateFail="validateFail" @success="requestSuccess" @fail="requestFailed"></login-phone>
-        </a-tab-pane>
+<!--        <a-tab-pane key="tab2" tab="手机号登录">-->
+<!--          <login-phone ref="plogin" @validateFail="validateFail" @success="requestSuccess" @fail="requestFailed"></login-phone>-->
+<!--        </a-tab-pane>-->
       </a-tabs>
 
       <a-form-model-item>
@@ -16,9 +16,9 @@
         <router-link :to="{ name: 'alteration'}" class="forge-password" style="float: right;">
           忘记密码
         </router-link>
-        <router-link :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px" >
-          注册账户
-        </router-link>
+<!--        <router-link :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px" >-->
+<!--          注册账户-->
+<!--        </router-link>-->
       </a-form-model-item>
 
       <a-form-item style="margin-top:24px">
@@ -30,7 +30,7 @@
 
     <two-step-captcha v-if="requiredTwoStepCaptcha" :visible="stepCaptchaVisible" @success="stepCaptchaSuccess" @cancel="stepCaptchaCancel"></two-step-captcha>
     <login-select-tenant ref="loginSelect" @success="loginSelectOk"></login-select-tenant>
-    <third-login ref="thirdLogin"></third-login>
+<!--    <third-login ref="thirdLogin"></third-login>-->
   </div>
 </template>
 

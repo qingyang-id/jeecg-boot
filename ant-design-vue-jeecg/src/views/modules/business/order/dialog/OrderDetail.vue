@@ -18,15 +18,15 @@
     <a-form :form="form">
       <!--销售订单-->
       <section ref="print" id="orderDetailPrint">
-        <a-row class="form-row" :gutter="24" style="text-align: center;margin: 10px">
+        <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
           <a-col :p="6" style="font-size: 24px;font-weight: 800">
-            <a-input v-decorator="['id', {}]" hidden/>
             {{ title }}
           </a-col>
         </a-row>
         <a-row class="form-row" :gutter="24">
           <a-col :span="6">
             <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
+              <a-input v-decorator="['id', {}]" hidden/>
               {{ model.orderCode }}
             </a-form-item>
           </a-col>
