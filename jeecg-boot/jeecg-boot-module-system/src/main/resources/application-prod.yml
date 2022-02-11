@@ -40,7 +40,7 @@ spring:
     job-store-type: jdbc
     initialize-schema: embedded
     #定时任务启动开关，true-开  false-关
-    auto-startup: true
+    auto-startup: false
     #启动时更新己存在的Job
     overwrite-existing-jobs: true
     properties:
