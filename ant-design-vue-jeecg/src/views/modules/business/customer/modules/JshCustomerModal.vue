@@ -12,7 +12,7 @@
         <a-row>
           <a-col :span="24">
             <a-form-model-item label="客户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="name">
-              <j-input v-model="model.name" dict=""/>
+              <j-input v-model="model.name"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
