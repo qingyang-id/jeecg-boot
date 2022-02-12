@@ -280,7 +280,7 @@ export default {
         this.addressDictOptions = [{ text: '请先去用户管理页面为该用户添加地址', value: '' }];
       }
       console.log('\n\n\n customerId', customerId);
-      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { id: customerId })
+      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId })
         .then((res) => {
           this.addressDictOptions = res.success && res.result.records.length ? res.result.records
             .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
