@@ -197,10 +197,9 @@ export default {
         text: '客户名字',
         popup: { code: '', field: '', orgFields: '', destFields: '' }
       });
-      fieldList.push({ type: 'int', value: 'sex', text: '客户性别:1男,2女,0未知', dictCode: 'sex' });
+      fieldList.push({ type: 'int', value: 'sex', text: '客户性别', dictCode: 'sex' });
       fieldList.push({ type: 'string', value: 'address', text: '常用地址', dictCode: '' });
       fieldList.push({ type: 'string', value: 'phone', text: '手机', dictCode: '' });
-      fieldList.push({ type: 'int', value: 'tenantId', text: '租户id', dictCode: '' });
       this.superFieldList = fieldList;
     }
   }

@@ -12,7 +12,7 @@
         <a-row>
           <a-col :span="24">
             <a-form-model-item label="客户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="name">
-              <j-input v-model="model.name"/>
+              <a-input v-model="model.name" placeholder="请输入客户名字"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -66,10 +66,10 @@ export default {
           { required: true, message: '请选择性别!' },
         ],
         address: [
-          { required: true, message: '请输入常用地址!' },
+          { required: false, message: '请输入常用地址!' },
         ],
         phone: [
-          { required: true, message: '请输入手机!' },
+          { required: false, message: '请输入手机!' },
           { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码!' },
         ],
       },
