@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.business.product.entity.JshProduct;
 import org.jeecg.modules.business.product.service.IJshProductService;
+import org.jeecg.modules.business.sequence.constant.SequenceConstant;
+import org.jeecg.modules.business.sequence.service.IJshSequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +34,8 @@ import java.util.Arrays;
 @RequestMapping("/business/product/jshProduct")
 @Slf4j
 public class JshProductController extends JeecgController<JshProduct, IJshProductService> {
+     @Autowired
+     private IJshSequenceService jshSequenceService;
 	@Autowired
 	private IJshProductService jshProductService;
 
@@ -66,6 +71,11 @@ public class JshProductController extends JeecgController<JshProduct, IJshProduc
 	@ApiOperation(value="jsh_product-添加", notes="jsh_product-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody JshProduct jshProduct) {
+	    if (StringUtils.isEmpty(jshProduct.getBarcode())) {
+            // 获取barcode
+            String barCode = jshSequenceService.buildOnlyNumber(SequenceConstant.BAR_CODE_NUMBER_SEQ);
+            jshProduct.setBarcode(barCode);
+        }
 		jshProductService.save(jshProduct);
 		return Result.OK("添加成功！");
 	}
@@ -137,7 +147,7 @@ public class JshProductController extends JeecgController<JshProduct, IJshProduc
     */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, JshProduct jshProduct) {
-        return super.exportXls(request, jshProduct, JshProduct.class, "jsh_product");
+        return super.exportXls(request, jshProduct, JshProduct.class, "产品信息");
     }
 
     /**

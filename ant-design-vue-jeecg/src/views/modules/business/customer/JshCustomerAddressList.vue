@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false" :class="'cust-erp-sub-tab'">
     <!-- 操作按钮区域 -->
-    <div class="table-operator" v-if="mainId">
+    <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('jsh_customer_address')">导出</a-button>
       <a-upload
@@ -14,8 +14,8 @@
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
       <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal"
-                     @handleSuperQuery="handleSuperQuery"></j-super-query>
+<!--      <j-super-query :fieldList="superFieldList" ref="superQueryModal"-->
+<!--                     @handleSuperQuery="handleSuperQuery"></j-super-query>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -46,6 +46,7 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
+        :sorter="isorter"
         :loading="loading"
         :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
@@ -107,7 +108,9 @@ export default {
       immediate: true,
       handler(val) {
         if (!this.mainId) {
+          this.queryParam['customerId'] = undefined;
           this.clearList();
+          this.loadData(1);
         } else {
           this.queryParam['customerId'] = val;
           this.loadData(1);
@@ -155,6 +158,10 @@ export default {
           scopedSlots: { customRender: 'action' },
         }
       ],
+      isorter: {
+        column: 'id',
+        order: 'desc',
+      },
       url: {
         list: "/business/customer/jshCustomer/listJshCustomerAddressByMainId",
         delete: "/business/customer/jshCustomer/deleteJshCustomerAddress",

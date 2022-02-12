@@ -10,7 +10,7 @@ CREATE TABLE `jsh_product` (
                              `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
                              `del_flag`  int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
                              `name` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
-                             `bar_code` varchar(50) NOT NULL DEFAULT '' COMMENT '商品条码',
+                             `barcode` varchar(50) NOT NULL DEFAULT '' COMMENT '商品条码',
                              `purchase_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '采购价格',
                              `wholesale_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '销售价格',
                              `aluminum_height_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '铝材高差值',
@@ -22,23 +22,23 @@ CREATE TABLE `jsh_product` (
                              `tenant_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
                              PRIMARY KEY (`id`),
                              KEY `idx_name` (`name`),
-                             KEY `idx_bar_code` (`bar_code`),
+                             KEY `idx_barcode` (`barcode`),
                              KEY `idx_tenant_id` (`tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品表';
 
 -- ----------------------------
 -- Records of jsh_product
 -- ----------------------------
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通80', '1001', 8000, 8000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通90', '1002', 9000, 9000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通100', '1003', 10000, 10000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (4, 'admin', 'admin', 0, '连体型', '1004', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (5, 'admin', 'admin', 0, 'G型', '1005', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (6, 'admin', 'admin', 0, 'M型', '1006', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (7, 'admin', 'admin', 0, 'F型', '1007', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (8, 'admin', 'admin', 0, '笑脸', '1008', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (9, 'admin', 'admin', 0, '拇指型', '1009', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `bar_code`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (10, 'admin', 'admin', 0, '月牙型', '1010', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通80', '1001', 8000, 8000, -43, -12, -35, -4, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通90', '1002', 9000, 9000, -43, -12, -35, -4, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通100', '1003', 10000, 10000, -43, -12, -35, -4, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (4, 'admin', 'admin', 0, '连体型', '1004', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (5, 'admin', 'admin', 0, 'G型', '1005', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (6, 'admin', 'admin', 0, 'M型', '1006', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (7, 'admin', 'admin', 0, 'F型', '1007', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (8, 'admin', 'admin', 0, '笑脸', '1008', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (9, 'admin', 'admin', 0, '拇指型', '1009', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (10, 'admin', 'admin', 0, '月牙型', '1010', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
 
 -- ----------------------------
 -- Table structure for jsh_customer
@@ -239,3 +239,4 @@ CREATE TABLE `jsh_sequence` (
 -- Records of jsh_sequence
 -- ----------------------------
 INSERT INTO `jsh_sequence` VALUES ('order_number_seq', '1', '999999999999999999', '0', '1', '订单编号sequence');
+INSERT INTO `jsh_sequence` VALUES ('barcode_number_seq', '1001', '999999999999999999', '1010', '1', '条码sequence');

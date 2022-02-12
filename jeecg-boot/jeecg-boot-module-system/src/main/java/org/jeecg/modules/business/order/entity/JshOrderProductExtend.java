@@ -68,7 +68,6 @@ public class JshOrderProductExtend implements Serializable {
   /**
    * 删除状态（0，正常，1已删除）
    */
-  @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
   @TableLogic
   private Integer delFlag;
 
@@ -90,9 +89,9 @@ public class JshOrderProductExtend implements Serializable {
   /**
    * 类型:1拉,2抽,3条
    */
-  @Excel(name = "类型:1拉,2抽,3条", width = 15, dicCode = "1,2,3")
-  @Dict(dicCode = "1,2,3")
-  @ApiModelProperty(value = "类型:1拉,2抽,3条")
+  @Excel(name = "类型", width = 15, dicCode = "product_extend")
+  @Dict(dicCode = "product_extend")
+  @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
   private java.lang.Integer type;
 
   /**

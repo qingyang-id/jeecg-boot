@@ -9,8 +9,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="商品条码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="barCode">
-              <a-input v-model="model.barCode" placeholder="请输入商品条码"></a-input>
+            <a-form-model-item label="商品条码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="barcode">
+              <a-input v-model="model.barcode" placeholder="请输入商品条码" :disabled="model.id"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -29,13 +29,14 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="铝材高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumHeightDiff">
+            <a-form-model-item label="铝材高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol"
+                               prop="aluminumHeightDiff">
               <a-input-number v-model="model.aluminumHeightDiff" placeholder="请输入铝材高度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="玻璃宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumWidthDiff">
-              <a-input-number v-model="model.aluminumWidthDiff" placeholder="请输入玻璃宽度差" style="width: 100%"/>
+            <a-form-model-item label="玻璃宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassWidthDiff">
+              <a-input-number v-model="model.glassWidthDiff" placeholder="请输入玻璃宽度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -92,10 +93,11 @@ export default {
         name: [
           { required: true, message: '请输入名称!' },
         ],
-        barCode: [
-          { required: true, message: '请输入商品条码!' },
-        ],
         purchasePrice: [
+          { required: true, message: '请输入采购价格!' },
+          { pattern: /^(([1-9][0-9]*)|([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2}))$/, message: '请输入正确的金额!' },
+        ],
+        wholesalePrice: [
           { required: true, message: '请输入采购价格!' },
           { pattern: /^(([1-9][0-9]*)|([0]\.\d{0,2}|[1-9][0-9]*\.\d{0,2}))$/, message: '请输入正确的金额!' },
         ],

@@ -28,6 +28,9 @@ public class JshSequenceServiceImpl extends ServiceImpl<JshSequenceMapper, JshSe
       jshSequenceMapper.updateBuildOnlyNumber(seqName); // 编号+1
       buildOnlyNumber = jshSequenceMapper.getBuildOnlyNumber(seqName);
     }
+    if (seqName.equalsIgnoreCase(SequenceConstant.BAR_CODE_NUMBER_SEQ)) {
+        return buildOnlyNumber.toString();
+    }
     if (buildOnlyNumber < SequenceConstant.SEQ_TO_STRING_MIN_LENGTH) {
       StringBuffer sb = new StringBuffer(buildOnlyNumber.toString());
       int len = SequenceConstant.SEQ_TO_STRING_MIN_LENGTH.toString().length() - sb.length();

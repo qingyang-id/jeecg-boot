@@ -422,7 +422,7 @@ export default {
       console.log("\n\n\n form edit", this.model, this.model.id);
       // 加载子表数据
       if (this.model.id) {
-        let params = { id: this.model.id };
+        let params = { id: this.model.id, };
         this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
         // 更新地址列表
         this.updateAddresses(this.model.customerId);
@@ -465,10 +465,10 @@ export default {
     classifyIntoFormData(allValues) {
       let main = Object.assign(this.model, allValues.formValue);
       const jshOrderProductPageList = allValues.tablesValue[0].values;
-      const jshOrderProductDetailList = [];
-      const jshOrderProductExtendList = [];
       if (jshOrderProductPageList.length) {
         jshOrderProductPageList.forEach(item => {
+          const jshOrderProductDetailList = [];
+          const jshOrderProductExtendList = [];
           const productDetail = {
             referenceWidth: Number(item.width),
             referenceHeight: Number(item.height),
@@ -510,6 +510,7 @@ export default {
               break;
             }
           }
+          console.log('detail: ', this.jshProductPricesMap, this.jshProductPricesMap[item.productId])
           jshOrderProductDetailList.push({
             ...productDetail,
             type: 1,
@@ -519,8 +520,8 @@ export default {
           jshOrderProductDetailList.push({
             ...productDetail,
             type: 2,
-            width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].grassWidthDiff,
-            height: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].grassHeightDiff,
+            width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].glassWidthDiff,
+            height: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].glassHeightDiff,
           });
           Object.assign(item, {
             id: '',

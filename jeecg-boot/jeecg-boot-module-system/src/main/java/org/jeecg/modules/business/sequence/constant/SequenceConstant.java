@@ -10,11 +10,13 @@ package org.jeecg.modules.business.sequence.constant;
 public class SequenceConstant {
     /**
      * sequence名称
-     * */
-    //sequence返回字符串的最小长度
+     */
+    // sequence返回字符串的最小长度
     public static final Long SEQ_TO_STRING_MIN_LENGTH = 10000000000L;
-    //sequence长度小于基准长度时前追加基础值
+    // sequence长度小于基准长度时前追加基础值
     public static final String SEQ_TO_STRING_LESS_INSERT = "0";
-    //单据编号
+    // 单据编号
     public static final String ORDER_NUMBER_SEQ = "order_number_seq";
+    // 条码
+    public static final String BAR_CODE_NUMBER_SEQ = "bar_code_number_seq";
 }

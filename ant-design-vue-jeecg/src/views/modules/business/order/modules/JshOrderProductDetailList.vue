@@ -1,5 +1,9 @@
 <template>
   <a-card :bordered="false">
+    <!-- 操作按钮区域 -->
+    <div class="table-operator">
+      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order_product_detail')">导出</a-button>
+    </div>
     <!-- table区域-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
@@ -17,8 +21,10 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
+        :sorter="isorter"
         :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange}">
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
+        @change="handleTableChange">
       </a-table>
     </div>
   </a-card>
@@ -48,20 +54,16 @@ export default {
     orderId: {
       immediate: true,
       handler(val) {
-        if (!this.orderId) {
-          this.clearList();
-        } else {
-          this.queryParam['orderId'] = val;
-          this.queryParam['type'] = this.type;
-          this.loadData(1);
-        }
+        this.queryParam['orderId'] = val || '';
+        this.queryParam['type'] = this.type || '';
+        this.loadData(1);
       }
     }
   },
   data() {
     return {
       description: 'jsh_order_product管理页面',
-      disableMixinCreated: true,
+      // disableMixinCreated: true,
       // 表头
       columns: [
         {
@@ -124,7 +126,7 @@ export default {
       ipagination: {
         current: 1,
         pageSize: 10,
-        pageSizeOptions: ['5', '10', '50'],
+        pageSizeOptions: ['5', '10', '30', '50'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条";
         },
@@ -132,8 +134,13 @@ export default {
         showSizeChanger: true,
         total: 0
       },
+      isorter: {
+        column: 'id',
+        order: 'desc',
+      },
       url: {
         list: "/business/order/jshOrderProductDetail/list",
+        exportXlsUrl: "/business/order/jshOrderProductDetail/exportXls",
       },
       dictOptions: {},
       superFieldList: [],

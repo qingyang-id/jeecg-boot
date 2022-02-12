@@ -45,11 +45,11 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-<!--      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>-->
-<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
-<!--                @change="handleImportExcel">-->
-<!--        <a-button type="primary" icon="import">导入</a-button>-->
-<!--      </a-upload>-->
+      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>
+      <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+      <!--                @change="handleImportExcel">-->
+      <!--        <a-button type="primary" icon="import">导入</a-button>-->
+      <!--      </a-upload>-->
       <!-- 高级查询区域 -->
       <j-super-query :fieldList="superFieldList" ref="superQueryModal"
                      @handleSuperQuery="handleSuperQuery"></j-super-query>
@@ -84,6 +84,7 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
+        :sorter="isorter"
         :loading="loading"
         :rowSelection="{selectedRowKeys, onChange: onSelectChange, type:'radio'}"
         :customRow="clickThenSelect"
@@ -185,10 +186,8 @@ export default {
         {
           title: '下单时间',
           align: "center",
+          sorter: true,
           dataIndex: 'orderTime',
-          customRender: function (text) {
-            return !text ? "" : (text.length > 10 ? text.substr(0, 10) : text);
-          }
         },
         {
           title: '地址',
@@ -201,6 +200,12 @@ export default {
           dataIndex: 'remark'
         },
         {
+          title: '更新时间',
+          align: "center",
+          sorter: true,
+          dataIndex: 'updateTime',
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: "center",
@@ -209,6 +214,22 @@ export default {
           scopedSlots: { customRender: 'action' },
         }
       ],
+      /* 分页参数 */
+      ipagination: {
+        current: 1,
+        pageSize: 5,
+        pageSizeOptions: ['5', '10', '30', '50'],
+        showTotal: (total, range) => {
+          return range[0] + "-" + range[1] + " 共" + total + "条";
+        },
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0
+      },
+      isorter: {
+        column: 'orderCode',
+        order: 'desc',
+      },
       // 字典选项
       dictOptions: {},
       // 展开的行test
@@ -218,22 +239,9 @@ export default {
         delete: "/business/order/jshOrder/delete",
         deleteBatch: "/business/order/jshOrder/deleteBatch",
         exportXlsUrl: "/business/order/jshOrder/exportXls",
-        importExcelUrl: "/business/order/jshOrder/importExcel",
       },
       selectedMainId: 0, // 选中的ID
       superFieldList: [],
-      /* 分页参数 */
-      ipagination: {
-        current: 1,
-        pageSize: 5,
-        pageSizeOptions: ['5', '10', '50'],
-        showTotal: (total, range) => {
-          return range[0] + "-" + range[1] + " 共" + total + "条";
-        },
-        showQuickJumper: true,
-        showSizeChanger: true,
-        total: 0
-      },
     };
   },
   created() {
@@ -243,9 +251,6 @@ export default {
     currentId() {
       return this.id;
     },
-    importExcelUrl: function () {
-      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-    }
   },
   methods: {
     printDetail(record, type) {
@@ -293,8 +298,7 @@ export default {
         if (res.success) {
           this.dataSource = res.result.records;
           this.ipagination.total = res.result.total;
-        }
-        if (res.code === 510) {
+        } else {
           this.$message.warning(res.message);
         }
         this.loading = false;

@@ -11,7 +11,7 @@
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="商品条码">
-              <a-input placeholder="请输入商品条码" v-model="queryParam.barCode"></a-input>
+              <a-input placeholder="请输入商品条码" v-model="queryParam.barcode"></a-input>
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
@@ -76,6 +76,7 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
+        :sorter="isorter"
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
@@ -164,7 +165,7 @@
           {
             title:'商品条码',
             align:"center",
-            dataIndex: 'barCode'
+            dataIndex: 'barcode'
           },
           {
             title:'采购价格(元)',
@@ -221,6 +222,10 @@
             scopedSlots: { customRender: 'action' }
           }
         ],
+        isorter: {
+          column: 'id',
+          order: 'desc',
+        },
         url: {
           list: "/business/product/jshProduct/list",
           delete: "/business/product/jshProduct/delete",
@@ -247,7 +252,7 @@
       getSuperFieldList(){
         let fieldList=[];
         fieldList.push({type:'string',value:'name',text:'名称',dictCode:''})
-        fieldList.push({type:'string',value:'barCode',text:'商品条码',dictCode:''})
+        fieldList.push({type:'string',value:'barcode',text:'商品条码',dictCode:''})
         fieldList.push({type:'double',value:'purchasePrice',text:'采购价格',dictCode:''})
         fieldList.push({type:'double',value:'wholesalePrice',text:'销售价格',dictCode:''})
         fieldList.push({type:'int',value:'aluminumWidthDiff',text:'铝材宽度差(cm)',dictCode:''})
@@ -255,7 +260,7 @@
         fieldList.push({type:'int',value:'glassWidthDiff',text:'玻璃宽度差(cm)',dictCode:''})
         fieldList.push({type:'int',value:'glassHeightDiff',text:'玻璃高度差(cm)',dictCode:''})
         fieldList.push({type:'string',value:'remark',text:'备注',dictCode:''})
-        fieldList.push({type:'int',value:'status',text:'状态:1启用,0禁用',dictCode:'status'})
+        fieldList.push({type:'int',value:'status',text:'状态',dictCode:'status'})
         this.superFieldList = fieldList
       }
     }

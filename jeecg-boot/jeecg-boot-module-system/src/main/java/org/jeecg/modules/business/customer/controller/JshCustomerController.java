@@ -159,7 +159,7 @@ public class JshCustomerController extends JeecgController<JshCustomer, IJshCust
    */
   @RequestMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, JshCustomer jshCustomer) {
-    return super.exportXls(request, jshCustomer, JshCustomer.class, "jsh_customer");
+    return super.exportXls(request, jshCustomer, JshCustomer.class, "客户信息");
   }
 
   /**
@@ -280,7 +280,7 @@ public class JshCustomerController extends JeecgController<JshCustomer, IJshCust
     ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
     mv.addObject(NormalExcelConstants.FILE_NAME, "jsh_customer_address"); //此处设置的filename无效 ,前端会重更新设置一下
     mv.addObject(NormalExcelConstants.CLASS, JshCustomerAddress.class);
-    mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("jsh_customer_address报表", "导出人:" + sysUser.getRealname(), "jsh_customer_address"));
+    mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("客户地址信息报表", "导出人:" + sysUser.getRealname(), "客户地址信息"));
     mv.addObject(NormalExcelConstants.DATA_LIST, exportList);
     return mv;
   }

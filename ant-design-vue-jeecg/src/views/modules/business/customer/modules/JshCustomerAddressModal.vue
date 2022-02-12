@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     add() {
-      this.edit(this.modelDefault);
+      this.edit(Object.assign(this.modelDefault, { customerId: this.mainId || '' }));
     },
     edit(record) {
       this.model = Object.assign({}, record);

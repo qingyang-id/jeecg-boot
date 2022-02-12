@@ -33,132 +33,140 @@ import java.util.List;
 @RequestMapping("/business/order/jshOrderProductDetail")
 @Slf4j
 public class JshOrderProductDetailController extends JeecgController<JshOrderProductDetail, IJshOrderProductDetailService> {
-  @Autowired
-  private IJshOrderProductDetailService jshOrderProductDetailService;
+    @Autowired
+    private IJshOrderProductDetailService jshOrderProductDetailService;
 
-  /**
-   * 分页列表查询
-   *
-   * @param jshOrderProductDetail
-   * @param pageNo
-   * @param pageSize
-   * @param req
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-分页列表查询")
-  @ApiOperation(value = "jsh_order_product_detail-分页列表查询", notes = "jsh_order_product_detail-分页列表查询")
-  @GetMapping(value = "/list")
-  public Result<?> queryPageList(JshOrderProductDetail jshOrderProductDetail,
-                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                 @RequestParam(name = "orderIds", required = false) String orderIds,
-                                 HttpServletRequest req) {
-    QueryWrapper<JshOrderProductDetail> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderProductDetail, req.getParameterMap());
-    Page<JshOrderProductDetail> page = new Page<JshOrderProductDetail>(pageNo, pageSize);
-    if (StringUtils.isNotEmpty(orderIds)) {
-      List<String> ids = Arrays.asList(orderIds.split(","));
-      if (!ids.isEmpty()) {
-        queryWrapper.in("order_id", ids);
-      }
+    /**
+     * 分页列表查询
+     *
+     * @param jshOrderProductDetail
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-分页列表查询")
+    @ApiOperation(value = "jsh_order_product_detail-分页列表查询", notes = "jsh_order_product_detail-分页列表查询")
+    @GetMapping(value = "/list")
+    public Result<?> queryPageList(JshOrderProductDetail jshOrderProductDetail,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                   @RequestParam(name = "orderIds", required = false) String orderIds,
+                                   HttpServletRequest req) {
+        QueryWrapper<JshOrderProductDetail> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderProductDetail, req.getParameterMap());
+        Page<JshOrderProductDetail> page = new Page<JshOrderProductDetail>(pageNo, pageSize);
+        if (StringUtils.isNotEmpty(orderIds)) {
+            List<String> ids = Arrays.asList(orderIds.split(","));
+            if (!ids.isEmpty()) {
+                queryWrapper.in("order_id", ids);
+            }
+        }
+        IPage<JshOrderProductDetail> pageList = jshOrderProductDetailService.page(page, queryWrapper);
+        return Result.OK(pageList);
     }
-    IPage<JshOrderProductDetail> pageList = jshOrderProductDetailService.page(page, queryWrapper);
-    return Result.OK(pageList);
-  }
 
-  /**
-   * 添加
-   *
-   * @param jshOrderProductDetail
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-添加")
-  @ApiOperation(value = "jsh_order_product_detail-添加", notes = "jsh_order_product_detail-添加")
-  @PostMapping(value = "/add")
-  public Result<?> add(@RequestBody JshOrderProductDetail jshOrderProductDetail) {
-    jshOrderProductDetailService.save(jshOrderProductDetail);
-    return Result.OK("添加成功！");
-  }
-
-  /**
-   * 编辑
-   *
-   * @param jshOrderProductDetail
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-编辑")
-  @ApiOperation(value = "jsh_order_product_detail-编辑", notes = "jsh_order_product_detail-编辑")
-  @PutMapping(value = "/edit")
-  public Result<?> edit(@RequestBody JshOrderProductDetail jshOrderProductDetail) {
-    jshOrderProductDetailService.updateById(jshOrderProductDetail);
-    return Result.OK("编辑成功!");
-  }
-
-  /**
-   * 通过id删除
-   *
-   * @param id
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-通过id删除")
-  @ApiOperation(value = "jsh_order_product_detail-通过id删除", notes = "jsh_order_product_detail-通过id删除")
-  @DeleteMapping(value = "/delete")
-  public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
-    jshOrderProductDetailService.removeById(id);
-    return Result.OK("删除成功!");
-  }
-
-  /**
-   * 批量删除
-   *
-   * @param ids
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-批量删除")
-  @ApiOperation(value = "jsh_order_product_detail-批量删除", notes = "jsh_order_product_detail-批量删除")
-  @DeleteMapping(value = "/deleteBatch")
-  public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
-    this.jshOrderProductDetailService.removeByIds(Arrays.asList(ids.split(",")));
-    return Result.OK("批量删除成功!");
-  }
-
-  /**
-   * 通过id查询
-   *
-   * @param id
-   * @return
-   */
-  @AutoLog(value = "jsh_order_product_detail-通过id查询")
-  @ApiOperation(value = "jsh_order_product_detail-通过id查询", notes = "jsh_order_product_detail-通过id查询")
-  @GetMapping(value = "/queryById")
-  public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
-    JshOrderProductDetail jshOrderProductDetail = jshOrderProductDetailService.getById(id);
-    if (jshOrderProductDetail == null) {
-      return Result.error("未找到对应数据");
+    /**
+     * 添加
+     *
+     * @param jshOrderProductDetail
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-添加")
+    @ApiOperation(value = "jsh_order_product_detail-添加", notes = "jsh_order_product_detail-添加")
+    @PostMapping(value = "/add")
+    public Result<?> add(@RequestBody JshOrderProductDetail jshOrderProductDetail) {
+        jshOrderProductDetailService.save(jshOrderProductDetail);
+        return Result.OK("添加成功！");
     }
-    return Result.OK(jshOrderProductDetail);
-  }
 
-  /**
-   * 导出excel
-   *
-   * @param request
-   * @param jshOrderProductDetail
-   */
-  @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, JshOrderProductDetail jshOrderProductDetail) {
-    return super.exportXls(request, jshOrderProductDetail, JshOrderProductDetail.class, "jsh_order_product_detail");
-  }
+    /**
+     * 编辑
+     *
+     * @param jshOrderProductDetail
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-编辑")
+    @ApiOperation(value = "jsh_order_product_detail-编辑", notes = "jsh_order_product_detail-编辑")
+    @PutMapping(value = "/edit")
+    public Result<?> edit(@RequestBody JshOrderProductDetail jshOrderProductDetail) {
+        jshOrderProductDetailService.updateById(jshOrderProductDetail);
+        return Result.OK("编辑成功!");
+    }
 
-  /**
-   * 通过excel导入数据
-   *
-   * @param request
-   * @param response
-   * @return
-   */
-  @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-  public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-    return super.importExcel(request, response, JshOrderProductDetail.class);
-  }
+    /**
+     * 通过id删除
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-通过id删除")
+    @ApiOperation(value = "jsh_order_product_detail-通过id删除", notes = "jsh_order_product_detail-通过id删除")
+    @DeleteMapping(value = "/delete")
+    public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
+        jshOrderProductDetailService.removeById(id);
+        return Result.OK("删除成功!");
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-批量删除")
+    @ApiOperation(value = "jsh_order_product_detail-批量删除", notes = "jsh_order_product_detail-批量删除")
+    @DeleteMapping(value = "/deleteBatch")
+    public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
+        this.jshOrderProductDetailService.removeByIds(Arrays.asList(ids.split(",")));
+        return Result.OK("批量删除成功!");
+    }
+
+    /**
+     * 通过id查询
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product_detail-通过id查询")
+    @ApiOperation(value = "jsh_order_product_detail-通过id查询", notes = "jsh_order_product_detail-通过id查询")
+    @GetMapping(value = "/queryById")
+    public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
+        JshOrderProductDetail jshOrderProductDetail = jshOrderProductDetailService.getById(id);
+        if (jshOrderProductDetail == null) {
+            return Result.error("未找到对应数据");
+        }
+        return Result.OK(jshOrderProductDetail);
+    }
+
+    /**
+     * 导出excel
+     *
+     * @param request
+     * @param jshOrderProductDetail
+     */
+    @RequestMapping(value = "/exportXls")
+    public ModelAndView exportXls(HttpServletRequest request, JshOrderProductDetail jshOrderProductDetail) {
+        Integer type = null;
+        if (jshOrderProductDetail != null) {
+            type = jshOrderProductDetail.getType();
+        }
+        String title = "生产单明细";
+        if (type != null) {
+            title = type == 1 ? "铝材单明细" : "生产单明细";
+        }
+        return super.exportXls(request, jshOrderProductDetail, JshOrderProductDetail.class, title);
+    }
+
+    /**
+     * 通过excel导入数据
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
+        return super.importExcel(request, response, JshOrderProductDetail.class);
+    }
 
 }

@@ -12,7 +12,7 @@
         <a-row>
           <a-col :span="24">
             <a-form-model-item label="客户名字" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="name">
-              <j-search-select-tag v-model="model.name" dict=""/>
+              <j-input v-model="model.name" dict=""/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -22,8 +22,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="常用地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-              <a-input v-model="model.address" placeholder="请输入常用地址"></a-input>
+            <a-form-model-item label="联系地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
+              <a-input v-model="model.address" placeholder="请输入联系地址"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     add() {
-      this.edit(this.modelDefault);
+      this.edit({ sex: 1 });
     },
     edit(record) {
       this.model = Object.assign({}, record);

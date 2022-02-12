@@ -1,6 +1,10 @@
 <template>
   <a-card class="j-inner-table-wrapper" :bordered="false">
 
+    <!-- 操作按钮区域 -->
+    <div class="table-operator">
+      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order_product')">导出</a-button>
+    </div>
     <!-- table区域 begin -->
     <div>
       <a-alert type="info" showIcon style="margin-bottom: 16px;">
@@ -22,7 +26,8 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange}">
+        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
+        @change="handleTableChange">
       </a-table>
     </div>
     <!-- table区域 end -->
@@ -56,21 +61,16 @@ export default {
     orderId: {
       immediate: true,
       handler(val) {
-        if (!this.orderId) {
-          this.clearList();
-        } else {
-          this.queryParam['orderId'] = val;
-          this.queryParam['type'] = this.type;
-          console.log(this.queryParam);
-          this.loadData(1);
-        }
+        this.queryParam['orderId'] = val || '';
+        console.log(this.queryParam);
+        this.loadData(1);
       }
     }
   },
   data() {
     return {
       description: 'jsh_order_product列表管理页面',
-      disableMixinCreated: true,
+      // disableMixinCreated: true,
       // 表头
       columns: [
         {
@@ -156,7 +156,7 @@ export default {
       ipagination: {
         current: 1,
         pageSize: 10,
-        pageSizeOptions: ['5', '10', '50'],
+        pageSizeOptions: ['5', '10', '30', '50'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条";
         },
@@ -164,21 +164,22 @@ export default {
         showSizeChanger: true,
         total: 0
       },
+      isorter: {
+        column: 'id',
+        order: 'desc',
+      },
       // 字典选项
       dictOptions: {},
       url: {
         list: '/business/order/jshOrderProduct/list',
+        exportXlsUrl: "/business/order/jshOrderProduct/exportXls",
       },
       superFieldList: [],
     };
   },
   created() {
   },
-  computed: {
-    importExcelUrl() {
-      return window._CONFIG['domianURL'] + this.url.importExcelUrl;
-    }
-  },
+  computed: {},
   methods: {
     clearList() {
       this.dataSource = [];

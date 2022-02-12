@@ -24,136 +24,136 @@ import java.io.Serializable;
 @Data
 @TableName("jsh_order_product")
 public class JshOrderProduct implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 主键
-   */
-  @TableId(type = IdType.ASSIGN_ID)
-  @ApiModelProperty(value = "主键")
-  private java.lang.Long id;
+    /**
+     * 主键
+     */
+    @TableId(type = IdType.ASSIGN_ID)
+    @ApiModelProperty(value = "主键")
+    private java.lang.Long id;
 
-  /**
-   * 创建人
-   */
-  @ApiModelProperty(value = "创建人")
-  private java.lang.String createBy;
+    /**
+     * 创建人
+     */
+    @ApiModelProperty(value = "创建人")
+    private java.lang.String createBy;
 
-  /**
-   * 创建时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "创建时间")
-  private java.util.Date createTime;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "创建时间")
+    private java.util.Date createTime;
 
-  /**
-   * 更新人
-   */
-  @ApiModelProperty(value = "更新人")
-  private java.lang.String updateBy;
+    /**
+     * 更新人
+     */
+    @ApiModelProperty(value = "更新人")
+    private java.lang.String updateBy;
 
-  /**
-   * 更新时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "更新时间")
-  private java.util.Date updateTime;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
+    private java.util.Date updateTime;
 
-  /**
-   * 删除状态（0，正常，1已删除）
-   */
-  @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
-  @TableLogic
-  private Integer delFlag;
+    /**
+     * 删除状态（0，正常，1已删除）
+     */
+    @TableLogic
+    private Integer delFlag;
 
-  /**
-   * 客户id
-   */
-  @Excel(name = "客户id", width = 15)
-  @ApiModelProperty(value = "客户id")
-  private java.lang.Long customerId;
-  /**
-   * 订单ID
-   */
-  @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-  @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-  @ApiModelProperty(value = "订单ID")
-  private java.lang.Long orderId;
-  /**
-   * 产品id
-   */
-  @Excel(name = "产品id", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
-  @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
-  @ApiModelProperty(value = "产品id")
-  private java.lang.Long productId;
-  /**
-   * 宽
-   */
-  @Excel(name = "宽", width = 15)
-  @ApiModelProperty(value = "宽")
-  private java.lang.Long width;
-  /**
-   * 高
-   */
-  @Excel(name = "高", width = 15)
-  @ApiModelProperty(value = "高")
-  private java.lang.Long height;
-  /**
-   * 数量
-   */
-  @Excel(name = "数量", width = 15)
-  @ApiModelProperty(value = "数量")
-  private java.lang.Integer num;
+    /**
+     * 客户id
+     */
+    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @ApiModelProperty(value = "客户id")
+    private java.lang.Long customerId;
+    /**
+     * 订单ID
+     */
+    @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @ApiModelProperty(value = "订单ID")
+    private java.lang.Long orderId;
+    /**
+     * 产品id
+     */
+    @Excel(name = "产品", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
+    @ApiModelProperty(value = "产品id")
+    private java.lang.Long productId;
+    /**
+     * 宽
+     */
+    @Excel(name = "宽(cm)", width = 15)
+    @ApiModelProperty(value = "宽(cm)")
+    private java.lang.Long width;
+    /**
+     * 高
+     */
+    @Excel(name = "高(cm)", width = 15)
+    @ApiModelProperty(value = "高(cm)")
+    private java.lang.Long height;
+    /**
+     * 数量
+     */
+    @Excel(name = "数量", width = 15)
+    @ApiModelProperty(value = "数量")
+    private java.lang.Integer num;
 
-  /**
-   * 方向:0其他,1双开,2左开,3右开
-   */
-  @Excel(name = "方向:0其他,1双开,2左开,3右开", width = 15, dicCode = "direction")
-  @Dict(dicCode = "direction")
-  @ApiModelProperty(value = "方向:0其他,1双开,2左开,3右开")
-  private java.lang.Integer direction;
+    /**
+     * 方向:0其他,1双开,2左开,3右开
+     */
+    @Excel(name = "方向", width = 15, dicCode = "direction")
+    @Dict(dicCode = "direction")
+    @ApiModelProperty(value = "方向:0其他,1双开,2左开,3右开")
+    private java.lang.Integer direction;
 
-  /**
-   * 颜色
-   */
-  @Excel(name = "颜色", width = 15)
-  @ApiModelProperty(value = "颜色")
-  private java.lang.String color;
+    /**
+     * 铝材颜色
+     */
+    @Excel(name = "铝材颜色", width = 15)
+    @ApiModelProperty(value = "铝材颜色")
+    private java.lang.String color;
 
-  /**
-   * 玻璃颜色
-   */
-  @Excel(name = "玻璃颜色", width = 15)
-  @ApiModelProperty(value = "玻璃颜色")
-  private java.lang.String glassColor;
+    /**
+     * 玻璃颜色
+     */
+    @Excel(name = "玻璃颜色", width = 15)
+    @ApiModelProperty(value = "玻璃颜色")
+    private java.lang.String glassColor;
 
-  /**
-   * 类型:1抽,2拉,3条
-   */
-  @Excel(name = "类型:0无,1抽,2拉,3条", width = 15, dicCode = "product_extend")
-  @Dict(dicCode = "product_extend")
-  @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
-  private java.lang.Integer extendType;
+    /**
+     * 类型:1抽,2拉,3条
+     */
+    @Excel(name = "类型", width = 15, dicCode = "product_extend")
+    @Dict(dicCode = "product_extend")
+    @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
+    private java.lang.Integer extendType;
 
-  /**
-   * 数量
-   */
-  @Excel(name = "数量", width = 15)
-  @ApiModelProperty(value = "数量")
-  private java.lang.Integer extendNum;
+    /**
+     * 数量
+     */
+    @Excel(name = "数量", width = 15)
+    @ApiModelProperty(value = "数量")
+    private java.lang.Integer extendNum;
 
-  /**
-   * 单价
-   */
-  @Excel(name = "单价", width = 15)
-  @ApiModelProperty(value = "单价")
-  private java.lang.Long price;
-  /**
-   * 总价
-   */
-  @Excel(name = "总价", width = 15)
-  @ApiModelProperty(value = "总价")
-  private java.lang.Long totalPrice;
+    /**
+     * 单价(元)
+     */
+    @Excel(name = "单价(元)", width = 15)
+    @ApiModelProperty(value = "单价(元)")
+    private java.lang.Long price;
+    /**
+     * 总价(元)
+     */
+    @Excel(name = "总价(元)", width = 15)
+    @ApiModelProperty(value = "总价(元)")
+    private java.lang.Long totalPrice;
 }

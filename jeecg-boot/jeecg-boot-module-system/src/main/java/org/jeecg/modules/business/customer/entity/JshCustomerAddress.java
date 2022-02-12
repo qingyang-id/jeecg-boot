@@ -24,61 +24,61 @@ import java.io.Serializable;
 @Data
 @TableName("jsh_customer_address")
 public class JshCustomerAddress implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 主键
-   */
-  @TableId(type = IdType.AUTO)
-  @ApiModelProperty(value = "主键")
-  private java.lang.Long id;
+    /**
+     * 主键
+     */
+    @TableId(type = IdType.AUTO)
+    @ApiModelProperty(value = "主键")
+    private java.lang.Long id;
 
-  /**
-   * 创建人
-   */
-  @ApiModelProperty(value = "创建人")
-  private java.lang.String createBy;
+    /**
+     * 创建人
+     */
+    @ApiModelProperty(value = "创建人")
+    private java.lang.String createBy;
 
-  /**
-   * 创建时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "创建时间")
-  private java.util.Date createTime;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "创建时间")
+    private java.util.Date createTime;
 
-  /**
-   * 更新人
-   */
-  @ApiModelProperty(value = "更新人")
-  private java.lang.String updateBy;
+    /**
+     * 更新人
+     */
+    @ApiModelProperty(value = "更新人")
+    private java.lang.String updateBy;
 
-  /**
-   * 更新时间
-   */
-  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  @ApiModelProperty(value = "更新时间")
-  private java.util.Date updateTime;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
+    private java.util.Date updateTime;
 
-  /**
-   * 删除状态（0，正常，1已删除）
-   */
-  @Excel(name = "删除状态", width = 15, dicCode = "del_flag")
-  @TableLogic
-  private Integer delFlag;
+    /**
+     * 删除状态（0，正常，1已删除）
+     */
+    @TableLogic
+    private Integer delFlag;
 
-  /**
-   * 客户id
-   */
-  @Dict(dicCode = "id",dicText = "name",dictTable = "jsh_customer")
-  @ApiModelProperty(value = "客户id")
-  private java.lang.Long customerId;
+    /**
+     * 客户id
+     */
+    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Dict(dicCode = "id", dicText = "name", dictTable = "jsh_customer")
+    @ApiModelProperty(value = "客户ID")
+    private java.lang.Long customerId;
 
-  /**
-   * 地址
-   */
-  @Excel(name = "地址", width = 15)
-  @ApiModelProperty(value = "地址")
-  private String address;
+    /**
+     * 地址
+     */
+    @Excel(name = "地址", width = 15)
+    @ApiModelProperty(value = "地址")
+    private String address;
 }

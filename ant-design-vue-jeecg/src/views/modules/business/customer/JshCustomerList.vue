@@ -75,6 +75,7 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
+        :sorter="isorter"
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type:'radio'}"
         :customRow="clickThenSelect"
@@ -129,7 +130,7 @@
       </a-tab-pane>
     </a-tabs>
 
-    <jsh-customer-modal ref="modalForm" @ok="modalFormOk"></jsh-customer-modal>
+    <jsh-customer-modal :mainId="selectedMainId" ref="modalForm" @ok="modalFormOk"></jsh-customer-modal>
   </a-card>
 </template>
 
@@ -164,6 +165,11 @@ export default {
           }
         },
         {
+          title: '客户ID',
+          align: "center",
+          dataIndex: 'id'
+        },
+        {
           title: '客户名字',
           align: "center",
           dataIndex: 'name'
@@ -192,6 +198,22 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
+      /* 分页参数 */
+      ipagination: {
+        current: 1,
+        pageSize: 5,
+        pageSizeOptions: ['5', '10', '50'],
+        showTotal: (total, range) => {
+          return range[0] + "-" + range[1] + " 共" + total + "条";
+        },
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0
+      },
+      isorter: {
+        column: 'id',
+        order: 'desc',
+      },
       superQueryFieldList: [
         { type: 'input', value: 'name', text: '姓名', },
         { type: 'select', value: 'sex', dbType: 'int', text: '性别', dictCode: 'sex' },
@@ -205,18 +227,6 @@ export default {
       },
       dictOptions: {
         sex: [],
-      },
-      /* 分页参数 */
-      ipagination: {
-        current: 1,
-        pageSize: 5,
-        pageSizeOptions: ['5', '10', '50'],
-        showTotal: (total, range) => {
-          return range[0] + "-" + range[1] + " 共" + total + "条";
-        },
-        showQuickJumper: true,
-        showSizeChanger: true,
-        total: 0
       },
       selectedMainId: 0,
       superFieldList: [],
@@ -279,7 +289,7 @@ export default {
       let fieldList = [];
       fieldList.push({ type: 'string', value: 'name', text: '客户名字', dictCode: '' });
       fieldList.push({ type: 'radio', value: 'sex', text: '客户性别', dictCode: 'sex' });
-      fieldList.push({ type: 'string', value: 'address', text: '常用地址', dictCode: '' });
+      fieldList.push({ type: 'string', value: 'address', text: '联系地址', dictCode: '' });
       fieldList.push({ type: 'string', value: 'phone', text: '手机', dictCode: '' });
       this.superFieldList = fieldList;
     }
