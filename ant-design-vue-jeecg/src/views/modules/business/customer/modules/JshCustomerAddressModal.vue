@@ -12,7 +12,7 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="客户id" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
+            <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
               <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id"/>
             </a-form-model-item>
           </a-col>
