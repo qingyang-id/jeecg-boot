@@ -29,16 +29,16 @@ CREATE TABLE `jsh_product` (
 -- ----------------------------
 -- Records of jsh_product
 -- ----------------------------
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通80', '1001', 8000, 8000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通90', '1002', 9000, 9000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通100', '1003', 10000, 10000, -43, -12, -35, -4, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (4, 'admin', 'admin', 0, '连体型', '1004', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (5, 'admin', 'admin', 0, 'G型', '1005', 12000, 12000, -29, 3, -33, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (6, 'admin', 'admin', 0, 'M型', '1006', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (7, 'admin', 'admin', 0, 'F型', '1007', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (8, 'admin', 'admin', 0, '笑脸', '1008', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (9, 'admin', 'admin', 0, '拇指型', '1009', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (10, 'admin', 'admin', 0, '月牙型', '1010', 13000, 13000, 3, 3, -2, -2, '', 1, 0);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通80', '1001', 8000, 8000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通90', '1002', 9000, 9000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通100', '1003', 10000, 10000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (4, 'admin', 'admin', 0, '连体型', '1004', 12000, 12000, -29, 3, -33, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (5, 'admin', 'admin', 0, 'G型', '1005', 12000, 12000, -29, 3, -33, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (6, 'admin', 'admin', 0, 'M型', '1006', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (7, 'admin', 'admin', 0, 'F型', '1007', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (8, 'admin', 'admin', 0, '笑脸', '1008', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (9, 'admin', 'admin', 0, '拇指型', '1009', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (10, 'admin', 'admin', 0, '月牙型', '1010', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
 
 -- ----------------------------
 -- Table structure for jsh_customer
@@ -64,40 +64,40 @@ CREATE TABLE `jsh_customer`  (
 -- ----------------------------
 -- Records of jsh_customer
 -- ----------------------------
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '公平', 1, '钟楼', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '光大', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '好太太', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '恒兴', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '红福', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '洪艺', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '华伟', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '华艺', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '简一', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '金玲', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '快鱼', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '领域', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '龙秀', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '美缝', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '美好', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '诺艺', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '欧雅', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '润泽', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '四方', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天工', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天一', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天宇', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '兄弟', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '阳光天一', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '耀强', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '一方', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '园林', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '赵德义', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '振鑫', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '振兴', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周广辉', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周磊', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周萌', 1, '', '', 0);
-INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周羽', 1, '', '', 0);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '公平', 1, '钟楼', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '光大', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '好太太', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '恒兴', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '红福', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '洪艺', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '华伟', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '华艺', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '简一', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '金玲', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '快鱼', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '领域', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '龙秀', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '美缝', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '美好', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '诺艺', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '欧雅', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '润泽', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '四方', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天工', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天一', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '天宇', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '兄弟', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '阳光天一', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '耀强', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '一方', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '园林', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '赵德义', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '振鑫', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '振兴', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周广辉', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周磊', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周萌', 1, '', '', 1001);
+INSERT INTO `jsh_customer`(`create_by`, `update_by`, `del_flag`, `name`, `sex`, `address`, `phone`, `tenant_id`) VALUES ('admin', 'admin', 0, '周羽', 1, '', '', 1001);
 
 -- ----------------------------
 -- Table structure for jsh_customer_address
