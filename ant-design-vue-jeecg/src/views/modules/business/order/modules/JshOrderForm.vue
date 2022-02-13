@@ -53,6 +53,8 @@
           <template #buttonAfter>
             <a-button style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
             <a-button style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
+            <a-button style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
+            <a-button style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
           </template>
         </j-editable-table>
         <!-- 表单区域 -->
@@ -286,7 +288,9 @@ export default {
             .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
         });
     },
-    updatePrices({ row, target }) {
+    updatePrices(event) {
+      const { row, target } = event;
+      console.log('update prices ', event)
       // 更新当列信息
       let extendPrice = 0;
       switch (Number(row.extendType)) {
@@ -335,7 +339,6 @@ export default {
     },
     /** 当选项被改变时，联动其他组件 */
     async handleValueChange(event) {
-      console.log('value changed');
       const { row, column, value, target } = event;
       switch (column.key) {
         case 'productId': {
@@ -354,7 +357,7 @@ export default {
           break;
         }
         case 'height':
-        case 'weight':
+        case 'width':
         case 'num': {
           if (!value) return;
           // 更新价格信息
@@ -427,26 +430,25 @@ export default {
         // 更新地址列表
         this.updateAddresses(this.model.customerId);
         // id bug
-        // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
-        this.jshOrderProductTable.loading = true;
-        getAction(this.url.jshOrderProduct.list, params).then(res => {
-          let { result } = res;
-          let dataSource = [];
-          if (result) {
-            if (Array.isArray(result)) {
-              dataSource = result;
-            } else if (Array.isArray(result.records)) {
-              dataSource = result.records;
-            }
-          }
-          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
-            id: undefined,
-            price: item.price / 100,
-            totalPrice: item.totalPrice / 100,
-          }));
-        }).finally(() => {
-          this.jshOrderProductTable.loading = false;
-        });
+        this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+        // this.jshOrderProductTable.loading = true;
+        // getAction(this.url.jshOrderProduct.list, params).then(res => {
+        //   let { result } = res;
+        //   let dataSource = [];
+        //   if (result) {
+        //     if (Array.isArray(result)) {
+        //       dataSource = result;
+        //     } else if (Array.isArray(result.records)) {
+        //       dataSource = result.records;
+        //     }
+        //   }
+        //   this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+        //     price: item.price / 100,
+        //     totalPrice: item.totalPrice / 100,
+        //   }));
+        // }).finally(() => {
+        //   this.jshOrderProductTable.loading = false;
+        // });
       }
     },
 
