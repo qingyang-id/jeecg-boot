@@ -3,33 +3,33 @@
     <!-- 主表单区域 -->
     <a-form-model ref="form" :model="model" :rules="validatorRules">
       <a-row>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-model-item label="订单编码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderCode">
             <a-input v-model="model.orderCode" placeholder="订单编码" disabled></a-input>
           </a-form-model-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
+          <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
+            <a-input-number v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
+          </a-form-model-item>
+        </a-col>
+        <a-col :span="12">
           <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
             <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id" @change="updateAddresses"/>
           </a-form-model-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
             <j-search-select-tag v-model="model.address" :dictOptions="addressDictOptions"/>
           </a-form-model-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-model-item label="下单时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderTime">
             <j-date placeholder="请选择下单时间" v-model="model.orderTime" :show-time="true"
                     date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
           </a-form-model-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
-            <a-input-number v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-model-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="remark">
             <a-input v-model="model.remark" placeholder="请输入备注"></a-input>
           </a-form-model-item>
@@ -39,24 +39,30 @@
     <!-- 子表单区域 -->
     <a-tabs v-model="activeKey" @change="handleChangeTabs">
       <a-tab-pane tab="订单商品" :key="refKeys[0]" :forceRender="true">
-        <j-editable-table
-          :ref="refKeys[0]"
-          :loading="jshOrderProductTable.loading"
-          :columns="jshOrderProductTable.columns"
-          :dataSource="jshOrderProductTable.dataSource"
-          :maxHeight="300"
-          :disabled="formDisabled"
-          :rowNumber="true"
-          :rowSelection="true"
-          :actionButton="true"
-          @valueChange="handleValueChange">
-          <template #buttonAfter>
+        <j-vxe-table
+            keep-source
+            :ref="refKeys[0]"
+            :loading="jshOrderProductTable.loading"
+            :columns="jshOrderProductTable.columns"
+            :dataSource="jshOrderProductTable.dataSource"
+            :maxHeight="300"
+            :disabled="formDisabled"
+            :rowNumber="true"
+            :rowSelection="true"
+            :toolbar="true"
+            :alwaysEdit="true"
+            :added = "calculateSumPrice"
+            @valueChange="handleValueChange">
+          <template v-slot:toolbarSuffix>
             <a-button style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
             <a-button style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
             <a-button style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
             <a-button style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
           </template>
-        </j-editable-table>
+          <template v-slot:action="props">
+            <a @click="handleCopy(props)">复制</a>
+          </template>
+        </j-vxe-table>
         <!-- 表单区域 -->
         <batch-set-size-modal ref="sizeModalForm" @ok="batchSetSizeModalFormOk"></batch-set-size-modal>
       </a-tab-pane>
@@ -66,15 +72,19 @@
 </template>
 
 <script>
-
+import { JVxeTableModelMixin } from '@/mixins/JVxeTableModelMixin.js';
+import {
+  VALIDATE_FAILED,
+  getRefPromise,
+  validateFormModelAndTables
+} from '@/components/jeecg/JVxeTable/utils/vxeUtils';
+import { JVXETypes } from '@/components/jeecg/JVxeTable';
 import { getAction, httpAction } from '@/api/manage';
-import { FormTypes, getRefPromise, VALIDATE_NO_PASSED, validateFormModelAndTables } from '@/utils/JEditableTableUtil';
-import { JEditableTableModelMixin } from '@/mixins/JEditableTableModelMixin';
 import BatchSetSizeModal from './BatchSetSizeModal';
 
 export default {
   name: 'JshOrderForm',
-  mixins: [JEditableTableModelMixin],
+  mixins: [JVxeTableModelMixin],
   components: {
     BatchSetSizeModal,
   },
@@ -88,14 +98,6 @@ export default {
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 16 },
-      },
-      labelCol2: {
-        xs: { span: 24 },
-        sm: { span: 3 },
-      },
-      wrapperCol2: {
-        xs: { span: 24 },
-        sm: { span: 20 },
       },
       model: {},
       // 新增时子表默认添加1行空数据
@@ -123,11 +125,11 @@ export default {
           {
             title: '产品',
             key: 'productId',
-            type: FormTypes.select,
+            type: JVXETypes.select,
             options: [],
             dictCode: 'jsh_product,name,id',
             allowSearch: true,
-            width: "12%",
+            width: "10%",
             placeholder: '请选择${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -135,7 +137,7 @@ export default {
           {
             title: '宽(cm)',
             key: 'width',
-            type: FormTypes.inputNumber,
+            type: JVXETypes.inputNumber,
             width: "8%",
             placeholder: '请输入${title}',
             defaultValue: '',
@@ -144,7 +146,7 @@ export default {
           {
             title: '高(cm)',
             key: 'height',
-            type: FormTypes.inputNumber,
+            type: JVXETypes.inputNumber,
             width: "8%",
             placeholder: '请输入${title}',
             defaultValue: '',
@@ -153,8 +155,8 @@ export default {
           {
             title: '数量',
             key: 'num',
-            type: FormTypes.inputNumber,
-            width: "8%",
+            type: JVXETypes.inputNumber,
+            width: "6%",
             placeholder: '请输入${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -162,36 +164,39 @@ export default {
           {
             title: '方向',
             key: 'direction',
-            type: FormTypes.select,
+            type: JVXETypes.select,
             options: [],
             dictCode: "direction",
             width: "8%",
             placeholder: '请选择${title}',
-            defaultValue: '0'
+            defaultValue: '',
           },
           {
             title: '抽/拉/条',
             key: 'extendType',
-            type: FormTypes.select,
+            type: JVXETypes.select,
             options: [],
             dictCode: "product_extend",
             width: "10%",
             placeholder: '请选择${title}',
-            defaultValue: '0'
+            defaultValue: '',
+            formatter({ cellValue }) {
+              return cellValue + '';
+            },
           },
           {
             title: '抽/拉/条数量',
             key: 'extendNum',
-            type: FormTypes.inputNumber,
-            width: "10%",
+            type: JVXETypes.inputNumber,
+            width: "8%",
             placeholder: '请输入${title}',
             defaultValue: 0,
           },
           {
             title: '铝材颜色',
             key: 'color',
-            type: FormTypes.select,
-            width: "10%",
+            type: JVXETypes.select,
+            width: "8%",
             placeholder: '请输入${title}',
             defaultValue: '',
             options: [{
@@ -201,36 +206,51 @@ export default {
               text: '金色',
               value: '金色'
             }, {
-              text: '银色',
-              value: '银色'
+              text: '黑色',
+              value: '黑色'
             }],
           },
           {
             title: '玻璃色号',
             key: 'glassColor',
-            type: FormTypes.input,
-            width: "10%",
+            type: JVXETypes.input,
+            width: "8%",
             placeholder: '请输入${title}',
             defaultValue: '',
           },
           {
             title: '单价(元)',
             key: 'price',
-            type: FormTypes.inputNumber,
+            type: JVXETypes.inputNumber,
             disabled: true,
             width: "8%",
             placeholder: '${title}',
             defaultValue: 0,
+            formatter({ cellValue }) {
+              return cellValue && cellValue / 100 || 0;
+            },
           },
           {
             title: '总价(元)',
             key: 'totalPrice',
-            type: FormTypes.inputNumber,
+            type: JVXETypes.inputNumber,
             disabled: true,
             width: "8%",
             placeholder: '${title}',
             defaultValue: 0,
+            formatter({ cellValue }) {
+              return cellValue && cellValue / 100 || 0;
+            },
           },
+          {
+            title: '操作',
+            key: 'action',
+            type: JVXETypes.slot,
+            fixed: 'right',
+            minWidth: '6%',
+            align: 'center',
+            slotName: 'action',
+          }
         ],
       },
       jshProductPricesMap: {},
@@ -268,30 +288,40 @@ export default {
   created() {
     // 备份model原始值
     this.modelDefault = JSON.parse(JSON.stringify(this.model));
-    getAction(this.url.jshProduct.list)
-      .then((res) => {
-        res.result.records.forEach(item => {
-          this.jshProductPricesMap[item.id] = item;
-        });
-        console.log(res);
-      });
+    this.initProductsMap();
   },
   methods: {
+    initProductsMap() {
+      getAction(this.url.jshProduct.list)
+          .then((res) => {
+            if (!res.success) {
+              return this.$message.error(res.message);
+            }
+            res.result.records.forEach(item => {
+              this.jshProductPricesMap[item.id] = item;
+            });
+          });
+    },
+
+    handleCopy({ row }) {
+      console.log('复制 ', row);
+      this.$refs.jshOrderProduct.pushRows([{ ...row, id: '' }]);
+      this.calculateSumPrice();
+    },
+
     updateAddresses(customerId) {
       if (!customerId) {
         this.addressDictOptions = [{ text: '请先去用户管理页面为该用户添加地址', value: '' }];
       }
       console.log('\n\n\n customerId', customerId);
       getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId })
-        .then((res) => {
-          this.addressDictOptions = res.success && res.result.records.length ? res.result.records
-            .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
-        });
+          .then((res) => {
+            this.addressDictOptions = res.success && res.result.records.length ? res.result.records
+                .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
+          });
     },
-    updatePrices(event) {
-      const { row, target } = event;
-      console.log('update prices ', event)
-      // 更新当列信息
+
+    calculateCurrentRowPrice(row) {
       let extendPrice = 0;
       switch (Number(row.extendType)) {
         case 1: {
@@ -299,7 +329,8 @@ export default {
           if (Number(row.extendNum) && row.extendNum % 3 !== 0) {
             // 重置抽的数量
             console.log('row.extendNum', row.extendNum);
-            target.setValues([{
+            // 此种设置方法，value change事件无法捕获行信息
+            this.$refs.jshOrderProduct.setValues([{
               rowKey: row.id,
               values: { extendNum: Math.floor(row.extendNum / 3) * 3 }
             }]);
@@ -324,23 +355,45 @@ export default {
       console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId);
       const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0) + extendPrice;
       const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 1000000;
-      // 设置商品价格和总价
-      target.setValues([{
+      // 此种设置方法，value change事件无法捕获行信息
+      this.$refs.jshOrderProduct.setValues([{
         rowKey: row.id,
         values: { price: price / 100, totalPrice }
       }]);
-      // 更新汇总信息
-      let { values } = target.getValuesSync({ validate: false });
-      console.log('row', row.extendNum, values);
+    },
 
+    calculateSumPrice() {
+      // 更新汇总信息
+      let values = this.$refs.jshOrderProduct.getTableData();
+      console.log('values', values);
       let sum = 0;
       values.forEach(item => sum += (item.totalPrice || 0) * 100);
       this.model.totalPrice = sum / 100;
     },
+
+    updatePrices({ row, target }) {
+      console.log('update prices ', row, target);
+      if (row) {
+        // 更新当列信息
+        this.calculateCurrentRowPrice(row);
+      } else {
+        // 计算所有行数据
+        this.jshOrderProductTable.dataSource.forEach(item => this.calculateCurrentRowPrice(item));
+      }
+      // 更新订单总价信息
+      this.calculateSumPrice();
+    },
+
     /** 当选项被改变时，联动其他组件 */
     async handleValueChange(event) {
-      const { row, column, value, target } = event;
-      switch (column.key) {
+      console.log('数据变化 ', event);
+      const { col, row, value, oldValue, target } = event;
+      console.log('值 ', value, oldValue, typeof value, typeof oldValue);
+      if (value === oldValue) {
+        console.log('值未发生变化 ', value, oldValue);
+        return;
+      }
+      switch (col.key) {
         case 'productId': {
           // 查询商品详情
           if (!value) return;
@@ -367,9 +420,10 @@ export default {
         case 'extendType': {
           if (!value) {
             // 设置抽拉条数量
+            // 此种设置方法，value change事件无法捕获行信息
             target.setValues([{
               rowKey: row.id,
-              values: { extendNum: 0 }
+              values: Object.assign(row, { extendNum: 0 })
             }]);
             return;
           }
@@ -389,7 +443,8 @@ export default {
     },
 
     batchSetSize(type) {
-      const rows = this.$refs.jshOrderProduct.getSelection();
+      let rows = this.$refs.jshOrderProduct.selectedRows;
+      console.log('values', rows);
       if (rows.length <= 0) {
         this.$message.error('请选中需要批量设置的行');
         return;
@@ -397,8 +452,10 @@ export default {
       this.$refs.sizeModalForm.add(type);
       this.$refs.sizeModalForm.disableSubmit = false;
     },
+
     batchSetSizeModalFormOk(size, batchType) {
-      const rowKeys = this.$refs.jshOrderProduct.getSelection();
+      const rowKeys = this.$refs.jshOrderProduct.selectedRowIds;
+      // 此种设置方法，value change事件无法捕获行信息
       this.$refs.jshOrderProduct.setValues(rowKeys.map(rowKey => ({
         rowKey: rowKey, // 行的id
         values: {
@@ -407,49 +464,59 @@ export default {
         }
       })));
     },
+
     getAllTable() {
       let values = this.tableKeys.map(key => getRefPromise(this, key));
       return Promise.all(values);
     },
+
     addBefore() {
       console.log("\n\n\n form add before");
       this.jshOrderProductTable.dataSource = [];
     },
+
     add() {
       console.log("\n\n\n form add", this.modelDefault);
       this.edit(this.modelDefault);
     },
+
     edit(record) {
       this.model = Object.assign({}, record);
       this.visible = true;
-      console.log("\n\n\n form edit", this.model, this.model.id);
       // 加载子表数据
       if (this.model.id) {
         let params = { id: this.model.id, };
         this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
         // 更新地址列表
         this.updateAddresses(this.model.customerId);
-        // id bug
-        this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
-        // this.jshOrderProductTable.loading = true;
-        // getAction(this.url.jshOrderProduct.list, params).then(res => {
-        //   let { result } = res;
-        //   let dataSource = [];
-        //   if (result) {
-        //     if (Array.isArray(result)) {
-        //       dataSource = result;
-        //     } else if (Array.isArray(result.records)) {
-        //       dataSource = result.records;
-        //     }
-        //   }
-        //   this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
-        //     price: item.price / 100,
-        //     totalPrice: item.totalPrice / 100,
-        //   }));
-        // }).finally(() => {
-        //   this.jshOrderProductTable.loading = false;
-        // });
+        // 格式化不起作用
+        // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
+        this.jshOrderProductTable.loading = true;
+        getAction(this.url.jshOrderProduct.list, params).then(res => {
+          let { result } = res;
+          let dataSource = [];
+          if (result) {
+            if (Array.isArray(result)) {
+              dataSource = result;
+            } else if (Array.isArray(result.records)) {
+              dataSource = result.records;
+            }
+          }
+          this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+            price: item.price / 100,
+            totalPrice: item.totalPrice / 100,
+          }));
+        }).finally(() => {
+          this.jshOrderProductTable.loading = false;
+        });
       }
+    },
+
+    /** ATab 选项卡切换事件 */
+    handleChangeTabs(key) {
+      getRefPromise(this, key).then(editableTable => {
+        editableTable.resetScrollTop();
+      });
     },
 
     // 校验所有一对一子表表单
@@ -465,8 +532,10 @@ export default {
 
     /** 整理成formData */
     classifyIntoFormData(allValues) {
+      console.log('main before', this.model, allValues.formValue);
       let main = Object.assign(this.model, allValues.formValue);
-      const jshOrderProductPageList = allValues.tablesValue[0].values;
+      console.log('main', main, allValues);
+      const jshOrderProductPageList = allValues.tablesValue[0].tableData;
       if (jshOrderProductPageList.length) {
         jshOrderProductPageList.forEach(item => {
           const jshOrderProductDetailList = [];
@@ -512,7 +581,7 @@ export default {
               break;
             }
           }
-          console.log('detail: ', this.jshProductPricesMap, this.jshProductPricesMap[item.productId])
+          console.log('detail: ', this.jshProductPricesMap, this.jshProductPricesMap[item.productId]);
           jshOrderProductDetailList.push({
             ...productDetail,
             type: 1,
@@ -537,9 +606,8 @@ export default {
       console.log('\n\n\n product list ', jshOrderProductPageList);
       return {
         ...main, // 展开
-        customerId_dictText: undefined,
-        totalPrice: main.totalPrice * 100,
         jshOrderProductPageList,
+        totalPrice: main.totalPrice * 100,
       };
     },
 
@@ -549,27 +617,32 @@ export default {
       /** 触发表单验证 */
       this.getAllTable().then(tables => {
         console.log('tables ', tables);
+        /** 一次性验证主表和所有的次表 */
         return validateFormModelAndTables(this.$refs.form, this.model, tables);
-      }).then(allValues => {
-        console.log('allValues ', allValues);
-        /** 一次性验证一对一的所有子表 */
-        return this.validateSubForm(allValues);
-      }).then(allValues => {
-        if (typeof this.classifyIntoFormData !== 'function') {
-          throw this.throwNotFunction('classifyIntoFormData');
-        }
-        console.log("this.classifyIntoFormData", typeof this.classifyIntoFormData);
-        let formData = this.classifyIntoFormData(allValues);
-        // 发起请求
-        return this.request(formData);
-      }).catch(e => {
-        if (e.error === VALIDATE_NO_PASSED) {
-          // 如果有未通过表单验证的子表，就自动跳转到它所在的tab
-          this.activeKey = e.index == null ? this.activeKey : this.refKeys[e.index];
-        } else {
-          this.$message.error('信息有误');
-        }
-      });
+      })
+          .then(allValues => {
+            console.log('allValues ', allValues);
+            /** 一次性验证一对一的所有子表 */
+            return this.validateSubForm(allValues);
+          })
+          .then(allValues => {
+            if (typeof this.classifyIntoFormData !== 'function') {
+              throw this.throwNotFunction('classifyIntoFormData');
+            }
+            console.log("this.classifyIntoFormData", typeof this.classifyIntoFormData);
+            let formData = this.classifyIntoFormData(allValues);
+            // 发起请求
+            return this.request(formData);
+          })
+          .catch((e) => {
+            if (e.error === VALIDATE_FAILED) {
+              // 如果有未通过表单验证的子表，就自动跳转到它所在的tab
+              this.activeKey = e.index == null ? this.activeKey : this.refKeys[e.index];
+            } else {
+              console.error(e);
+              this.$message.error('信息有误');
+            }
+          });
     },
     validateError(msg) {
       this.$message.error(msg);
