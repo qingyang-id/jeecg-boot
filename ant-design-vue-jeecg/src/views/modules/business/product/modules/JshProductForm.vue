@@ -24,23 +24,23 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="铝材宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumWidthDiff">
+            <a-form-model-item label="铝材宽度差(mm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="aluminumWidthDiff">
               <a-input-number v-model="model.aluminumWidthDiff" placeholder="请输入铝材宽度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="铝材高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol"
+            <a-form-model-item label="铝材高度差(mm)" :labelCol="labelCol" :wrapperCol="wrapperCol"
                                prop="aluminumHeightDiff">
               <a-input-number v-model="model.aluminumHeightDiff" placeholder="请输入铝材高度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="玻璃宽度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassWidthDiff">
+            <a-form-model-item label="玻璃宽度差(mm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassWidthDiff">
               <a-input-number v-model="model.glassWidthDiff" placeholder="请输入玻璃宽度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="玻璃高度差(cm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassHeightDiff">
+            <a-form-model-item label="玻璃高度差(mm)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="glassHeightDiff">
               <a-input-number v-model="model.glassHeightDiff" placeholder="请输入玻璃高度差" style="width: 100%"/>
             </a-form-model-item>
           </a-col>

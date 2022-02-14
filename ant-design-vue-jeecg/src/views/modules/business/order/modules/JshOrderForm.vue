@@ -51,7 +51,7 @@
             :rowSelection="true"
             :toolbar="true"
             :alwaysEdit="true"
-            :added = "calculateSumPrice"
+            @remove="calculateSumPrice"
             @valueChange="handleValueChange">
           <template v-slot:toolbarSuffix>
             <a-button style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
@@ -79,7 +79,7 @@ import {
   validateFormModelAndTables
 } from '@/components/jeecg/JVxeTable/utils/vxeUtils';
 import { JVXETypes } from '@/components/jeecg/JVxeTable';
-import { getAction, httpAction } from '@/api/manage';
+import { getAction, httpAction, putAction } from '@/api/manage';
 import BatchSetSizeModal from './BatchSetSizeModal';
 
 export default {
@@ -135,7 +135,7 @@ export default {
             validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
-            title: '宽(cm)',
+            title: '宽(mm)',
             key: 'width',
             type: JVXETypes.inputNumber,
             width: "8%",
@@ -144,7 +144,7 @@ export default {
             validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
-            title: '高(cm)',
+            title: '高(mm)',
             key: 'height',
             type: JVXETypes.inputNumber,
             width: "8%",
@@ -169,7 +169,7 @@ export default {
             dictCode: "direction",
             width: "8%",
             placeholder: '请选择${title}',
-            defaultValue: '',
+            defaultValue: '0',
           },
           {
             title: '抽/拉/条',
@@ -179,10 +179,7 @@ export default {
             dictCode: "product_extend",
             width: "10%",
             placeholder: '请选择${title}',
-            defaultValue: '',
-            formatter({ cellValue }) {
-              return cellValue + '';
-            },
+            defaultValue: '0',
           },
           {
             title: '抽/拉/条数量',
@@ -354,7 +351,7 @@ export default {
       }
       console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId);
       const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0) + extendPrice;
-      const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 1000000;
+      const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 100000000;
       // 此种设置方法，value change事件无法捕获行信息
       this.$refs.jshOrderProduct.setValues([{
         rowKey: row.id,
@@ -362,7 +359,8 @@ export default {
       }]);
     },
 
-    calculateSumPrice() {
+    calculateSumPrice(arg) {
+      console.log('arg', arg);
       // 更新汇总信息
       let values = this.$refs.jshOrderProduct.getTableData();
       console.log('values', values);
@@ -503,6 +501,8 @@ export default {
             }
           }
           this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
+            direction: `${item.direction}`,
+            extendType: `${item.extendType}`,
             price: item.price / 100,
             totalPrice: item.totalPrice / 100,
           }));
@@ -613,7 +613,8 @@ export default {
 
     /** 确定按钮点击事件 */
     handleOk() {
-      console.log("\n\n\n form handle ok");
+      // 重新计算一次价格
+      this.updatePrices({});
       /** 触发表单验证 */
       this.getAllTable().then(tables => {
         console.log('tables ', tables);

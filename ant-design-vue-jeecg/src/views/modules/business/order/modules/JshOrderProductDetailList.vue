@@ -92,22 +92,22 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '参考宽度(cm)',
+          title: '参考宽度(mm)',
           align: "center",
           dataIndex: 'referenceWidth'
         },
         {
-          title: '参考高度(cm)',
+          title: '参考高度(mm)',
           align: "center",
           dataIndex: 'referenceHeight'
         },
         {
-          title: '宽(cm)',
+          title: '宽(mm)',
           align: "center",
           dataIndex: 'width'
         },
         {
-          title: '高(cm)',
+          title: '高(mm)',
           align: "center",
           dataIndex: 'height'
         },

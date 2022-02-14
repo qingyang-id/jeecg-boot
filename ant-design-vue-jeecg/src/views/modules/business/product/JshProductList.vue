@@ -184,22 +184,22 @@
             }
           },
           {
-            title:'铝材宽度差(cm)',
+            title:'铝材宽度差(mm)',
             align:"center",
             dataIndex: 'aluminumWidthDiff'
           },
           {
-            title:'铝材高度差(cm)',
+            title:'铝材高度差(mm)',
             align:"center",
             dataIndex: 'aluminumHeightDiff'
           },
           {
-            title:'玻璃宽度差(cm)',
+            title:'玻璃宽度差(mm)',
             align:"center",
             dataIndex: 'glassWidthDiff'
           },
           {
-            title:'玻璃高度差(cm)',
+            title:'玻璃高度差(mm)',
             align:"center",
             dataIndex: 'glassHeightDiff'
           },
@@ -255,10 +255,10 @@
         fieldList.push({type:'string',value:'barcode',text:'商品条码',dictCode:''})
         fieldList.push({type:'double',value:'purchasePrice',text:'采购价格',dictCode:''})
         fieldList.push({type:'double',value:'wholesalePrice',text:'销售价格',dictCode:''})
-        fieldList.push({type:'int',value:'aluminumWidthDiff',text:'铝材宽度差(cm)',dictCode:''})
-        fieldList.push({type:'int',value:'aluminumHeightDiff',text:'铝材高度差(cm)',dictCode:''})
-        fieldList.push({type:'int',value:'glassWidthDiff',text:'玻璃宽度差(cm)',dictCode:''})
-        fieldList.push({type:'int',value:'glassHeightDiff',text:'玻璃高度差(cm)',dictCode:''})
+        fieldList.push({type:'int',value:'aluminumWidthDiff',text:'铝材宽度差(mm)',dictCode:''})
+        fieldList.push({type:'int',value:'aluminumHeightDiff',text:'铝材高度差(mm)',dictCode:''})
+        fieldList.push({type:'int',value:'glassWidthDiff',text:'玻璃宽度差(mm)',dictCode:''})
+        fieldList.push({type:'int',value:'glassHeightDiff',text:'玻璃高度差(mm)',dictCode:''})
         fieldList.push({type:'string',value:'remark',text:'备注',dictCode:''})
         fieldList.push({type:'int',value:'status',text:'状态',dictCode:'status'})
         this.superFieldList = fieldList

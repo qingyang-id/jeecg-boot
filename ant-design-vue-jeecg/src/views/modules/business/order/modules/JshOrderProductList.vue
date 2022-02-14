@@ -96,12 +96,12 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '宽(cm)',
+          title: '宽(mm)',
           align: "center",
           dataIndex: 'width'
         },
         {
-          title: '高(cm)',
+          title: '高(mm)',
           align: "center",
           dataIndex: 'height'
         },
