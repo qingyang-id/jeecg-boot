@@ -91,14 +91,14 @@ public class JshOrderProduct implements Serializable {
     /**
      * 宽
      */
-    @Excel(name = "宽(cm)", width = 15)
-    @ApiModelProperty(value = "宽(cm)")
+    @Excel(name = "宽(mm)", width = 15)
+    @ApiModelProperty(value = "宽(mm)")
     private java.lang.Long width;
     /**
      * 高
      */
-    @Excel(name = "高(cm)", width = 15)
-    @ApiModelProperty(value = "高(cm)")
+    @Excel(name = "高(mm)", width = 15)
+    @ApiModelProperty(value = "高(mm)")
     private java.lang.Long height;
     /**
      * 数量
@@ -145,15 +145,23 @@ public class JshOrderProduct implements Serializable {
     private java.lang.Integer extendNum;
 
     /**
-     * 单价(元)
+     * 单价(分)
      */
     @Excel(name = "单价(元)", width = 15)
-    @ApiModelProperty(value = "单价(元)")
+    @ApiModelProperty(value = "单价(分)")
     private java.lang.Long price;
+
     /**
-     * 总价(元)
+     * 总面积
      */
-    @Excel(name = "总价(元)", width = 15)
-    @ApiModelProperty(value = "总价(元)")
+    @Excel(name = "总面积(m²)", width = 15)
+    @ApiModelProperty(value = "总面积(mm²)")
+    private java.lang.Long totalArea;
+
+    /**
+     * 订单总额
+     */
+    @Excel(name = "订单总额(元)", width = 15)
+    @ApiModelProperty(value = "订单总额(分)")
     private java.lang.Long totalPrice;
 }

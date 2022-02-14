@@ -7,32 +7,43 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.business.order.entity.JshOrderProduct;
 import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
 import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
 import org.jeecg.modules.business.order.service.IJshOrderProductDetailService;
 import org.jeecg.modules.business.order.service.IJshOrderProductExtendService;
 import org.jeecg.modules.business.order.service.IJshOrderProductService;
+import org.jeecg.modules.business.order.vo.AluminumVo;
+import org.jeecg.modules.business.order.vo.GlassVo;
+import org.jeecg.modules.business.order.vo.JshOrderProductExportVo;
 import org.jeecg.modules.business.order.vo.JshOrderProductPage;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
+import org.jeecgframework.poi.excel.def.NormalExcelConstants;
+import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
+import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.jeecg.common.util.oConvertUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description: jsh_order_product
@@ -205,42 +216,50 @@ public class JshOrderProductController extends JeecgController<JshOrderProduct, 
      */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, JshOrderProduct jshOrderProduct) {
-//        // Step.1 组装查询条件查询数据
-//        QueryWrapper<JshOrderProduct> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderProduct, request.getParameterMap());
-//        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-//
-//        //Step.2 获取导出数据
-//        List<JshOrderProduct> queryList = jshOrderProductService.list(queryWrapper);
-//        // 过滤选中数据
-//        String selections = request.getParameter("selections");
-//        List<JshOrderProduct> jshOrderProductList = new ArrayList<JshOrderProduct>();
-//        if (oConvertUtils.isEmpty(selections)) {
-//            jshOrderProductList = queryList;
-//        } else {
-//            List<String> selectionList = Arrays.asList(selections.split(","));
-//            jshOrderProductList = queryList.stream().filter(item -> selectionList.contains(item.getId())).collect(Collectors.toList());
-//        }
-//
-//        // Step.3 组装pageList
-//        List<JshOrderProductPage> pageList = new ArrayList<JshOrderProductPage>();
-//        for (JshOrderProduct main : jshOrderProductList) {
-//            JshOrderProductPage vo = new JshOrderProductPage();
-//            BeanUtils.copyProperties(main, vo);
-//            List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
-//            vo.setJshOrderProductDetailList(jshOrderProductDetailList);
-//            List<JshOrderProductExtend> jshOrderProductExtendList = jshOrderProductExtendService.selectByMainId(main.getId());
-//            vo.setJshOrderProductExtendList(jshOrderProductExtendList);
-//            pageList.add(vo);
-//        }
-//
-//        // Step.4 AutoPoi 导出Excel
-//        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-//        mv.addObject(NormalExcelConstants.FILE_NAME, "jsh_order_product列表");
-//        mv.addObject(NormalExcelConstants.CLASS, JshOrderProductPage.class);
-//        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("jsh_order_product数据", "导出人:" + sysUser.getRealname(), "jsh_order_product"));
-//        mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
-//        return mv;
-        return super.exportXls(request, jshOrderProduct, JshOrderProduct.class, "原尺寸信息");
+        // Step.1 组装查询条件查询数据
+        QueryWrapper<JshOrderProduct> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderProduct, request.getParameterMap());
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+
+        //Step.2 获取导出数据
+        List<JshOrderProduct> queryList = jshOrderProductService.list(queryWrapper);
+        // 过滤选中数据
+        String selections = request.getParameter("selections");
+        List<JshOrderProduct> jshOrderProductList;
+        if (oConvertUtils.isEmpty(selections)) {
+            jshOrderProductList = queryList;
+        } else {
+            List<String> selectionList = Arrays.asList(selections.split(","));
+            jshOrderProductList = queryList.stream().filter(item -> selectionList.contains(item.getId())).collect(Collectors.toList());
+        }
+
+        // Step.3 组装pageList
+        List<JshOrderProductExportVo> pageList = new ArrayList<>();
+        for (JshOrderProduct main : jshOrderProductList) {
+            JshOrderProductExportVo vo = new JshOrderProductExportVo();
+            BeanUtils.copyProperties(main, vo);
+            List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
+            for (JshOrderProductDetail jshOrderProductDetail : jshOrderProductDetailList) {
+                if (jshOrderProductDetail.getType() == 1) {
+                    // 铝材
+                    AluminumVo aluminumVo = new AluminumVo();
+                    BeanUtils.copyProperties(jshOrderProductDetail, aluminumVo);
+                    vo.setAluminumVo(aluminumVo);
+                } else {
+                    GlassVo glassVo = new GlassVo();
+                    BeanUtils.copyProperties(jshOrderProductDetail, glassVo);
+                    vo.setGlassVo(glassVo);
+                }
+            }
+            pageList.add(vo);
+        }
+
+        // Step.4 AutoPoi 导出Excel
+        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
+        mv.addObject(NormalExcelConstants.FILE_NAME, "原尺寸信息");
+        mv.addObject(NormalExcelConstants.CLASS, JshOrderProductExportVo.class);
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("原尺寸信息", "导出人:" + sysUser.getRealname(), "原尺寸信息"));
+        mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
+        return mv;
     }
 
     /**

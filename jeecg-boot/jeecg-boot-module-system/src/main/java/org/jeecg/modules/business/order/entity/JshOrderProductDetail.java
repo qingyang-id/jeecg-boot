@@ -97,7 +97,7 @@ public class JshOrderProductDetail implements Serializable {
   /**
    * 产品id
    */
-  @Excel(name = "产品", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+  @Excel(name = "产品", width = 15, dictTable = "jsh_product", dicText = "name", dicCode = "id")
   @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
   @ApiModelProperty(value = "产品id")
   private java.lang.Long productId;
@@ -111,35 +111,40 @@ public class JshOrderProductDetail implements Serializable {
   private java.lang.Integer type;
 
   /**
-   * 参考宽度(cm)
+   * 参考宽度(mm)
    */
-  @Excel(name = "参考宽度(cm)", width = 15)
-  @ApiModelProperty(value = "参考宽度(cm)")
+  @Excel(name = "参考宽度(mm)", width = 15)
+  @ApiModelProperty(value = "参考宽度(mm)")
   private java.lang.Long referenceWidth;
+
   /**
-   * 参考高度(cm)
+   * 参考高度(mm)
    */
-  @Excel(name = "参考高度(cm)", width = 15)
-  @ApiModelProperty(value = "参考高度(cm)")
+  @Excel(name = "参考高度(mm)", width = 15)
+  @ApiModelProperty(value = "参考高度(mm)")
   private java.lang.Long referenceHeight;
+
   /**
-   * 宽(cm)
+   * 宽(mm)
    */
-  @Excel(name = "宽(cm)", width = 15)
-  @ApiModelProperty(value = "宽(cm)")
+  @Excel(name = "宽(mm)", width = 15)
+  @ApiModelProperty(value = "宽(mm)")
   private java.lang.Long width;
+
   /**
-   * 高(cm)
+   * 高(mm)
    */
-  @Excel(name = "高(cm)", width = 15)
-  @ApiModelProperty(value = "高(cm)")
+  @Excel(name = "高(mm)", width = 15)
+  @ApiModelProperty(value = "高(mm)")
   private java.lang.Long height;
+
   /**
    * 数量
    */
   @Excel(name = "数量", width = 15)
   @ApiModelProperty(value = "数量")
   private java.lang.Integer num;
+
   /**
    * 方向:0其他,1双开,2左开,3右开
    */
@@ -147,6 +152,7 @@ public class JshOrderProductDetail implements Serializable {
   @Dict(dicCode = "direction")
   @ApiModelProperty(value = "方向:0其他,1双开,2左开,3右开")
   private java.lang.Integer direction;
+
   /**
    * 颜色
    */

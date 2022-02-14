@@ -8,6 +8,10 @@
   <title>ERP管理系统</title>
   <link rel="icon" href="<%= BASE_URL %>logo.png">
   <script src="<%= BASE_URL %>cdn/babel-polyfill/polyfill_7_2_5.js"></script>
+  <!-- require cdn assets css 配置在vue.config.js下 -->
+  <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+  <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
+  <% } %>
   <style>
     html,
     body,

@@ -6,13 +6,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.jeecg.common.aspect.annotation.Dict;
-import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
-import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
 import org.jeecgframework.poi.excel.annotation.Excel;
-import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.List;
 
 /**
  * @Description: jsh_order_product
@@ -21,8 +16,8 @@ import java.util.List;
  * @Version: V1.0
  */
 @Data
-@ApiModel(value = "jsh_order_productPage对象", description = "jsh_order_product")
-public class JshOrderProductPage {
+@ApiModel(value = "jsh_order_productVo对象", description = "jsh_order_product")
+public class JshOrderProductVo {
 
     /**
      * 主键
@@ -67,14 +62,12 @@ public class JshOrderProductPage {
     /**
      * 客户id
      */
-    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
     @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
     @ApiModelProperty(value = "客户id")
     private java.lang.Long customerId;
     /**
      * 订单ID
      */
-    @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
     @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
     @ApiModelProperty(value = "订单ID")
     private java.lang.Long orderId;
@@ -146,27 +139,19 @@ public class JshOrderProductPage {
      */
     @Excel(name = "单价(元)", width = 15)
     @ApiModelProperty(value = "单价(分)")
-    private java.lang.Long price;
+    private java.math.BigDecimal price;
 
     /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)
     @ApiModelProperty(value = "总面积(mm²)")
-    private java.lang.Long totalArea;
+    private java.math.BigDecimal totalArea;
 
     /**
      * 订单总额
      */
     @Excel(name = "订单总额(元)", width = 15)
     @ApiModelProperty(value = "订单总额(分)")
-    private java.lang.Long totalPrice;
-
-    @ExcelCollection(name = "jsh_order_product_detail")
-    @ApiModelProperty(value = "jsh_order_product_detail")
-    private List<JshOrderProductDetail> jshOrderProductDetailList;
-    @ExcelCollection(name = "jsh_order_product_extend")
-    @ApiModelProperty(value = "jsh_order_product_extend")
-    private List<JshOrderProductExtend> jshOrderProductExtendList;
-
+    private java.math.BigDecimal totalPrice;
 }

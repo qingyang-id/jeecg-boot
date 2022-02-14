@@ -19,14 +19,14 @@ import java.util.List;
  * @Version: V1.0
  */
 @Data
-@ApiModel(value = "jsh_orderPage对象", description = "jsh_order")
-public class JshOrderPage {
+@ApiModel(value = "jsh_orderVo对象", description = "jsh_order")
+public class JshOrderVo {
 
     /**
      * 主键
      */
     @ApiModelProperty(value = "主键")
-    private java.lang.Long id;
+    private Long id;
 
     /**
      * 创建人
@@ -82,14 +82,14 @@ public class JshOrderPage {
      */
     @Excel(name = "总面积(m²)", width = 15)
     @ApiModelProperty(value = "总面积(mm²)")
-    private java.lang.Long totalArea;
+    private java.math.BigDecimal totalArea;
 
     /**
      * 订单总额
      */
     @Excel(name = "订单总额(元)", width = 15)
     @ApiModelProperty(value = "订单总额(分)")
-    private java.lang.Long totalPrice;
+    private java.math.BigDecimal totalPrice;
 
     /**
      * 下单时间
@@ -120,8 +120,7 @@ public class JshOrderPage {
     @ApiModelProperty(value = "租户id")
     private java.lang.Long tenantId;
 
-    @ExcelCollection(name = "jsh_order_product")
+    @ExcelCollection(name = "订单明细")
     @ApiModelProperty(value = "jsh_order_product")
-    private List<JshOrderProductPage> jshOrderProductPageList;
-
+    private List<JshOrderProductVo> jshOrderProductVoList;
 }

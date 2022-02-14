@@ -62,7 +62,6 @@ export default {
       immediate: true,
       handler(val) {
         this.queryParam['orderId'] = val || '';
-        console.log(this.queryParam);
         this.loadData(1);
       }
     }
@@ -141,6 +140,14 @@ export default {
           dataIndex: 'price',
           customRender: function (t) {
             return t / 100;
+          }
+        },
+        {
+          title: '总面积(m²)',
+          align: "center",
+          dataIndex: 'totalArea',
+          customRender: function (t) {
+            return t / 1000000;
           }
         },
         {

@@ -83,10 +83,17 @@ public class JshOrder implements Serializable {
     private java.lang.Long customerId;
 
     /**
+     * 总面积
+     */
+    @Excel(name = "总面积(m²)", width = 15)
+    @ApiModelProperty(value = "总面积(mm²)")
+    private java.lang.Long totalArea;
+
+    /**
      * 订单总额
      */
     @Excel(name = "订单总额(元)", width = 15)
-    @ApiModelProperty(value = "订单总额(元)")
+    @ApiModelProperty(value = "订单总额(分)")
     private java.lang.Long totalPrice;
 
     /**

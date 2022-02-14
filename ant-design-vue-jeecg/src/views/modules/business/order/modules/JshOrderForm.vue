@@ -1,41 +1,48 @@
 <template>
   <a-spin :spinning="confirmLoading">
-    <!-- 主表单区域 -->
-    <a-form-model ref="form" :model="model" :rules="validatorRules">
-      <a-row>
-        <a-col :span="12">
-          <a-form-model-item label="订单编码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderCode">
-            <a-input v-model="model.orderCode" placeholder="订单编码" disabled></a-input>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
-            <a-input-number v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
-            <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id" @change="updateAddresses"/>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-            <j-search-select-tag v-model="model.address" :dictOptions="addressDictOptions"/>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="下单时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderTime">
-            <j-date placeholder="请选择下单时间" v-model="model.orderTime" :show-time="true"
-                    date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="remark">
-            <a-input v-model="model.remark" placeholder="请输入备注"></a-input>
-          </a-form-model-item>
-        </a-col>
-      </a-row>
-    </a-form-model>
+    <j-form-container :disabled="formDisabled">
+      <!-- 主表单区域 -->
+      <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
+        <a-row>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="订单编码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderCode">
+              <a-input v-model="model.orderCode" placeholder="订单编码" disabled></a-input>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="总面积(m²)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalArea">
+              <a-input v-model="model.totalArea" placeholder="总面积(m²)" disabled style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="订单总额(元)" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="totalPrice">
+              <a-input v-model="model.totalPrice" placeholder="订单总额" disabled style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
+              <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id" @change="updateAddresses"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
+              <j-search-select-tag v-model="model.address" :dictOptions="addressDictOptions"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="下单时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderTime">
+              <j-date placeholder="请选择下单时间" v-model="model.orderTime" :show-time="true"
+                      date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="remark">
+              <a-textarea v-model="model.remark" rows="4" placeholder="请输入备注" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+      </a-form-model>
+    </j-form-container>
     <!-- 子表单区域 -->
     <a-tabs v-model="activeKey" @change="handleChangeTabs">
       <a-tab-pane tab="订单商品" :key="refKeys[0]" :forceRender="true">
@@ -48,19 +55,19 @@
             :maxHeight="300"
             :disabled="formDisabled"
             :rowNumber="true"
-            :rowSelection="true"
+            :rowSelection="disabled"
             :toolbar="true"
             :alwaysEdit="true"
             @remove="calculateSumPrice"
             @valueChange="handleValueChange">
           <template v-slot:toolbarSuffix>
-            <a-button style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
-            <a-button style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
-            <a-button style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
-            <a-button style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
           </template>
           <template v-slot:action="props">
-            <a @click="handleCopy(props)">复制</a>
+            <a :disabled="disabled"  @click="handleCopy(props)">复制</a>
           </template>
         </j-vxe-table>
         <!-- 表单区域 -->
@@ -72,6 +79,7 @@
 </template>
 
 <script>
+import BigNumber from 'bignumber.js';
 import { JVxeTableModelMixin } from '@/mixins/JVxeTableModelMixin.js';
 import {
   VALIDATE_FAILED,
@@ -107,11 +115,8 @@ export default {
         customerId: [
           { required: true, message: '请选择客户!' },
         ],
-        orderTime: [
-          { required: true, message: '请选择下单时间!' },
-        ],
         address: [
-          { required: true, message: '请输入地址!' },
+          { required: true, message: '请选择地址!' },
         ],
       },
       refKeys: ['jshOrderProduct',],
@@ -197,14 +202,17 @@ export default {
             placeholder: '请输入${title}',
             defaultValue: '',
             options: [{
-              text: '无',
+              text: '默认',
               value: ''
+            }, {
+              text: '黑色',
+              value: '黑色'
             }, {
               text: '金色',
               value: '金色'
             }, {
-              text: '黑色',
-              value: '黑色'
+              text: '亮色',
+              value: '亮色'
             }],
           },
           {
@@ -218,26 +226,38 @@ export default {
           {
             title: '单价(元)',
             key: 'price',
-            type: JVXETypes.inputNumber,
+            type: JVXETypes.input,
             disabled: true,
             width: "8%",
             placeholder: '${title}',
-            defaultValue: 0,
-            formatter({ cellValue }) {
-              return cellValue && cellValue / 100 || 0;
-            },
+            defaultValue: '0',
+            // formatter({ cellValue }) {
+            //   return cellValue ? cellValue / 100 : 0;
+            // },
+          },
+          {
+            title: '总面积(m²)',
+            key: 'totalArea',
+            type: JVXETypes.input,
+            disabled: true,
+            width: "8%",
+            placeholder: '${title}',
+            defaultValue: '0',
+            // formatter({ cellValue }) {
+            //   return cellValue && cellValue / 100 || 0;
+            // },
           },
           {
             title: '总价(元)',
             key: 'totalPrice',
-            type: JVXETypes.inputNumber,
+            type: JVXETypes.input,
             disabled: true,
             width: "8%",
             placeholder: '${title}',
-            defaultValue: 0,
-            formatter({ cellValue }) {
-              return cellValue && cellValue / 100 || 0;
-            },
+            defaultValue: '0',
+            // formatter({ cellValue }) {
+            //   return cellValue && cellValue / 100 || 0;
+            // },
           },
           {
             title: '操作',
@@ -279,6 +299,7 @@ export default {
   },
   computed: {
     formDisabled() {
+      console.log('this.disabled ', this.disabled)
       return this.disabled;
     },
   },
@@ -349,13 +370,17 @@ export default {
         default: {
         }
       }
-      console.log('\n\n\n product ', this.jshProductPricesMap[row.productId], row.productId);
       const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0) + extendPrice;
-      const totalPrice = price * (row.num || 0) * (row.width || 0) * (row.height || 0) / 100000000;
+      const totalArea = (row.num || 0) * (row.width || 0) * (row.height || 0);
+      const totalPrice = price * totalArea;
       // 此种设置方法，value change事件无法捕获行信息
       this.$refs.jshOrderProduct.setValues([{
         rowKey: row.id,
-        values: { price: price / 100, totalPrice }
+        values: {
+          price: new BigNumber(price / 100).toFixed(2, BigNumber.ROUND_UP),
+          totalArea: new BigNumber(totalArea / 1000000).toFixed(3, BigNumber.ROUND_UP),
+          totalPrice: new BigNumber(totalPrice / 100000000).toFixed(2, BigNumber.ROUND_UP),
+        }
       }]);
     },
 
@@ -364,9 +389,15 @@ export default {
       // 更新汇总信息
       let values = this.$refs.jshOrderProduct.getTableData();
       console.log('values', values);
-      let sum = 0;
-      values.forEach(item => sum += (item.totalPrice || 0) * 100);
-      this.model.totalPrice = sum / 100;
+      let totalArea = '0';
+      let totalPrice = '0';
+      values.forEach((item) => {
+        totalArea = new BigNumber(totalArea).plus(item.totalArea || 0).toFixed();
+        totalPrice = new BigNumber(totalPrice).plus(item.totalPrice || 0).toFixed();
+      });
+      console.log('price: ', totalPrice, totalArea)
+      this.model.totalArea = totalArea;
+      this.model.totalPrice = totalPrice;
     },
 
     updatePrices({ row, target }) {
@@ -484,7 +515,8 @@ export default {
       // 加载子表数据
       if (this.model.id) {
         let params = { id: this.model.id, };
-        this.model.totalPrice = this.model.totalPrice && this.model.totalPrice / 100;
+        this.model.totalArea = this.model.totalArea ? `${this.model.totalArea / 1000000}` : '0';
+        this.model.totalPrice = this.model.totalPrice ? `${this.model.totalPrice / 100}` : '0';
         // 更新地址列表
         this.updateAddresses(this.model.customerId);
         // 格式化不起作用
@@ -503,8 +535,9 @@ export default {
           this.jshOrderProductTable.dataSource = dataSource.map(item => Object.assign(item, {
             direction: `${item.direction}`,
             extendType: `${item.extendType}`,
-            price: item.price / 100,
-            totalPrice: item.totalPrice / 100,
+            price: `${item.price / 100}`,
+            totalArea: `${item.totalArea / 1000000}`,
+            totalPrice: `${item.totalPrice / 100}`,
           }));
         }).finally(() => {
           this.jshOrderProductTable.loading = false;
@@ -598,8 +631,9 @@ export default {
             id: '',
             jshOrderProductExtendList,
             jshOrderProductDetailList,
-            price: item.price * 100,
-            totalPrice: item.totalPrice * 100,
+            price: new BigNumber(item.price).multipliedBy(100).toFixed(),
+            totalArea: new BigNumber(item.totalArea).multipliedBy(1000000).toFixed(),
+            totalPrice: new BigNumber(item.totalPrice).multipliedBy(100).toFixed(),
           });
         });
       }
@@ -607,7 +641,8 @@ export default {
       return {
         ...main, // 展开
         jshOrderProductPageList,
-        totalPrice: main.totalPrice * 100,
+        totalArea: new BigNumber(main.totalArea).multipliedBy(1000000).toFixed(),
+        totalPrice: new BigNumber(main.totalPrice).multipliedBy(100).toFixed(),
       };
     },
 
@@ -621,11 +656,11 @@ export default {
         /** 一次性验证主表和所有的次表 */
         return validateFormModelAndTables(this.$refs.form, this.model, tables);
       })
-          .then(allValues => {
-            console.log('allValues ', allValues);
-            /** 一次性验证一对一的所有子表 */
-            return this.validateSubForm(allValues);
-          })
+          // .then(allValues => {
+          //   console.log('allValues ', allValues);
+          //   /** 一次性验证一对一的所有子表 */
+          //   return this.validateSubForm(allValues);
+          // })
           .then(allValues => {
             if (typeof this.classifyIntoFormData !== 'function') {
               throw this.throwNotFunction('classifyIntoFormData');

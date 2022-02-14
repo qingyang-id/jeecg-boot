@@ -11,12 +11,12 @@ CREATE TABLE `jsh_product` (
                              `del_flag`  int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
                              `name` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
                              `barcode` varchar(50) NOT NULL DEFAULT '' COMMENT '商品条码',
-                             `purchase_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '采购价格',
-                             `wholesale_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '销售价格',
-                             `aluminum_height_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '铝材高差值',
-                             `aluminum_width_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '铝材宽差值',
-                             `glass_height_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '玻璃高差值',
-                             `glass_width_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '玻璃宽差值',
+                             `purchase_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '采购价格(分)',
+                             `wholesale_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '销售价格(分)',
+                             `aluminum_height_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '铝材高差值(mm)',
+                             `aluminum_width_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '铝材宽差值(mm)',
+                             `glass_height_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '玻璃高差值(mm)',
+                             `glass_width_diff` bigint(20) NOT NULL DEFAULT 0 COMMENT '玻璃宽差值(mm)',
                              `remark` varchar(100) NOT NULL DEFAULT ''  COMMENT '备注',
                              `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态:1启用,0禁用',
                              `tenant_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
@@ -29,9 +29,9 @@ CREATE TABLE `jsh_product` (
 -- ----------------------------
 -- Records of jsh_product
 -- ----------------------------
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通80', '1001', 8000, 8000, -43, -12, -35, -4, '', 1, 1001);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通90', '1002', 9000, 9000, -43, -12, -35, -4, '', 1, 1001);
-INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通100', '1003', 10000, 10000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (1, 'admin', 'admin', 0, '普通90', '1001', 9000, 9000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (2, 'admin', 'admin', 0, '普通100', '1002', 10000, 10000, -43, -12, -35, -4, '', 1, 1001);
+INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (3, 'admin', 'admin', 0, '普通110', '1003', 11000, 11000, -43, -12, -35, -4, '', 1, 1001);
 INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (4, 'admin', 'admin', 0, '连体型', '1004', 12000, 12000, -29, 3, -33, -2, '', 1, 1001);
 INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (5, 'admin', 'admin', 0, 'G型', '1005', 12000, 12000, -29, 3, -33, -2, '', 1, 1001);
 INSERT INTO `jsh_product`(`id`, `create_by`, `update_by`, `del_flag`, `name`, `barcode`, `purchase_price`, `wholesale_price`, `aluminum_height_diff`, `aluminum_width_diff`, `glass_height_diff`, `glass_width_diff`, `remark`, `status`, `tenant_id`) VALUES (6, 'admin', 'admin', 0, 'M型', '1006', 13000, 13000, 3, 3, -2, -2, '', 1, 1001);
@@ -129,7 +129,8 @@ CREATE TABLE `jsh_order`  (
                               `del_flag`  int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
                               `order_code` varchar(32) NOT NULL DEFAULT '' COMMENT '订单编码',
                               `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id',
-                              `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '订单总额',
+                              `total_area` bigint(20) NOT NULL DEFAULT 0 COMMENT '总面积(mm²)',
+                              `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '订单总额(分)',
                               `order_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
                               `address` varchar(128) COMMENT '地址',
                               `remark` varchar(500) NOT NULL DEFAULT '' COMMENT '备注',
@@ -155,14 +156,15 @@ CREATE TABLE `jsh_order_product`  (
                                     `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id',
                                     `order_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '订单ID',
                                     `product_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '产品id',
-                                    `width` bigint(20) NOT NULL DEFAULT 0 COMMENT '宽',
-                                    `height` bigint(20) NOT NULL DEFAULT 0 COMMENT '高',
+                                    `width` bigint(20) NOT NULL DEFAULT 0 COMMENT '宽(mm)',
+                                    `height` bigint(20) NOT NULL DEFAULT 0 COMMENT '高(mm)',
                                     `num` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
                                     `direction` tinyint(1) NOT NULL DEFAULT 0 COMMENT '方向:0其他,1双开,2左开,3右开',
                                     `color` varchar(50) NOT NULL DEFAULT '' COMMENT '颜色',
                                     `glass_color` varchar(50) NOT NULL DEFAULT '' COMMENT '玻璃颜色',
-                                    `price` bigint(20) NOT NULL DEFAULT 0 COMMENT '单价',
-                                    `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '总价',
+                                    `price` bigint(20) NOT NULL DEFAULT 0 COMMENT '单价(分)',
+                                    `total_area` bigint(20) NOT NULL DEFAULT 0 COMMENT '总面积(mm²)',
+                                    `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '总价(分)',
                                     `extend_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '扩展类型:1拉,2抽,3条',
                                     `extend_num` int(11) NOT NULL DEFAULT 0 COMMENT '扩展数量',
                                     PRIMARY KEY (`id`) USING BTREE,
