@@ -85,7 +85,6 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
             jshOrderProductDetail.setCustomerId(jshOrder.getCustomerId());
             jshOrderProductDetail.setOrderProductId(jshOrderProduct.getId());
             jshOrderProductDetail.setProductId(jshOrderProduct.getProductId());
-            jshOrderProductDetail.setColor(jshOrderProduct.getColor());
             jshOrderProductDetailMapper.insert(jshOrderProductDetail);
           }
         }

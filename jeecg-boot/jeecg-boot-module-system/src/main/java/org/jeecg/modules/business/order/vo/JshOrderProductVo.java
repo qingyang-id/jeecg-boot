@@ -79,17 +79,17 @@ public class JshOrderProductVo {
     @ApiModelProperty(value = "产品id")
     private java.lang.Long productId;
     /**
-     * 宽
-     */
-    @Excel(name = "宽(mm)", width = 15)
-    @ApiModelProperty(value = "宽(mm)")
-    private java.lang.Long width;
-    /**
      * 高
      */
     @Excel(name = "高(mm)", width = 15)
     @ApiModelProperty(value = "高(mm)")
     private java.lang.Long height;
+    /**
+     * 宽
+     */
+    @Excel(name = "宽(mm)", width = 15)
+    @ApiModelProperty(value = "宽(mm)")
+    private java.lang.Long width;
     /**
      * 数量
      */
