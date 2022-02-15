@@ -102,9 +102,6 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-              <a-menu-item>
                 <a @click="printDetail(record, '订单信息')">订单打印</a>
               </a-menu-item>
               <a-menu-item>
