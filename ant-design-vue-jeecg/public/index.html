@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>ERP管理系统</title>
+  <title><%= VUE_APP_PLATFORM_NAME %></title>
   <link rel="icon" href="<%= BASE_URL %>logo.png">
   <script src="<%= BASE_URL %>cdn/babel-polyfill/polyfill_7_2_5.js"></script>
   <!-- require cdn assets css 配置在vue.config.js下 -->
@@ -260,7 +260,11 @@
     </div>
   </div>
 </div>
-
+<!-- require cdn assets js 配置在vue.config.js下 -->
+<% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+<script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+<% } %>
+<!-- built files will be auto injected -->
 </body>
 
 </html>

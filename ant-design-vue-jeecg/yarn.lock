@@ -3172,6 +3172,14 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
+"chalk@^4.1.0":
+  "integrity" "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="
+  "resolved" "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
+  "version" "4.1.2"
+  dependencies:
+    "ansi-styles" "^4.1.0"
+    "supports-color" "^7.1.0"
+
 "chardet@^0.4.0":
   "integrity" "sha1-tUc7M9yXxCTl2Y3IfVXU2KKci/I="
   "resolved" "https://registry.npmjs.org/chardet/-/chardet-0.4.2.tgz"
@@ -6687,9 +6695,9 @@
   "version" "1.1.6"
 
 "is-buffer@^2.0.2":
-  "integrity" "sha512-Kq1rokWXOPXWuaMAqZiJW4XxsmD9zGx9q4aePabbn3qCRGedtH7Cm+zV8WETitMfu1wdh+Rvd6w5egwSngUX2A=="
-  "resolved" "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.4.tgz"
-  "version" "2.0.4"
+  "integrity" "sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ=="
+  "resolved" "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.5.tgz"
+  "version" "2.0.5"
 
 "is-buffer@~1.1.1":
   "integrity" "sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w=="
@@ -10855,6 +10863,13 @@
     "select-hose" "^2.0.0"
     "spdy-transport" "^3.0.0"
 
+"speed-measure-webpack-plugin@^1.5.0":
+  "integrity" "sha512-Re0wX5CtM6gW7bZA64ONOfEPEhwbiSF/vz6e2GvadjuaPrQcHTQdRGsD8+BE7iUOysXH8tIenkPCQBEcspXsNg=="
+  "resolved" "https://registry.npmjs.org/speed-measure-webpack-plugin/-/speed-measure-webpack-plugin-1.5.0.tgz"
+  "version" "1.5.0"
+  dependencies:
+    "chalk" "^4.1.0"
+
 "split-string@^3.0.1", "split-string@^3.0.2":
   "integrity" "sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw=="
   "resolved" "https://registry.npmjs.org/split-string/-/split-string-3.1.0.tgz"
@@ -11937,9 +11952,9 @@
   "version" "2.0.0"
 
 "vue-router@^3.0.1":
-  "integrity" "sha512-SdKRBeoXUjaZ9R/8AyxsdTqkOfMcI5tWxPZOUX5Ie1BTL5rPSZ0O++pbiZCeYeythiZIdLEfkDiQPKIaWk5hDg=="
-  "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.3.4.tgz"
-  "version" "3.3.4"
+  "integrity" "sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg=="
+  "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.5.3.tgz"
+  "version" "3.5.3"
 
 "vue-splitpane@^1.0.4":
   "integrity" "sha512-6sneVSEeF1VsCD025HP93nRxwzYhv3rotCeYi2Ah1FmGxwtfqbCZEIzaHGberdGNCpMlEzGD/1OIE1kK5QukLA=="
@@ -11988,9 +12003,9 @@
     "sortablejs" "^1.10.1"
 
 "vuex@^3.1.0":
-  "integrity" "sha512-w7oJzmHQs0FM9LXodfskhw9wgKBiaB+totOdb8sNzbTB2KDCEEwEs29NzBZFh/lmEK1t5tDmM1vtsO7ubG1DFw=="
-  "resolved" "https://registry.npmjs.org/vuex/-/vuex-3.5.1.tgz"
-  "version" "3.5.1"
+  "integrity" "sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw=="
+  "resolved" "https://registry.npmjs.org/vuex/-/vuex-3.6.2.tgz"
+  "version" "3.6.2"
 
 "vxe-table-plugin-antd@1.8.10":
   "integrity" "sha512-XsNToY1zSmuLo/oQfSeDjnD4I03U+YYiMcBiduW8/BhZ7/eSTF4L2Rmu7cSDbLJefPwxsQKRd+jlFeF7T433Mw=="
@@ -12178,6 +12193,34 @@
     "source-list-map" "^2.0.0"
     "source-map" "~0.6.1"
 
+"webpack@^1 || ^2 || ^3 || ^4 || ^5", "webpack@^1.0.0 || ^2.0.0 || ^3.0.0", "webpack@^1.9 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3.0.0", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^2.2.0 || ^3.0.0", "webpack@^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^3.1.0", "webpack@^3.6.0", "webpack@^4.0.0", "webpack@^4.3.0 || ^5.0.0", "webpack@^4.4.0", "webpack@>=2.0.0 <5.0.0", "webpack@>=4.0.0", "webpack@>=4.0.0 < 6.0.0", "webpack@2 || 3 || 4":
+  "integrity" "sha512-Sw7MdIIOv/nkzPzee4o0EdvCuPmxT98+vVpIvwtcwcF1Q4SDSNp92vwcKc4REe7NItH9f1S4ra9FuQ7yuYZ8bQ=="
+  "resolved" "https://registry.npmjs.org/webpack/-/webpack-3.12.0.tgz"
+  "version" "3.12.0"
+  dependencies:
+    "acorn" "^5.0.0"
+    "acorn-dynamic-import" "^2.0.0"
+    "ajv" "^6.1.0"
+    "ajv-keywords" "^3.1.0"
+    "async" "^2.1.2"
+    "enhanced-resolve" "^3.4.0"
+    "escope" "^3.6.0"
+    "interpret" "^1.0.0"
+    "json-loader" "^0.5.4"
+    "json5" "^0.5.1"
+    "loader-runner" "^2.3.0"
+    "loader-utils" "^1.1.0"
+    "memory-fs" "~0.4.1"
+    "mkdirp" "~0.5.0"
+    "node-libs-browser" "^2.0.0"
+    "source-map" "^0.5.3"
+    "supports-color" "^4.2.1"
+    "tapable" "^0.2.7"
+    "uglifyjs-webpack-plugin" "^0.4.6"
+    "watchpack" "^1.4.0"
+    "webpack-sources" "^1.0.1"
+    "yargs" "^8.0.2"
+
 "webpack@^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^4.0.0 || ^5.0.0":
   "integrity" "sha512-GW1LjnPipFW2Y78OOab8NJlCflB7EFskMih2AHdvjbpKMeDJqEgSx24cXXXiPS65+WSwVyxtDsJH6jGX2czy+g=="
   "resolved" "https://registry.npmjs.org/webpack/-/webpack-4.43.0.tgz"
@@ -12206,34 +12249,6 @@
     "terser-webpack-plugin" "^1.4.3"
     "watchpack" "^1.6.1"
     "webpack-sources" "^1.4.1"
-
-"webpack@^1.0.0 || ^2.0.0 || ^3.0.0", "webpack@^1.9 || ^2 || ^2.1.0-beta || ^2.2.0-rc || ^3.0.0", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0", "webpack@^2.2.0 || ^3.0.0", "webpack@^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^3.1.0", "webpack@^3.6.0", "webpack@^4.0.0", "webpack@^4.3.0 || ^5.0.0", "webpack@^4.4.0", "webpack@>=2.0.0 <5.0.0", "webpack@>=4.0.0", "webpack@>=4.0.0 < 6.0.0", "webpack@2 || 3 || 4":
-  "integrity" "sha512-Sw7MdIIOv/nkzPzee4o0EdvCuPmxT98+vVpIvwtcwcF1Q4SDSNp92vwcKc4REe7NItH9f1S4ra9FuQ7yuYZ8bQ=="
-  "resolved" "https://registry.npmjs.org/webpack/-/webpack-3.12.0.tgz"
-  "version" "3.12.0"
-  dependencies:
-    "acorn" "^5.0.0"
-    "acorn-dynamic-import" "^2.0.0"
-    "ajv" "^6.1.0"
-    "ajv-keywords" "^3.1.0"
-    "async" "^2.1.2"
-    "enhanced-resolve" "^3.4.0"
-    "escope" "^3.6.0"
-    "interpret" "^1.0.0"
-    "json-loader" "^0.5.4"
-    "json5" "^0.5.1"
-    "loader-runner" "^2.3.0"
-    "loader-utils" "^1.1.0"
-    "memory-fs" "~0.4.1"
-    "mkdirp" "~0.5.0"
-    "node-libs-browser" "^2.0.0"
-    "source-map" "^0.5.3"
-    "supports-color" "^4.2.1"
-    "tapable" "^0.2.7"
-    "uglifyjs-webpack-plugin" "^0.4.6"
-    "watchpack" "^1.4.0"
-    "webpack-sources" "^1.0.1"
-    "yargs" "^8.0.2"
 
 "webpack@>=2":
   "integrity" "sha512-GW1LjnPipFW2Y78OOab8NJlCflB7EFskMih2AHdvjbpKMeDJqEgSx24cXXXiPS65+WSwVyxtDsJH6jGX2czy+g=="

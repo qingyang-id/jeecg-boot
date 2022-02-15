@@ -184,14 +184,14 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
+        },
+        {
+          title: '宽(mm)',
+          align: "center",
+          dataIndex: 'width'
         },
         {
           title: '数量',
@@ -266,24 +266,24 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '参考宽度(mm)',
-          align: "center",
-          dataIndex: 'referenceWidth'
-        },
-        {
           title: '参考高度(mm)',
           align: "center",
           dataIndex: 'referenceHeight'
         },
         {
-          title: '宽(mm)',
+          title: '参考宽度(mm)',
           align: "center",
-          dataIndex: 'width'
+          dataIndex: 'referenceWidth'
         },
         {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
+        },
+        {
+          title: '宽(mm)',
+          align: "center",
+          dataIndex: 'width'
         },
         {
           title: '颜色',
@@ -314,14 +314,14 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
+        },
+        {
+          title: '宽(mm)',
+          align: "center",
+          dataIndex: 'width'
         },
         {
           title: '颜色',

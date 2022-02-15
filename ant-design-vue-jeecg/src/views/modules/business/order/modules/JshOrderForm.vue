@@ -55,14 +55,14 @@
             :maxHeight="300"
             :disabled="formDisabled"
             :rowNumber="true"
-            :rowSelection="disabled"
+            :rowSelection="true"
             :toolbar="true"
             :alwaysEdit="true"
             @remove="calculateSumPrice"
             @valueChange="handleValueChange">
           <template v-slot:toolbarSuffix>
-            <a-button :disabled="disabled" style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
             <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
             <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
             <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
           </template>
@@ -140,8 +140,8 @@ export default {
             validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
-            title: '宽(mm)',
-            key: 'width',
+            title: '高(mm)',
+            key: 'height',
             type: JVXETypes.inputNumber,
             width: "8%",
             placeholder: '请输入${title}',
@@ -149,8 +149,8 @@ export default {
             validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
-            title: '高(mm)',
-            key: 'height',
+            title: '宽(mm)',
+            key: 'width',
             type: JVXETypes.inputNumber,
             width: "8%",
             placeholder: '请输入${title}',
@@ -619,13 +619,13 @@ export default {
             ...productDetail,
             type: 1,
             width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].aluminumWidthDiff,
-            height: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].aluminumHeightDiff,
+            height: productDetail.referenceHeight + this.jshProductPricesMap[item.productId].aluminumHeightDiff,
           });
           jshOrderProductDetailList.push({
             ...productDetail,
             type: 2,
             width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].glassWidthDiff,
-            height: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].glassHeightDiff,
+            height: productDetail.referenceHeight + this.jshProductPricesMap[item.productId].glassHeightDiff,
           });
           Object.assign(item, {
             id: '',

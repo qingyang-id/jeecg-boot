@@ -95,14 +95,14 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
+        },
+        {
+          title: '宽(mm)',
+          align: "center",
+          dataIndex: 'width'
         },
         {
           title: '数量',
