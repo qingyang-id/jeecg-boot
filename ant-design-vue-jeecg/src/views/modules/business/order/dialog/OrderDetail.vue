@@ -184,6 +184,16 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
+          title: '铝材颜色',
+          align: "center",
+          dataIndex: 'color'
+        },
+        {
+          title: '玻璃色号',
+          align: "center",
+          dataIndex: 'glassColor'
+        },
+        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
@@ -212,16 +222,6 @@ export default {
           title: '抽/拉/条数量',
           align: "center",
           dataIndex: 'extendNum'
-        },
-        {
-          title: '铝材颜色',
-          align: "center",
-          dataIndex: 'color'
-        },
-        {
-          title: '玻璃色号',
-          align: "center",
-          dataIndex: 'glassColor'
         },
         {
           title: '单价(元)',
@@ -266,6 +266,11 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
+          title: '颜色',
+          align: "center",
+          dataIndex: 'color'
+        },
+        {
           title: '参考高度(mm)',
           align: "center",
           dataIndex: 'referenceHeight'
@@ -286,19 +291,24 @@ export default {
           dataIndex: 'width'
         },
         {
+          title: '数量',
+          align: "center",
+          dataIndex: 'num'
+        },
+        {
           title: '方向',
           align: "center",
           dataIndex: 'direction_dictText'
         },
         {
-          title: '颜色',
+          title: '抽/拉/条',
           align: "center",
-          dataIndex: 'color'
+          dataIndex: 'extendType_dictText'
         },
         {
-          title: '数量',
+          title: '抽/拉/条数量',
           align: "center",
-          dataIndex: 'num'
+          dataIndex: 'extendNum'
         }
       ],
       // 玻璃生产单
@@ -319,6 +329,11 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
+          title: '色号',
+          align: "center",
+          dataIndex: 'color'
+        },
+        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
@@ -327,11 +342,6 @@ export default {
           title: '宽(mm)',
           align: "center",
           dataIndex: 'width'
-        },
-        {
-          title: '色号',
-          align: "center",
-          dataIndex: 'color'
         },
         {
           title: '数量',

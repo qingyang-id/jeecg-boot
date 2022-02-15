@@ -31,16 +31,28 @@ public class JshOrderProductExportVo {
     private Long productId;
 
     /**
-     * 宽
+     * 铝材颜色
      */
-    @Excel(name = "宽(mm)", width = 15)
-    private Long width;
+    @Excel(name = "铝材颜色", width = 15)
+    private String color;
+
+    /**
+     * 玻璃颜色
+     */
+    @Excel(name = "玻璃色号", width = 15)
+    private String glassColor;
 
     /**
      * 高
      */
     @Excel(name = "高(mm)", width = 15)
     private Long height;
+
+    /**
+     * 宽
+     */
+    @Excel(name = "宽(mm)", width = 15)
+    private Long width;
 
     /**
      * 数量
@@ -53,18 +65,6 @@ public class JshOrderProductExportVo {
      */
     @Excel(name = "方向", width = 15, dicCode = "direction")
     private Integer direction;
-
-    /**
-     * 铝材颜色
-     */
-    @Excel(name = "铝材颜色", width = 15)
-    private String color;
-
-    /**
-     * 玻璃颜色
-     */
-    @Excel(name = "玻璃颜色", width = 15)
-    private String glassColor;
 
     /**
      * 类型:1抽,2拉,3条

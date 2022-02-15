@@ -140,6 +140,35 @@ export default {
             validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
+            title: '铝材颜色',
+            key: 'color',
+            type: JVXETypes.select,
+            width: "8%",
+            placeholder: '请输入${title}',
+            defaultValue: '',
+            options: [{
+              text: '默认',
+              value: ''
+            }, {
+              text: '黑色',
+              value: '黑色'
+            }, {
+              text: '金色',
+              value: '金色'
+            }, {
+              text: '亮色',
+              value: '亮色'
+            }],
+          },
+          {
+            title: '玻璃色号',
+            key: 'glassColor',
+            type: JVXETypes.input,
+            width: "8%",
+            placeholder: '请输入${title}',
+            defaultValue: '',
+          },
+          {
             title: '高(mm)',
             key: 'height',
             type: JVXETypes.inputNumber,
@@ -193,35 +222,6 @@ export default {
             width: "8%",
             placeholder: '请输入${title}',
             defaultValue: 0,
-          },
-          {
-            title: '铝材颜色',
-            key: 'color',
-            type: JVXETypes.select,
-            width: "8%",
-            placeholder: '请输入${title}',
-            defaultValue: '',
-            options: [{
-              text: '默认',
-              value: ''
-            }, {
-              text: '黑色',
-              value: '黑色'
-            }, {
-              text: '金色',
-              value: '金色'
-            }, {
-              text: '亮色',
-              value: '亮色'
-            }],
-          },
-          {
-            title: '玻璃色号',
-            key: 'glassColor',
-            type: JVXETypes.input,
-            width: "8%",
-            placeholder: '请输入${title}',
-            defaultValue: '',
           },
           {
             title: '单价(元)',
@@ -578,6 +578,8 @@ export default {
             referenceHeight: Number(item.height),
             num: Number(item.num),
             color: item.color,
+            extendType: item.extendType,
+            extendNum: item.extendNum,
           };
           switch (Number(item.extendType)) {
             case 1: {

@@ -65,7 +65,8 @@ export default {
       description: 'jsh_order_product管理页面',
       // disableMixinCreated: true,
       // 表头
-      columns: [
+      columns: [],
+      aluminumColumns: [
         {
           title: '#',
           dataIndex: '',
@@ -92,6 +93,11 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
+          title: '颜色',
+          align: "center",
+          dataIndex: 'color'
+        },
+        {
           title: '参考高度(mm)',
           align: "center",
           dataIndex: 'referenceHeight'
@@ -112,9 +118,67 @@ export default {
           dataIndex: 'width'
         },
         {
-          title: '颜色',
+          title: '数量',
+          align: "center",
+          dataIndex: 'num'
+        },
+        {
+          title: '方向',
+          align: "center",
+          dataIndex: 'direction_dictText'
+        },
+        {
+          title: '抽/拉/条',
+          align: "center",
+          dataIndex: 'extendType_dictText'
+        },
+        {
+          title: '抽/拉/条数量',
+          align: "center",
+          dataIndex: 'extendNum'
+        }
+      ],
+      // 玻璃表头
+      glassColumns: [
+        {
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: "center",
+          customRender: function (t, r, index) {
+            return parseInt(index) + 1;
+          }
+        },
+        {
+          title: '原尺寸ID',
+          align: "center",
+          dataIndex: 'orderProductId'
+        },
+        {
+          title: '订单号',
+          align: "center",
+          dataIndex: 'orderId_dictText'
+        },
+        {
+          title: '产品',
+          align: "center",
+          dataIndex: 'productId_dictText'
+        },
+        {
+          title: '色号',
           align: "center",
           dataIndex: 'color'
+        },
+        {
+          title: '高(mm)',
+          align: "center",
+          dataIndex: 'height'
+        },
+        {
+          title: '宽(mm)',
+          align: "center",
+          dataIndex: 'width'
         },
         {
           title: '数量',
@@ -147,6 +211,7 @@ export default {
     };
   },
   created() {
+    this.columns = this.type === 1 ? this.aluminumColumns : this.glassColumns;
   },
   computed: {},
   methods: {

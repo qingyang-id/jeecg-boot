@@ -111,11 +111,11 @@ public class JshOrderProductDetail implements Serializable {
   private java.lang.Integer type;
 
   /**
-   * 参考宽度(mm)
+   * 颜色
    */
-  @Excel(name = "参考宽度(mm)", width = 15)
-  @ApiModelProperty(value = "参考宽度(mm)")
-  private java.lang.Long referenceWidth;
+  @Excel(name = "颜色", width = 15)
+  @ApiModelProperty(value = "颜色")
+  private java.lang.String color;
 
   /**
    * 参考高度(mm)
@@ -125,11 +125,11 @@ public class JshOrderProductDetail implements Serializable {
   private java.lang.Long referenceHeight;
 
   /**
-   * 宽(mm)
+   * 参考宽度(mm)
    */
-  @Excel(name = "宽(mm)", width = 15)
-  @ApiModelProperty(value = "宽(mm)")
-  private java.lang.Long width;
+  @Excel(name = "参考宽度(mm)", width = 15)
+  @ApiModelProperty(value = "参考宽度(mm)")
+  private java.lang.Long referenceWidth;
 
   /**
    * 高(mm)
@@ -137,6 +137,13 @@ public class JshOrderProductDetail implements Serializable {
   @Excel(name = "高(mm)", width = 15)
   @ApiModelProperty(value = "高(mm)")
   private java.lang.Long height;
+
+  /**
+   * 宽(mm)
+   */
+  @Excel(name = "宽(mm)", width = 15)
+  @ApiModelProperty(value = "宽(mm)")
+  private java.lang.Long width;
 
   /**
    * 数量
@@ -154,9 +161,17 @@ public class JshOrderProductDetail implements Serializable {
   private java.lang.Integer direction;
 
   /**
-   * 颜色
+   * 类型:1抽,2拉,3条
    */
-  @Excel(name = "颜色", width = 15)
-  @ApiModelProperty(value = "颜色")
-  private java.lang.String color;
+  @Excel(name = "抽/拉/条", width = 15, dicCode = "product_extend")
+  @Dict(dicCode = "product_extend")
+  @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
+  private java.lang.Integer extendType;
+
+  /**
+   * 数量
+   */
+  @Excel(name = "抽/拉/条数量", width = 15)
+  @ApiModelProperty(value = "数量")
+  private java.lang.Integer extendNum;
 }

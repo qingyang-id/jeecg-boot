@@ -12,10 +12,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Data
 public class GlassVo {
   /**
-   * 宽(mm)
+   * 颜色
    */
-  @Excel(name = "宽(mm)", width = 15)
-  private Long width;
+  @Excel(name = "颜色", width = 15)
+  private String color;
 
   /**
    * 高(mm)
@@ -24,14 +24,14 @@ public class GlassVo {
   private Long height;
 
   /**
+   * 宽(mm)
+   */
+  @Excel(name = "宽(mm)", width = 15)
+  private Long width;
+
+  /**
    * 数量
    */
   @Excel(name = "数量", width = 15)
   private Integer num;
-
-  /**
-   * 颜色
-   */
-  @Excel(name = "颜色", width = 15)
-  private String color;
 }

@@ -78,6 +78,15 @@ public class JshOrderVo {
     private java.lang.Long customerId;
 
     /**
+     * 下单时间
+     */
+    @Excel(name = "下单时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "下单时间")
+    private java.util.Date orderTime;
+
+    /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)
@@ -90,15 +99,6 @@ public class JshOrderVo {
     @Excel(name = "订单总额(元)", width = 15)
     @ApiModelProperty(value = "订单总额(分)")
     private java.math.BigDecimal totalPrice;
-
-    /**
-     * 下单时间
-     */
-    @Excel(name = "下单时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "下单时间")
-    private java.util.Date orderTime;
 
     /**
      * 地址

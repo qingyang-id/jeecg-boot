@@ -12,10 +12,10 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Data
 public class AluminumVo {
   /**
-   * 参考宽度(mm)
+   * 颜色
    */
-  @Excel(name = "参考宽度(mm)", width = 15)
-  private Long referenceWidth;
+  @Excel(name = "颜色", width = 15)
+  private String color;
 
   /**
    * 参考高度(mm)
@@ -24,16 +24,22 @@ public class AluminumVo {
   private Long referenceHeight;
 
   /**
-   * 宽(mm)
+   * 参考宽度(mm)
    */
-  @Excel(name = "宽(mm)", width = 15)
-  private Long width;
+  @Excel(name = "参考宽度(mm)", width = 15)
+  private Long referenceWidth;
 
   /**
    * 高(mm)
    */
   @Excel(name = "高(mm)", width = 15)
   private Long height;
+
+  /**
+   * 宽(mm)
+   */
+  @Excel(name = "宽(mm)", width = 15)
+  private Long width;
 
   /**
    * 数量
@@ -48,8 +54,14 @@ public class AluminumVo {
   private Integer direction;
 
   /**
-   * 颜色
+   * 类型:1抽,2拉,3条
    */
-  @Excel(name = "颜色", width = 15)
-  private String color;
+  @Excel(name = "类型", width = 15, dicCode = "product_extend")
+  private java.lang.Integer extendType;
+
+  /**
+   * 数量
+   */
+  @Excel(name = "数量", width = 15)
+  private java.lang.Integer extendNum;
 }

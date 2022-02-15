@@ -78,6 +78,21 @@ public class JshOrderProductVo {
     @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
     @ApiModelProperty(value = "产品id")
     private java.lang.Long productId;
+
+    /**
+     * 铝材颜色
+     */
+    @Excel(name = "铝材颜色", width = 15)
+    @ApiModelProperty(value = "铝材颜色")
+    private java.lang.String color;
+
+    /**
+     * 玻璃颜色
+     */
+    @Excel(name = "玻璃颜色", width = 15)
+    @ApiModelProperty(value = "玻璃颜色")
+    private java.lang.String glassColor;
+
     /**
      * 高
      */
@@ -106,23 +121,9 @@ public class JshOrderProductVo {
     private java.lang.Integer direction;
 
     /**
-     * 铝材颜色
-     */
-    @Excel(name = "铝材颜色", width = 15)
-    @ApiModelProperty(value = "铝材颜色")
-    private java.lang.String color;
-
-    /**
-     * 玻璃颜色
-     */
-    @Excel(name = "玻璃颜色", width = 15)
-    @ApiModelProperty(value = "玻璃颜色")
-    private java.lang.String glassColor;
-
-    /**
      * 类型:1抽,2拉,3条
      */
-    @Excel(name = "类型", width = 15, dicCode = "product_extend")
+    @Excel(name = "抽/拉/条", width = 15, dicCode = "product_extend")
     @Dict(dicCode = "product_extend")
     @ApiModelProperty(value = "类型:0无,1抽,2拉,3条")
     private java.lang.Integer extendType;
@@ -130,7 +131,7 @@ public class JshOrderProductVo {
     /**
      * 数量
      */
-    @Excel(name = "数量", width = 15)
+    @Excel(name = "抽/拉/条数量", width = 15)
     @ApiModelProperty(value = "数量")
     private java.lang.Integer extendNum;
 

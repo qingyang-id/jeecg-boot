@@ -229,7 +229,7 @@ public class JshOrderProductController extends JeecgController<JshOrderProduct, 
             jshOrderProductList = queryList;
         } else {
             List<String> selectionList = Arrays.asList(selections.split(","));
-            jshOrderProductList = queryList.stream().filter(item -> selectionList.contains(item.getId())).collect(Collectors.toList());
+            jshOrderProductList = queryList.stream().filter(item -> selectionList.contains(String.valueOf(item.getId()))).collect(Collectors.toList());
         }
 
         // Step.3 组装pageList
@@ -237,6 +237,8 @@ public class JshOrderProductController extends JeecgController<JshOrderProduct, 
         for (JshOrderProduct main : jshOrderProductList) {
             JshOrderProductExportVo vo = new JshOrderProductExportVo();
             BeanUtils.copyProperties(main, vo);
+            vo.setAluminumVo(new AluminumVo());
+            vo.setGlassVo(new GlassVo());
             List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
             for (JshOrderProductDetail jshOrderProductDetail : jshOrderProductDetailList) {
                 if (jshOrderProductDetail.getType() == 1) {

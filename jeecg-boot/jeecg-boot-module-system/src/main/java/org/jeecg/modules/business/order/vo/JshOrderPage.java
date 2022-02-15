@@ -78,6 +78,15 @@ public class JshOrderPage {
     private java.lang.Long customerId;
 
     /**
+     * 下单时间
+     */
+    @Excel(name = "下单时间", width = 30, format = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "下单时间")
+    private java.util.Date orderTime;
+
+    /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)
@@ -92,18 +101,9 @@ public class JshOrderPage {
     private java.lang.Long totalPrice;
 
     /**
-     * 下单时间
-     */
-    @Excel(name = "下单时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "下单时间")
-    private java.util.Date orderTime;
-
-    /**
      * 地址
      */
-    @Excel(name = "地址", width = 15)
+    @Excel(name = "地址", width = 30)
     @ApiModelProperty(value = "地址")
     private java.lang.String address;
 

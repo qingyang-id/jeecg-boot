@@ -95,6 +95,16 @@ export default {
           dataIndex: 'productId_dictText'
         },
         {
+          title: '铝材颜色',
+          align: "center",
+          dataIndex: 'color'
+        },
+        {
+          title: '玻璃色号',
+          align: "center",
+          dataIndex: 'glassColor'
+        },
+        {
           title: '高(mm)',
           align: "center",
           dataIndex: 'height'
@@ -123,16 +133,6 @@ export default {
           title: '抽/拉/条数量',
           align: "center",
           dataIndex: 'extendNum'
-        },
-        {
-          title: '铝材颜色',
-          align: "center",
-          dataIndex: 'color'
-        },
-        {
-          title: '玻璃色号',
-          align: "center",
-          dataIndex: 'glassColor'
         },
         {
           title: '单价(元)',
