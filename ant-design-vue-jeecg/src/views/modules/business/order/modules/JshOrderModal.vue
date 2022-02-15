@@ -1,15 +1,14 @@
 <template>
-  <j-modal
+  <a-modal
       :title="title"
       width="90%"
       :visible="visible"
+      :destroyOnClose="true"
       :maskClosable="false"
-      switchFullscreen
       @ok="handleOk"
-      :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
       @cancel="handleCancel">
     <jsh-order-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"/>
-  </j-modal>
+  </a-modal>
 </template>
 
 <script>

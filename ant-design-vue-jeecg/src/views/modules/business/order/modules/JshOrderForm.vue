@@ -323,7 +323,7 @@ export default {
 
     handleCopy({ row }) {
       console.log('复制 ', row);
-      this.$refs.jshOrderProduct.pushRows([{ ...row, id: '' }]);
+      this.$refs.jshOrderProduct.addRows([{ ...row, id: '' }]);
       this.calculateSumPrice();
     },
 
@@ -585,7 +585,6 @@ export default {
               Object.assign(productDetail, {
                 referenceHeight: Math.ceil(item.height / 3) - 2,
                 num: item.num * 3,
-                color: item.color,
               });
               jshOrderProductExtendList.push({
                 type: item.extendType,
@@ -598,7 +597,6 @@ export default {
               Object.assign(productDetail, {
                 referenceHeight: Math.ceil(item.height / 2) - 2,
                 num: item.num * 2,
-                color: item.glassColor,
               });
               jshOrderProductExtendList.push({
                 type: item.extendType,
@@ -620,12 +618,14 @@ export default {
             type: 1,
             width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].aluminumWidthDiff,
             height: productDetail.referenceHeight + this.jshProductPricesMap[item.productId].aluminumHeightDiff,
+            color: item.color,
           });
           jshOrderProductDetailList.push({
             ...productDetail,
             type: 2,
             width: productDetail.referenceWidth + this.jshProductPricesMap[item.productId].glassWidthDiff,
             height: productDetail.referenceHeight + this.jshProductPricesMap[item.productId].glassHeightDiff,
+            color: item.glassColor,
           });
           Object.assign(item, {
             id: '',

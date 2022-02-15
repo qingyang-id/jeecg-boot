@@ -286,6 +286,11 @@ export default {
           dataIndex: 'width'
         },
         {
+          title: '方向',
+          align: "center",
+          dataIndex: 'direction_dictText'
+        },
+        {
           title: '颜色',
           align: "center",
           dataIndex: 'color'
@@ -324,7 +329,7 @@ export default {
           dataIndex: 'width'
         },
         {
-          title: '颜色',
+          title: '色号',
           align: "center",
           dataIndex: 'color'
         },
