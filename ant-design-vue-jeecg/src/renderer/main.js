@@ -7,7 +7,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Storage from 'vue-ls'
 import router from './router'
-import store from './store'
+import store from './store/'
 import { VueAxios } from "@/utils/request"
 
 require('@jeecg/antd-online-mini')
@@ -41,7 +41,7 @@ import {
 } from "@/store/mutation-types"
 import config from '@/defaultSettings'
 
-import JDictSelectTag from './components/dict'
+import JDictSelectTag from './components/dict/index.js'
 import hasPermission from '@/utils/hasPermission'
 import vueBus from '@/utils/vueBus';
 import JeecgComponents from '@/components/jeecg/index'
@@ -53,7 +53,12 @@ import '@/components/JVxeCells/install'
 import { rules } from '@/utils/rules'
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
-if (!process.env.IS_WEB) Vue.use(require("vue-electron"));
+if (!process.env.IS_WEB) {
+  console.error('\n\n\nnot web')
+  Vue.use(require("vue-electron"));
+}
+// Vue.use(require("vue-electron"));
+console.error('\n\n\nweb', process.env.IS_WEB)
 Vue.use(Storage, config.storageOptions)
 // Vue.use(Antd)
 Vue.use(VueAxios, router)

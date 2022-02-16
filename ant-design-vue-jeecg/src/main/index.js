@@ -16,13 +16,13 @@ async function createWindow() {
     useContentSize: true,
     width: 1200,
     height: 900,
-    title: process.platform === "win32" ? "ERP管理系统" : "",
+    title: process.platform === 'win32' ? 'ERP管理系统' : '',
     // icon: previewIcon,
-    // titleBarStyle: "hiddenInset",
-    frame: process.platform !== "win32",
+    // titleBarStyle: 'hiddenInset',
+    frame: process.platform !== 'win32',
     show: true,
-    // backgroundColor: "#2e2c29",
-    hasShadow: process.platform !== "darwin",
+    // backgroundColor: '#2e2c29',
+    hasShadow: process.platform !== 'darwin',
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -39,6 +39,7 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+    win.webContents.openDevTools()
   }
 }
 

@@ -1,7 +1,7 @@
 const path = require('path')
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
-const { HashedModuleIdsPlugin } = require('webpack');
+// const { HashedModuleIdsPlugin } = require('webpack')
 console.log(process.env) // remove this after you've confirmed it working
 
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production'
@@ -9,31 +9,31 @@ const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV ==
 console.log('is prod:', isProd)
 
 // cdn 外部扩展，通过 cdn 引入，不会被webpack打包
-const assetsCDN = {
-  // 模块名称和模块作用域命名（对应window里面挂载的变量名称）
-  externals: {
-    vue: 'Vue',
-    'vue-router': 'VueRouter',
-    vuex: 'Vuex',
-    axios: 'axios',
-    moment: 'moment',
-    'ant-design-vue': 'antd',
-  },
-  // cdn的css链接
-  css: [
-    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.css'
-  ],
-  // cdn的js链接
-  js: [
-    'https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js', // 必须先引入moment，否则报错“TypeError: Cannot read property 'default' of undefined”
-    'https://cdn.jsdelivr.net/npm/moment@2.29.1/locale/zh-cn.js', // 需同步引入语言包，否则日期选择控件等将默认显示为英文
-    'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
-    'https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js',
-    'https://cdn.jsdelivr.net/npm/vuex@3.5.1/dist/vuex.min.js',
-    'https://cdn.jsdelivr.net/npm/axios@0.18.1/dist/axios.min.js',
-    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.js',
-  ]
-}
+// const assetsCDN = {
+//   // 模块名称和模块作用域命名（对应window里面挂载的变量名称）
+//   externals: {
+//     vue: 'Vue',
+//     'vue-router': 'VueRouter',
+//     vuex: 'Vuex',
+//     axios: 'axios',
+//     moment: 'moment',
+//     'ant-design-vue': 'antd'
+//   },
+//   // cdn的css链接
+//   css: [
+//     'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.css'
+//   ],
+//   // cdn的js链接
+//   js: [
+//     'https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js', // 必须先引入moment，否则报错“TypeError: Cannot read property 'default' of undefined”
+//     'https://cdn.jsdelivr.net/npm/moment@2.29.1/locale/zh-cn.js', // 需同步引入语言包，否则日期选择控件等将默认显示为英文
+//     'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
+//     'https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js',
+//     'https://cdn.jsdelivr.net/npm/vuex@3.5.1/dist/vuex.min.js',
+//     'https://cdn.jsdelivr.net/npm/axios@0.18.1/dist/axios.min.js',
+//     'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.js'
+//   ]
+// }
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -49,10 +49,13 @@ module.exports = {
    */
   lintOnSave: undefined,
   runtimeCompiler: true,
+  assetsDir: 'public',
+  // 打包输出路径
+  outputDir: 'dist/web',
+  // 打包app时放开该配置
+  publicPath: isProd ? './' : '/',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
-  // 打包输出路径
-  outputDir: "dist/web",
   // 多入口配置
   // pages: {
   //   index: {
@@ -71,8 +74,6 @@ module.exports = {
   //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
   //   }
   // },
-  // 打包app时放开该配置
-  publicPath: isProd ? "./" : "/",
   configureWebpack: config => {
     // Ignore related resources when building with cdn
     // config.externals = isProd ? assetsCDN.externals : {}
@@ -83,12 +84,22 @@ module.exports = {
     // }
   },
   chainWebpack: (config) => {
-    // config.entry(path.join('')"./src/renderer/main.js")
+    // config
+    // Interact with entry points
+    // .entry('index')
+    // .add(resolve('src/renderer/main.js'))
+    // .end()
+    // Modify output settings
+    // .output
+    // .path('dist')
+    // .filename('[name].bundle.js')
+
     config.resolve.alias
       .set('@$', resolve('src'))
       .set('@api', resolve('src/api'))
       .set('@assets', resolve('src/assets'))
       .set('@comp', resolve('src/components'))
+      .set('@config', resolve('src/config'))
       .set('@views', resolve('src/views'))
 
     // webpack 会默认给 commonChunk 打进 chunk-vendors，所以需要对 webpack 的配置进行 delete
@@ -129,10 +140,10 @@ module.exports = {
           },
           styles: {
             // 样式抽离
-            name: "styles",
+            name: 'styles',
             test: /\.(sa|sc|le|c)ss$/,
-            chunks: "all",
-            enforce: true,
+            chunks: 'all',
+            enforce: true
           },
           runtimeChunk: {
             name: 'manifest'
@@ -192,6 +203,7 @@ module.exports = {
   },
 
   devServer: {
+    open: !process.argv.includes('electron:serve'),
     port: 3000,
     proxy: {
      /* '/api': {
@@ -217,43 +229,43 @@ module.exports = {
       nodeIntegration: true,
       builderOptions: {
         win: {
-          icon: "build/electron-icon/icon.ico",
+          icon: 'build/electron-icon/icon.ico',
           // 图标路径 windows系统中icon需要256*256的ico格式图片，更换应用图标亦在此处
           target: [
             {
               // 打包成一个独立的 exe 安装程序
-              target: "nsis",
+              target: 'nsis',
               // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
               arch: [
-                // "x64",
+                // 'x64',
                 'ia32'
-              ],
-            },
-          ],
+              ]
+            }
+          ]
         },
         dmg: {
           contents: [
             {
               x: 410,
               y: 150,
-              type: "link",
-              path: "/Applications",
+              type: 'link',
+              path: '/Applications'
             },
             {
               x: 130,
               y: 150,
-              type: "file",
-            },
-          ],
+              type: 'file'
+            }
+          ]
         },
-        linux: {
-          icon: "build/electron-icon/icon.png",
-          target: "AppImage",
-        },
+        // linux: {
+        //   icon: 'build/electron-icon/icon.png',
+        //   target: 'AppImage'
+        // },
         mac: {
-          icon: "build/electron-icon/icon.icns",
+          icon: 'build/electron-icon/icon.icns'
         },
-        files: ["**/*"],
+        files: ['**/*'],
         asar: true,
         nsis: {
           // 是否一键安装，建议为 false，可以让用户点击下一步、下一步、下一步的形式安装程序，如果为true，当用户双击构建好的程序，自动安装程序并打开，即：一键安装（one-click installer）
@@ -263,32 +275,32 @@ module.exports = {
           // 允许修改安装目录，建议为 true，是否允许用户改变安装目录，默认是不允许
           allowToChangeInstallationDirectory: true,
           // 安装图标
-          installerIcon: "build/electron-icon/icon.ico",
+          installerIcon: 'build/electron-icon/icon.ico',
           // 卸载图标
-          uninstallerIcon: "build/electron-icon/icon.ico",
+          uninstallerIcon: 'build/electron-icon/icon.ico',
           // 安装时头部图标
-          installerHeaderIcon: "build/electron-icon/icon.ico",
+          installerHeaderIcon: 'build/electron-icon/icon.ico',
           // 创建桌面图标
           createDesktopShortcut: true,
           // 创建开始菜单图标
-          createStartMenuShortcut: true,
-        },
+          createStartMenuShortcut: true
+        }
       },
       chainWebpackMainProcess: (config) => {
-        config.plugin("define").tap((args) => {
-          args[0]["IS_ELECTRON"] = true;
-          return args;
-        });
+        config.plugin('define').tap((args) => {
+          args[0]['IS_ELECTRON'] = true
+          return args
+        })
       },
       chainWebpackRendererProcess: (config) => {
-        config.plugin("define").tap((args) => {
-          args[0]["IS_ELECTRON"] = true;
-          return args;
-        });
+        config.plugin('define').tap((args) => {
+          args[0]['IS_ELECTRON'] = true
+          return args
+        })
       },
-      outputDir: "dist/electron",
-      mainProcessFile: "src/main/index.js",
-      mainProcessWatch: ["src/main"],
-    },
-  },
+      outputDir: 'dist/electron',
+      mainProcessFile: 'src/main/index.js',
+      mainProcessWatch: ['src/main']
+    }
+  }
 }
