@@ -4,6 +4,9 @@ import lombok.Data;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * @Description: jsh_order_product
  * @Author: jeecg-boot
@@ -13,21 +16,21 @@ import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 @Data
 public class JshOrderProductExportVo {
     /**
-     * 客户id
-     */
-    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
-    private Long customerId;
-
-    /**
      * 订单ID
      */
     @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
     private Long orderId;
 
     /**
+     * 客户id
+     */
+    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    private Long customerId;
+
+    /**
      * 产品id
      */
-    @Excel(name = "产品", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Excel(name = "产品", width = 15, dictTable = "jsh_product", dicText = "name", dicCode = "id")
     private Long productId;
 
     /**
@@ -69,37 +72,37 @@ public class JshOrderProductExportVo {
     /**
      * 类型:1抽,2拉,3条
      */
-    @Excel(name = "类型", width = 15, dicCode = "product_extend")
+    @Excel(name = "抽/拉/条", width = 15, dicCode = "product_extend")
     private Integer extendType;
 
     /**
      * 数量
      */
-    @Excel(name = "数量", width = 15)
+    @Excel(name = "抽/拉/条数量", width = 15)
     private Integer extendNum;
 
     /**
      * 单价(分)
      */
     @Excel(name = "单价(元)", width = 15)
-    private Long price;
+    private BigDecimal price;
 
 
     /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)
-    private Long totalArea;
+    private BigDecimal totalArea;
 
     /**
      * 订单总额
      */
     @Excel(name = "订单总额(元)", width = 15)
-    private Long totalPrice;
+    private BigDecimal totalPrice;
 
     @ExcelCollection(name = "铝材信息")
-    private AluminumVo aluminumVo;
+    private List<AluminumVo> aluminumVoList;
 
     @ExcelCollection(name = "玻璃信息")
-    private GlassVo glassVo;
+    private List<GlassVo> glassVoList;
 }

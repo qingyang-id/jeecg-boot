@@ -13,6 +13,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.business.order.entity.JshOrderProduct;
 import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
 import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
@@ -34,15 +35,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.jeecg.common.util.oConvertUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -235,31 +234,33 @@ public class JshOrderProductController extends JeecgController<JshOrderProduct, 
         // Step.3 组装pageList
         List<JshOrderProductExportVo> pageList = new ArrayList<>();
         for (JshOrderProduct main : jshOrderProductList) {
-            JshOrderProductExportVo vo = new JshOrderProductExportVo();
-            BeanUtils.copyProperties(main, vo);
-            vo.setAluminumVo(new AluminumVo());
-            vo.setGlassVo(new GlassVo());
+            JshOrderProductExportVo jshOrderProductExportVo = new JshOrderProductExportVo();
+            BeanUtils.copyProperties(main, jshOrderProductExportVo);
+            // 格式化单价/面积/资金
+            jshOrderProductExportVo.setPrice(BigDecimal.valueOf(main.getPrice()).divide(new BigDecimal("100"), 3, RoundingMode.CEILING));
+            jshOrderProductExportVo.setTotalArea(BigDecimal.valueOf(main.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
+            jshOrderProductExportVo.setTotalPrice(BigDecimal.valueOf(main.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
             List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
             for (JshOrderProductDetail jshOrderProductDetail : jshOrderProductDetailList) {
                 if (jshOrderProductDetail.getType() == 1) {
                     // 铝材
                     AluminumVo aluminumVo = new AluminumVo();
                     BeanUtils.copyProperties(jshOrderProductDetail, aluminumVo);
-                    vo.setAluminumVo(aluminumVo);
+                    jshOrderProductExportVo.setAluminumVoList(Collections.singletonList(aluminumVo));
                 } else {
                     GlassVo glassVo = new GlassVo();
                     BeanUtils.copyProperties(jshOrderProductDetail, glassVo);
-                    vo.setGlassVo(glassVo);
+                    jshOrderProductExportVo.setGlassVoList(Collections.singletonList(glassVo));
                 }
             }
-            pageList.add(vo);
+            pageList.add(jshOrderProductExportVo);
         }
 
         // Step.4 AutoPoi 导出Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
-        mv.addObject(NormalExcelConstants.FILE_NAME, "原尺寸信息");
+        mv.addObject(NormalExcelConstants.FILE_NAME, "生产单信息");
         mv.addObject(NormalExcelConstants.CLASS, JshOrderProductExportVo.class);
-        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("原尺寸信息", "导出人:" + sysUser.getRealname(), "原尺寸信息"));
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("生产单信息", "导出人:" + sysUser.getRealname(), "生产单信息"));
         mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
         return mv;
     }

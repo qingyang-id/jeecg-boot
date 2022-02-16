@@ -6,17 +6,7 @@
       <a-button type="primary" icon="download" @click="handleExportXls('jsh_order_product')">导出</a-button>
     </div>
     <!-- table区域 begin -->
-    <div>
-      <a-alert type="info" showIcon style="margin-bottom: 16px;">
-        <template slot="message">
-          <span>已选择</span>
-          <a style="font-weight: 600;padding: 0 4px;">{{ selectedRowKeys.length }}</a>
-          <span>项</span>
-          <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-        </template>
-      </a-alert>
-
-      <a-table
+    <a-table
         ref="table"
         size="middle"
         bordered
@@ -26,10 +16,8 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
-      </a-table>
-    </div>
+    </a-table>
     <!-- table区域 end -->
 
   </a-card>

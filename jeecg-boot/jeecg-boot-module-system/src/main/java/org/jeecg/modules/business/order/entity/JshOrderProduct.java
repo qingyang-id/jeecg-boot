@@ -66,6 +66,13 @@ public class JshOrderProduct implements Serializable {
      */
     @TableLogic
     private Integer delFlag;
+    /**
+     * 订单ID
+     */
+    @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @ApiModelProperty(value = "订单ID")
+    private java.lang.Long orderId;
 
     /**
      * 客户id
@@ -75,16 +82,9 @@ public class JshOrderProduct implements Serializable {
     @ApiModelProperty(value = "客户id")
     private java.lang.Long customerId;
     /**
-     * 订单ID
-     */
-    @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-    @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
-    @ApiModelProperty(value = "订单ID")
-    private java.lang.Long orderId;
-    /**
      * 产品id
      */
-    @Excel(name = "产品", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Excel(name = "产品", width = 15, dictTable = "jsh_product", dicText = "name", dicCode = "id")
     @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
     @ApiModelProperty(value = "产品id")
     private java.lang.Long productId;

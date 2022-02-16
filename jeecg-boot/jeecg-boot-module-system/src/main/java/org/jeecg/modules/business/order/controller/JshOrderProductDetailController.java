@@ -7,12 +7,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
 import org.jeecg.modules.business.order.service.IJshOrderProductDetailService;
+import org.jeecg.modules.business.order.vo.AluminumVo;
+import org.jeecg.modules.business.order.vo.GlassVo;
+import org.jeecgframework.poi.excel.def.NormalExcelConstants;
+import org.jeecgframework.poi.excel.entity.ExportParams;
+import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description: jsh_order_product_detail
@@ -145,16 +154,56 @@ public class JshOrderProductDetailController extends JeecgController<JshOrderPro
      * @param jshOrderProductDetail
      */
     @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, JshOrderProductDetail jshOrderProductDetail) {
-        Integer type = null;
-        if (jshOrderProductDetail != null) {
-            type = jshOrderProductDetail.getType();
+    public ModelAndView exportXls(HttpServletRequest request,
+                                  @RequestParam(name = "ids", required = false) String ids,
+                                  JshOrderProductDetail jshOrderProductDetail) {
+        int type = jshOrderProductDetail.getType() != null && jshOrderProductDetail.getType() == 1 ? 1: 2;
+        jshOrderProductDetail.setType(type);
+        // Step.1 组装查询条件查询数据
+        QueryWrapper<JshOrderProductDetail> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderProductDetail, request.getParameterMap());
+        // 过滤选中数据
+        String selections = request.getParameter("selections");
+        if (StringUtils.isNotEmpty(selections)) {
+            List<String> rowIds = Arrays.asList(selections.split(","));
+            if (!ids.isEmpty()) {
+                queryWrapper.in("id", rowIds);
+            }
         }
-        String title = "生产单明细";
-        if (type != null) {
-            title = type == 1 ? "铝材单明细" : "生产单明细";
+        // Step.2 获取导出数据
+        List<JshOrderProductDetail> queryList = jshOrderProductDetailService.list(queryWrapper);
+        // 查询用户信息
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        String title;
+        Object className;
+        List<Object> list;
+        if (type == 1) {
+            title = "铝材单明细";
+            className = AluminumVo.class;
+            list = queryList.stream()
+                    .map(item -> {
+                        AluminumVo aluminumVo = new AluminumVo();
+                        BeanUtils.copyProperties(item, aluminumVo);
+                        return aluminumVo;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            title = "生产单明细";
+            className = GlassVo.class;
+            list = queryList.stream()
+                    .map(item -> {
+                        GlassVo glassVo = new GlassVo();
+                        BeanUtils.copyProperties(item, glassVo);
+                        return glassVo;
+                    })
+                    .collect(Collectors.toList());
         }
-        return super.exportXls(request, jshOrderProductDetail, JshOrderProductDetail.class, title);
+        // Step.3 AutoPoi 导出Excel
+        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
+        mv.addObject(NormalExcelConstants.FILE_NAME, title);
+        mv.addObject(NormalExcelConstants.CLASS, className);
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams(title, "导出人:" + sysUser.getRealname(), title));
+        mv.addObject(NormalExcelConstants.DATA_LIST, list);
+        return mv;
     }
 
     /**
