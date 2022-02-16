@@ -47,27 +47,32 @@ module.exports = {
     Crashed when using Webpack `import()` #2463
     https://github.com/vuejs/vue-cli/issues/2463
    */
+  lintOnSave: undefined,
+  runtimeCompiler: true,
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
+  // 打包输出路径
+  outputDir: "dist/web",
   // 多入口配置
-  // pages: {
-  //   index: {
-  //     // entry for the page
-  //     entry: 'src/main.js',
-  //     // the source template
-  //     template: 'public/index.html',
-  //     // output as dist/index.html
-  //     filename: 'index.html',
-  //     // when using title option,
-  //     // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-  //     // title: 'ERP管理系统',
-  //     // chunks to include on this page, by default includes
-  //     // extracted common chunks and vendor chunks.
-  //     chunks: ['chunk-vendors', 'chunk-common', 'index']
-  //   }
-  // },
+  pages: {
+    index: {
+      // entry for the page
+      entry: 'src/renderer/main.js',
+      // entry: path.join(__dirname, './src/renderer/main.js'),
+      // the source template
+      template: 'public/index.html',
+      // output as dist/index.html
+      filename: 'index.html',
+      // when using title option,
+      // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+      // title: 'ERP管理系统',
+      // chunks to include on this page, by default includes
+      // extracted common chunks and vendor chunks.
+      // chunks: ['chunk-vendors', 'chunk-common', 'index']
+    }
+  },
   // 打包app时放开该配置
-  // publicPath:'./',
+  publicPath: isProd ? "./" : "/",
   configureWebpack: config => {
     // Ignore related resources when building with cdn
     // config.externals = isProd ? assetsCDN.externals : {}
@@ -78,20 +83,13 @@ module.exports = {
     // }
   },
   chainWebpack: (config) => {
+    // config.entry(path.join('')"./src/renderer/main.js")
     config.resolve.alias
-      .set('@$', resolve('src'))
-      .set('@api', resolve('src/api'))
-      .set('@assets', resolve('src/assets'))
-      .set('@comp', resolve('src/components'))
-      .set('@views', resolve('src/views'))
-
-    // 压缩图片
-    // config.module
-    //   .rule('images')
-    //   .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
-    //   .use('image-webpack-loader')
-    //   .loader('image-webpack-loader')
-    //   .options({ bypassOnDebug: true })
+      .set('@$', resolve('src/renderer'))
+      .set('@api', resolve('src/renderer/api'))
+      .set('@assets', resolve('src/renderer/assets'))
+      .set('@comp', resolve('src/renderer/components'))
+      .set('@views', resolve('src/renderer/views'))
 
     // webpack 会默认给 commonChunk 打进 chunk-vendors，所以需要对 webpack 的配置进行 delete
     // config.optimization.delete('splitChunks')
@@ -131,10 +129,10 @@ module.exports = {
           },
           styles: {
             // 样式抽离
-            name: 'styles',
-            test: /\.(sa|sc|c)ss$/,
-            chunks: 'all',
-            enforce: true
+            name: "styles",
+            test: /\.(sa|sc|le|c)ss$/,
+            chunks: "all",
+            enforce: true,
           },
           runtimeChunk: {
             name: 'manifest'
@@ -212,5 +210,85 @@ module.exports = {
     }
   },
 
-  lintOnSave: undefined
+  // 第三方插件配置
+  pluginOptions: {
+    // vue-cli-plugin-electron-builder配置
+    electronBuilder: {
+      nodeIntegration: true,
+      builderOptions: {
+        win: {
+          icon: "build/electron-icon/icon.ico",
+          // 图标路径 windows系统中icon需要256*256的ico格式图片，更换应用图标亦在此处
+          target: [
+            {
+              // 打包成一个独立的 exe 安装程序
+              target: "nsis",
+              // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
+              arch: [
+                // "x64",
+                'ia32'
+              ],
+            },
+          ],
+        },
+        dmg: {
+          contents: [
+            {
+              x: 410,
+              y: 150,
+              type: "link",
+              path: "/Applications",
+            },
+            {
+              x: 130,
+              y: 150,
+              type: "file",
+            },
+          ],
+        },
+        linux: {
+          icon: "build/electron-icon/icon.png",
+          target: "AppImage",
+        },
+        mac: {
+          icon: "build/electron-icon/icon.icns",
+        },
+        files: ["**/*"],
+        asar: true,
+        nsis: {
+          // 是否一键安装，建议为 false，可以让用户点击下一步、下一步、下一步的形式安装程序，如果为true，当用户双击构建好的程序，自动安装程序并打开，即：一键安装（one-click installer）
+          oneClick: false,
+          // 允许请求提升。 如果为false，则用户必须使用提升的权限重新启动安装程序。
+          allowElevation: true,
+          // 允许修改安装目录，建议为 true，是否允许用户改变安装目录，默认是不允许
+          allowToChangeInstallationDirectory: true,
+          // 安装图标
+          installerIcon: "build/electron-icon/icon.ico",
+          // 卸载图标
+          uninstallerIcon: "build/electron-icon/icon.ico",
+          // 安装时头部图标
+          installerHeaderIcon: "build/electron-icon/icon.ico",
+          // 创建桌面图标
+          createDesktopShortcut: true,
+          // 创建开始菜单图标
+          createStartMenuShortcut: true,
+        },
+      },
+      chainWebpackMainProcess: (config) => {
+        config.plugin("define").tap((args) => {
+          args[0]["IS_ELECTRON"] = true;
+          return args;
+        });
+      },
+      chainWebpackRendererProcess: (config) => {
+        config.plugin("define").tap((args) => {
+          args[0]["IS_ELECTRON"] = true;
+          return args;
+        });
+      },
+      outputDir: "dist/electron",
+      mainProcessFile: "src/main/index.js",
+      mainProcessWatch: ["src/main"],
+    },
+  },
 }

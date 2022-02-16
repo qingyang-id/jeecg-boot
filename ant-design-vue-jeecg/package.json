@@ -3,12 +3,17 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org ",
     "serve": "vue-cli-service serve",
-    "build:test": "vue-cli-service build --mode test",
     "build": "vue-cli-service build --report",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build:test": "vue-cli-service build --mode test",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
+    "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org "
   },
+  "main": "background.js",
   "dependencies": {
     "@antv/data-set": "^0.11.4",
     "@jeecg/antd-online-mini": "3.0.0-RC",
@@ -34,6 +39,7 @@
     "vue": "^2.6.10",
     "vue-area-linkage": "^5.1.0",
     "vue-cropper": "^0.5.4",
+    "vue-electron": "^1.0.6",
     "vue-i18n": "^8.7.0",
     "vue-loader": "^15.7.0",
     "vue-ls": "^3.2.0",
@@ -56,12 +62,17 @@
     "babel-eslint": "7.2.3",
     "babel-plugin-import": "^1.13.3",
     "compression-webpack-plugin": "^3.1.0",
+    "electron": "^17.0.1",
+    "electron-builder": "^22.14.13",
+    "electron-debug": "^3.2.0",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.1.0",
     "html-webpack-plugin": "^4.2.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "speed-measure-webpack-plugin": "^1.5.0",
+    "vue-cli-plugin-electron-builder": "~2.1.1",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
