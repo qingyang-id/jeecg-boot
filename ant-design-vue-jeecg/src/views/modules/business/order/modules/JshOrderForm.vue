@@ -98,7 +98,7 @@ export default {
   },
   data() {
     return {
-      addressDictOptions: [],
+      addressDictOptions: [{ text: '请选择', value: '', disabled: true }],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 6 },
@@ -321,21 +321,37 @@ export default {
           });
     },
 
+    addCustomer() {
+      this.$router.push('/business/customer/list');
+    },
+
     handleCopy({ row }) {
       console.log('复制 ', row);
       this.$refs.jshOrderProduct.addRows([{ ...row, id: '' }]);
       this.calculateSumPrice();
     },
 
+    resetAddresses() {
+      this.addressDictOptions = [{ text: '请先去客户管理-客户信息页面为该用户添加地址', value: '' }];
+    },
+
     updateAddresses(customerId) {
       if (!customerId) {
-        this.addressDictOptions = [{ text: '请先去用户管理页面为该用户添加地址', value: '' }];
+        this.resetAddresses();
       }
-      console.log('\n\n\n customerId', customerId);
       getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId })
           .then((res) => {
-            this.addressDictOptions = res.success && res.result.records.length ? res.result.records
-                .map(item => ({ text: item.address, value: item.address })) : [{ text: '请先去用户管理为该用户添加地址', value: '' }];
+            if (res.success) {
+              if (res.result.records.length) {
+                this.addressDictOptions = res.result.records
+                    .map(item => ({ text: item.address, value: item.address }));
+              } else {
+                this.resetAddresses();
+              }
+            } else {
+              this.$message.error(res.message);
+              this.resetAddresses();
+            }
           });
     },
 
