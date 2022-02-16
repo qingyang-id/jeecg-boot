@@ -54,23 +54,23 @@ module.exports = {
   // 打包输出路径
   outputDir: "dist/web",
   // 多入口配置
-  pages: {
-    index: {
-      // entry for the page
-      entry: 'src/renderer/main.js',
-      // entry: path.join(__dirname, './src/renderer/main.js'),
-      // the source template
-      template: 'public/index.html',
-      // output as dist/index.html
-      filename: 'index.html',
-      // when using title option,
-      // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-      // title: 'ERP管理系统',
-      // chunks to include on this page, by default includes
-      // extracted common chunks and vendor chunks.
-      // chunks: ['chunk-vendors', 'chunk-common', 'index']
-    }
-  },
+  // pages: {
+  //   index: {
+  //     // entry for the page
+  //     entry: 'src/main.js',
+  //     // entry: path.join(__dirname, './src/renderer/main.js'),
+  //     // the source template
+  //     template: 'public/index.html',
+  //     // output as dist/index.html
+  //     filename: 'index.html',
+  //     // when using title option,
+  //     // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+  //     // title: 'ERP管理系统',
+  //     // chunks to include on this page, by default includes
+  //     // extracted common chunks and vendor chunks.
+  //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
+  //   }
+  // },
   // 打包app时放开该配置
   publicPath: isProd ? "./" : "/",
   configureWebpack: config => {
@@ -85,11 +85,11 @@ module.exports = {
   chainWebpack: (config) => {
     // config.entry(path.join('')"./src/renderer/main.js")
     config.resolve.alias
-      .set('@$', resolve('src/renderer'))
-      .set('@api', resolve('src/renderer/api'))
-      .set('@assets', resolve('src/renderer/assets'))
-      .set('@comp', resolve('src/renderer/components'))
-      .set('@views', resolve('src/renderer/views'))
+      .set('@$', resolve('src'))
+      .set('@api', resolve('src/api'))
+      .set('@assets', resolve('src/assets'))
+      .set('@comp', resolve('src/components'))
+      .set('@views', resolve('src/views'))
 
     // webpack 会默认给 commonChunk 打进 chunk-vendors，所以需要对 webpack 的配置进行 delete
     // config.optimization.delete('splitChunks')
