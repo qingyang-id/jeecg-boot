@@ -4,7 +4,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const { HashedModuleIdsPlugin } = require('webpack');
 console.log(process.env) // remove this after you've confirmed it working
 
-const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production' || process.env.BABEL_ENV === 'test'
 
 console.log('is prod:', isProd)
 
@@ -47,6 +47,13 @@ module.exports = {
     Crashed when using Webpack `import()` #2463
     https://github.com/vuejs/vue-cli/issues/2463
    */
+  lintOnSave: undefined,
+  runtimeCompiler: true,
+  assetsDir: 'public',
+  // 打包输出路径
+  outputDir: 'dist/web',
+  // 打包app时放开该配置
+  // publicPath: './',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // 多入口配置
@@ -204,13 +211,11 @@ module.exports = {
           '/jeecg-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
         }
       }, */
-      '/jeecg-boot': {
+      '/portal': {
         target: 'http://localhost:8080', // 请求本地 需要jeecg-boot后台项目
         ws: false,
         changeOrigin: true
       }
     }
-  },
-
-  lintOnSave: undefined
+  }
 }
