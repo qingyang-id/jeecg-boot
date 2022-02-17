@@ -1,10 +1,22 @@
 const path = require('path')
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const { dependencies } = require('../package.json')
 // const { HashedModuleIdsPlugin } = require('webpack')
+
+/**
+ * List of node_modules to include in webpack bundle
+ *
+ * Required for specific packages like Vue UI libraries
+ * that provide pure *.vue files that need compiling
+ * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
+ */
+let whiteListedModules = ['vue', 'ant-design-vue']
+
 console.log(process.env) // remove this after you've confirmed it working
 
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production'
+const isAPP = process.env.IS_ELECTRON
 
 console.log('is prod:', isProd)
 
@@ -53,7 +65,7 @@ module.exports = {
   // 打包输出路径
   outputDir: 'dist/web',
   // 打包app时放开该配置
-  publicPath: isProd ? './' : '/',
+  publicPath: isProd && isAPP ? './' : '/',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // 多入口配置
@@ -82,6 +94,9 @@ module.exports = {
     // if (isProd) {
     //   config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
     // }
+    if (isAPP) {
+      config.externals = [...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))]
+    }
   },
   chainWebpack: (config) => {
     // config
@@ -230,36 +245,36 @@ module.exports = {
       nodeIntegration: true,
       // 项目打包参数配置
       builderOptions: {
-        win: {
-          icon: 'build/electron-icon/icon.ico',
-          // 图标路径 windows系统中icon需要256*256的ico格式图片，更换应用图标亦在此处
-          target: [
-            {
-              // 打包成一个独立的 exe 安装程序
-              target: 'nsis',
-              // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
-              arch: [
-                // 'x64',
-                'ia32'
-              ]
-            }
-          ]
-        },
-        dmg: {
-          contents: [
-            {
-              x: 410,
-              y: 150,
-              type: 'link',
-              path: '/Applications'
-            },
-            {
-              x: 130,
-              y: 150,
-              type: 'file'
-            }
-          ]
-        },
+        // win: {
+        //   icon: 'build/electron-icon/icon.ico',
+        //   // 图标路径 windows系统中icon需要256*256的ico格式图片，更换应用图标亦在此处
+        //   target: [
+        //     {
+        //       // 打包成一个独立的 exe 安装程序
+        //       target: 'nsis',
+        //       // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
+        //       arch: [
+        //         // 'x64',
+        //         'ia32'
+        //       ]
+        //     }
+        //   ]
+        // },
+        // dmg: {
+        //   contents: [
+        //     {
+        //       x: 410,
+        //       y: 150,
+        //       type: 'link',
+        //       path: '/Applications'
+        //     },
+        //     {
+        //       x: 130,
+        //       y: 150,
+        //       type: 'file'
+        //     }
+        //   ]
+        // },
         // linux: {
         //   icon: 'build/electron-icon/icon.png',
         //   target: 'AppImage'
@@ -274,7 +289,8 @@ module.exports = {
         // eslint-disable-next-line
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}', // 打包后安装包名称
         asar: true, // asar打包
-        files: ['**/*'],
+        // files: ['**/*'],
+        // files: ['dist/electron/**/*'],
         nsis: {
           // 是否一键安装，建议为 false，可以让用户点击下一步、下一步、下一步的形式安装程序，如果为true，当用户双击构建好的程序，自动安装程序并打开，即：一键安装（one-click installer）
           oneClick: false,
@@ -309,8 +325,8 @@ module.exports = {
         })
       },
       outputDir: 'dist/electron',
-      mainProcessFile: 'src/main/index.dev.js',
-      mainProcessWatch: ['src/main']
+      mainProcessFile: 'electron/main/index.dev.js',
+      mainProcessWatch: ['electron/main']
     }
   }
 }
