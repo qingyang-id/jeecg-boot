@@ -87,7 +87,7 @@ module.exports = {
     // config
     // Interact with entry points
     // .entry('index')
-    // .add(resolve('src/renderer/main.js'))
+    // .add(resolve('src/main.js'))
     // .end()
     // Modify output settings
     // .output
@@ -226,7 +226,9 @@ module.exports = {
   pluginOptions: {
     // vue-cli-plugin-electron-builder配置
     electronBuilder: {
+      // 配置后可以在渲染进程使用ipcRenderer
       nodeIntegration: true,
+      // 项目打包参数配置
       builderOptions: {
         win: {
           icon: 'build/electron-icon/icon.ico',
@@ -265,8 +267,14 @@ module.exports = {
         mac: {
           icon: 'build/electron-icon/icon.icns'
         },
+        productName: 'erp-admin', // 项目名称 打包生成exe的前缀名
+        appId: 'com.qing.yang.erp', // 包名
+        copyright: 'Copyright © 2023-present QingYang', // 版权
+        compression: 'maximum', // store|normal|maximum 打包压缩情况(store速度较快)
+        // eslint-disable-next-line
+        artifactName: '${productName}-${version}-${platform}-${arch}.${ext}', // 打包后安装包名称
+        asar: true, // asar打包
         files: ['**/*'],
-        asar: true,
         nsis: {
           // 是否一键安装，建议为 false，可以让用户点击下一步、下一步、下一步的形式安装程序，如果为true，当用户双击构建好的程序，自动安装程序并打开，即：一键安装（one-click installer）
           oneClick: false,
@@ -284,6 +292,8 @@ module.exports = {
           createDesktopShortcut: true,
           // 创建开始菜单图标
           createStartMenuShortcut: true
+          // 桌面快捷键图标名称
+          // shortcutName: 'erp-admin'
         }
       },
       chainWebpackMainProcess: (config) => {
@@ -299,7 +309,7 @@ module.exports = {
         })
       },
       outputDir: 'dist/electron',
-      mainProcessFile: 'src/main/index.js',
+      mainProcessFile: 'src/main/index.dev.js',
       mainProcessWatch: ['src/main']
     }
   }
