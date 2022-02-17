@@ -15,7 +15,7 @@ let whiteListedModules = ['vue', 'ant-design-vue']
 
 console.log(process.env) // remove this after you've confirmed it working
 
-const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production' || process.env.BABEL_ENV === 'test'
 const isAPP = process.env.IS_ELECTRON
 
 console.log('is prod:', isProd)
@@ -229,7 +229,7 @@ module.exports = {
           '/jeecg-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
         }
       }, */
-      '/jeecg-boot': {
+      '/portal': {
         target: 'http://localhost:8080', // 请求本地 需要jeecg-boot后台项目
         ws: false,
         changeOrigin: true
