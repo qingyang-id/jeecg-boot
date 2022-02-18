@@ -61,11 +61,11 @@ module.exports = {
    */
   lintOnSave: undefined,
   runtimeCompiler: true,
-  assetsDir: 'public',
+  // assetsDir: 'public',
   // 打包输出路径
   outputDir: 'dist/web',
   // 打包app时放开该配置
-  publicPath: isProd && isAPP ? './' : '/',
+  publicPath: isAPP ? './' : '/',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // 多入口配置
@@ -80,7 +80,7 @@ module.exports = {
   //     filename: 'index.html',
   //     // when using title option,
   //     // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-  //     // title: 'ERP管理系统',
+  //     title: process.env.VUE_APP_PLATFORM_NAME
   //     // chunks to include on this page, by default includes
   //     // extracted common chunks and vendor chunks.
   //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
@@ -195,15 +195,20 @@ module.exports = {
       .rule('vxe')
       .test(/\.js$/)
       .include
-        .add(resolve('node_modules/vxe-table'))
-        .add(resolve('node_modules/vxe-table-plugin-antd'))
-        .end()
+      .add(resolve('node_modules/vxe-table'))
+      .add(resolve('node_modules/vxe-table-plugin-antd'))
+      .end()
       .use()
       .loader('babel-loader')
       .end()
   },
 
   css: {
+    // 是否使用css分离插件 ExtractTextPlugin
+    extract: isProd,
+    // 开启 CSS source maps?
+    sourceMap: !isProd,
+    // css预设器配置项
     loaderOptions: {
       less: {
         modifyVars: {
@@ -221,14 +226,14 @@ module.exports = {
     open: !process.argv.includes('electron:serve'),
     port: 3000,
     proxy: {
-     /* '/api': {
-        target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro', //mock API接口系统
-        ws: false,
-        changeOrigin: true,
-        pathRewrite: {
-          '/jeecg-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
-        }
-      }, */
+      /* '/api': {
+         target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro', //mock API接口系统
+         ws: false,
+         changeOrigin: true,
+         pathRewrite: {
+           '/jeecg-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
+         }
+       }, */
       '/portal': {
         target: 'http://localhost:8080', // 请求本地 需要jeecg-boot后台项目
         ws: false,
@@ -284,12 +289,12 @@ module.exports = {
         },
         productName: 'erp-admin', // 项目名称 打包生成exe的前缀名
         appId: 'com.qing.yang.erp', // 包名
-        copyright: 'Copyright © 2023-present QingYang', // 版权
+        copyright: 'Copyright © 2023 QingYang', // 版权
         compression: 'maximum', // store|normal|maximum 打包压缩情况(store速度较快)
         // eslint-disable-next-line
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}', // 打包后安装包名称
         asar: true, // asar打包
-        // files: ['**/*'],
+        files: ['**/*'],
         // files: ['dist/electron/**/*'],
         nsis: {
           // 是否一键安装，建议为 false，可以让用户点击下一步、下一步、下一步的形式安装程序，如果为true，当用户双击构建好的程序，自动安装程序并打开，即：一键安装（one-click installer）
@@ -325,8 +330,9 @@ module.exports = {
         })
       },
       outputDir: 'dist/electron',
-      mainProcessFile: 'electron/main/index.dev.js',
-      mainProcessWatch: ['electron/main']
+      mainProcessFile: 'electron/main/index.dev.js', // 主进程入口文件
+      // rendererProcessFile: 'src/main.js', // 渲染进程入口文件
+      mainProcessWatch: ['electron/main'] // 检测主进程文件在更改时将重新编译主进程并重新启动
     }
   }
 }
