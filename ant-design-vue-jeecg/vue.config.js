@@ -19,6 +19,7 @@ const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV ==
 const isAPP = process.env.IS_ELECTRON
 
 console.log('is prod:', isProd)
+console.log('is app:', isAPP)
 
 // cdn 外部扩展，通过 cdn 引入，不会被webpack打包
 // const assetsCDN = {
@@ -61,7 +62,7 @@ module.exports = {
    */
   lintOnSave: undefined,
   runtimeCompiler: true,
-  // assetsDir: 'public',
+  assetsDir: 'public',
   // 打包输出路径
   outputDir: 'dist/web',
   // 打包app时放开该配置
@@ -69,23 +70,23 @@ module.exports = {
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // 多入口配置
-  pages: {
-    index: {
-      // entry for the page
-      entry: 'src/main.js',
-      // entry: path.join(__dirname, './src/renderer/main.js'),
-      // the source template
-      template: 'public/index.html',
-      // output as dist/index.html
-      filename: 'index.html',
-      // when using title option,
-      // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-      title: process.env.VUE_APP_PLATFORM_NAME
-      // chunks to include on this page, by default includes
-      // extracted common chunks and vendor chunks.
-      // chunks: ['chunk-vendors', 'chunk-common', 'index']
-    }
-  },
+  // pages: {
+  //   index: {
+  //     // entry for the page
+  //     entry: 'src/main.js',
+  //     // entry: path.join(__dirname, './src/renderer/main.js'),
+  //     // the source template
+  //     template: 'public/index.html',
+  //     // output as dist/index.html
+  //     filename: 'index.html',
+  //     // when using title option,
+  //     // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+  //     title: process.env.VUE_APP_PLATFORM_NAME
+  //     // chunks to include on this page, by default includes
+  //     // extracted common chunks and vendor chunks.
+  //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
+  //   }
+  // },
   configureWebpack: config => {
     // Ignore related resources when building with cdn
     // config.externals = isProd ? assetsCDN.externals : {}
@@ -116,9 +117,6 @@ module.exports = {
       .set('@comp', resolve('src/components'))
       .set('@config', resolve('src/config'))
       .set('@views', resolve('src/views'))
-
-    // webpack 会默认给 commonChunk 打进 chunk-vendors，所以需要对 webpack 的配置进行 delete
-    // config.optimization.delete('splitChunks')
     if (isProd) {
       // 初始化页面的title为配置文件设置的值，public/index.html中的htmlWebpackPlugin.options.title
       // config.plugin('html').tap((args) => {
@@ -129,6 +127,8 @@ module.exports = {
       //   return args
       // })
 
+      // webpack 会默认给 commonChunk 打进 chunk-vendors，所以需要对 webpack 的配置进行 delete
+      config.optimization.delete('splitChunks')
       // Ignore related resources when building with cdn
       config.optimization.splitChunks({
         // 分割代码块
