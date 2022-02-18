@@ -69,23 +69,23 @@ module.exports = {
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // 多入口配置
-  // pages: {
-  //   index: {
-  //     // entry for the page
-  //     entry: 'src/main.js',
-  //     // entry: path.join(__dirname, './src/renderer/main.js'),
-  //     // the source template
-  //     template: 'public/index.html',
-  //     // output as dist/index.html
-  //     filename: 'index.html',
-  //     // when using title option,
-  //     // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-  //     title: process.env.VUE_APP_PLATFORM_NAME
-  //     // chunks to include on this page, by default includes
-  //     // extracted common chunks and vendor chunks.
-  //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
-  //   }
-  // },
+  pages: {
+    index: {
+      // entry for the page
+      entry: 'src/main.js',
+      // entry: path.join(__dirname, './src/renderer/main.js'),
+      // the source template
+      template: 'public/index.html',
+      // output as dist/index.html
+      filename: 'index.html',
+      // when using title option,
+      // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+      title: process.env.VUE_APP_PLATFORM_NAME
+      // chunks to include on this page, by default includes
+      // extracted common chunks and vendor chunks.
+      // chunks: ['chunk-vendors', 'chunk-common', 'index']
+    }
+  },
   configureWebpack: config => {
     // Ignore related resources when building with cdn
     // config.externals = isProd ? assetsCDN.externals : {}
