@@ -1,13 +1,11 @@
 module.exports = {
-  presets: [
-    ['@vue/app',
-      { useBuiltIns: 'entry' }]
-  ],
+  presets: ['@vue/app'],
   plugins: [
+    // ant-design-vue按需加载配置
     ['import', {
-      'libraryName': 'ant-design-vue',
-      'libraryDirectory': 'es',
-      'style': 'css'
+      libraryName: 'ant-design-vue',
+      libraryDirectory: 'es',
+      style: true
     }]
   ]
 }

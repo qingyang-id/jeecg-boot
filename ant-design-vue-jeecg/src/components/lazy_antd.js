@@ -55,12 +55,12 @@ import {
   Pagination,
   FormModel,
   Cascader,
-  Slider,
+  // Slider,
   Transfer,
   Rate,
   Collapse,
 } from 'ant-design-vue'
-import Viser from 'viser-vue'
+// import Viser from 'viser-vue'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -110,7 +110,7 @@ Vue.use(Carousel)
 Vue.use(Pagination)
 Vue.use(FormModel)
 Vue.use(Cascader)
-Vue.use(Slider)
+// Vue.use(Slider)
 Vue.use(Transfer)
 Vue.use(Rate)
 Vue.use(Collapse)

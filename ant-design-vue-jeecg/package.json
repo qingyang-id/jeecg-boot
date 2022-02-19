@@ -4,25 +4,24 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build:test": "NODE_ENV=production && npm run vue-cli-service build --mode test",
     "build": "NODE_ENV=production && vue-cli-service build --report",
     "lint": "vue-cli-service lint",
-    "electron:serve": "NODE_ENV=production && IS_ELECTRON=true && vue-cli-service electron:serve",
-    "electron:build": "IS_ELECTRON=true && npm run vue-cli-service electron:build",
-    "build:dev:win32": "IS_ELECTRON=true && vue-cli-service electron:build --mode dev --win --ia32",
-    "build:dev:win64": "IS_ELECTRON=true && vue-cli-service electron:build --mode dev --win --x64",
-    "build:test:win32": "IS_ELECTRON=true && vue-cli-service electron:build --mode test --win --ia32",
-    "build:test:win64": "IS_ELECTRON=true && vue-cli-service electron:build --mode test --win --x64",
-    "build:prod:win32": "IS_ELECTRON=true && vue-cli-service electron:build --mode prod --win --ia32",
-    "build:prod:win64": "IS_ELECTRON=true && vue-cli-service electron:build --mode prod --win --x64",
-    "build:dev:mac": "IS_ELECTRON=true && vue-cli-service electron:build --mode dev --mac",
-    "build:test:mac": "IS_ELECTRON=true && vue-cli-service electron:build --mode test --mac",
-    "build:prod:mac": "IS_ELECTRON=true && vue-cli-service electron:build --mode prod --mac",
+    "build:dev:mac": "vue-cli-service electron:build --mode dev --mac",
+    "build:dev:win32": "vue-cli-service electron:build --mode dev --win --ia32",
+    "build:dev:win64": "vue-cli-service electron:build --mode dev --win --x64",
+    "build:prod:mac": "vue-cli-service electron:build --mode prod --mac",
+    "build:prod:win32": "vue-cli-service electron:build --mode prod --win --ia32",
+    "build:prod:win64": "vue-cli-service electron:build --mode prod --win --x64",
+    "build:test": "NODE_ENV=production && npm run vue-cli-service build --mode test",
+    "build:test:mac": "vue-cli-service electron:build --mode test --mac",
+    "build:test:win32": "vue-cli-service electron:build --mode test --win --ia32",
+    "build:test:win64": "vue-cli-service electron:build --mode test --win --x64",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:build:app": "vue-cli-service electron:build --mode app",
+    "electron:serve": "NODE_ENV=production && traceDeprecation=1 && vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org "
+    "postuninstall": "electron-builder install-app-deps"
   },
-  "appId": "com.qing.yang.erp",
   "main": "background.js",
   "dependencies": {
     "@antv/data-set": "^0.11.4",
@@ -35,9 +34,11 @@
     "china-area-data": "^5.0.1",
     "clipboard": "^2.0.4",
     "codemirror": "^5.46.0",
+    "core-js": "^3.8.3",
     "cron-parser": "^2.10.0",
     "dayjs": "^1.8.0",
     "dom-align": "1.12.0",
+    "electron-builder": "^22.14.13",
     "enquire.js": "^2.1.6",
     "js-cookie": "^2.2.0",
     "lodash.get": "^4.4.2",
@@ -46,12 +47,11 @@
     "nprogress": "^0.2.0",
     "tinymce": "5.4.1",
     "viser-vue": "^2.4.8",
-    "vue": "^2.6.10",
+    "vue": "^2.6.14",
     "vue-area-linkage": "^5.1.0",
     "vue-cropper": "^0.5.4",
     "vue-electron": "^1.0.6",
     "vue-i18n": "^8.7.0",
-    "vue-loader": "^15.7.0",
     "vue-ls": "^3.2.0",
     "vue-photo-preview": "^1.1.3",
     "vue-print-nb-jeecg": "^1.0.9",
@@ -64,71 +64,30 @@
     "xe-utils": "2.4.8"
   },
   "devDependencies": {
-    "@babel/polyfill": "^7.2.5",
-    "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
-    "@vue/eslint-config-standard": "^4.0.0",
-    "babel-eslint": "7.2.3",
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.1",
+    "@vue/cli-plugin-eslint": "~5.0.1",
+    "@vue/cli-service": "~5.0.1",
+    "@vue/eslint-config-airbnb": "^6.0.0",
     "babel-plugin-import": "^1.13.3",
     "compression-webpack-plugin": "^3.1.0",
     "cross-env": "^7.0.3",
-    "electron": "^17.0.1",
-    "electron-builder": "^22.14.13",
+    "electron": "17.0.1",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.1.0",
-    "html-webpack-plugin": "^4.2.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "eslint-plugin-vuejs-accessibility": "^1.1.1",
+    "html-webpack-plugin": "^5.5.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "speed-measure-webpack-plugin": "^1.5.0",
     "vue-cli-plugin-electron-builder": "~2.1.1",
+    "vue-loader": "^15.2.4",
     "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/strongly-recommended",
-      "@vue/standard"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {
-      "generator-star-spacing": "off",
-      "no-mixed-operators": 0,
-      "vue/max-attributes-per-line": [
-        2,
-        {
-          "singleline": 5,
-          "multiline": {
-            "max": 1,
-            "allowFirstLine": false
-          }
-        }
-      ],
-      "vue/attribute-hyphenation": 0,
-      "vue/html-self-closing": 0,
-      "vue/component-name-in-template-casing": 0,
-      "vue/html-closing-bracket-spacing": 0,
-      "vue/singleline-html-element-content-newline": 0,
-      "vue/no-unused-components": 0,
-      "vue/multiline-html-element-content-newline": 0,
-      "vue/no-use-v-if-with-v-for": 0,
-      "vue/html-closing-bracket-newline": 0,
-      "vue/no-parsing-error": 0,
-      "no-tabs": 0,
-      "indent": [
-        "off",
-        2
-      ],
-      "no-console": 0,
-      "space-before-function-paren": 0
-    }
   },
   "postcss": {
     "plugins": {
@@ -139,5 +98,11 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ]
+  ],
+  "appId": "com.qing.yang.erp",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
 }

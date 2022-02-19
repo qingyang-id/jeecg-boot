@@ -1,5 +1,6 @@
 /** init domain config */
 import './config'
+// import 'babel-polyfill'
 // 按需引入所需组件，统一引入文件
 import './components/lazy_antd'
 
@@ -16,13 +17,12 @@ require('@jeecg/antd-online-mini/dist/OnlineForm.css')
 // import Antd, { version } from 'ant-design-vue'
 // console.log('ant-design-vue version:', version, Antd)
 
-import Viser from 'viser-vue'
+// import Viser from 'viser-vue'
 // import 'ant-design-vue/dist/antd.less';  // or 'ant-design-vue/dist/antd.less'
 
 import '@/permission' // permission control
 import '@/utils/filter' // base filter
 import Print from 'vue-print-nb-jeecg'
-/*import '@babel/polyfill'*/
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
 import SSO from '@/cas/sso.js'
@@ -61,7 +61,7 @@ console.error('\n\n\nweb', process.env.IS_WEB, process.env)
 Vue.use(Storage, config.storageOptions)
 // Vue.use(Antd)
 Vue.use(VueAxios, router)
-Vue.use(Viser)
+// Vue.use(Viser)
 Vue.use(hasPermission)
 Vue.use(JDictSelectTag)
 Vue.use(Print)
