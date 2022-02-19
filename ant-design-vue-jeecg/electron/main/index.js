@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+const isDebug = process.env.IS_DEBUG
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -13,33 +14,24 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    useContentSize: true,
     width: 1200,
     height: 900,
-    title: process.platform === 'win32' ? 'ERP管理系统' : '',
-    // icon: previewIcon,
-    // titleBarStyle: 'hiddenInset',
-    frame: process.platform !== 'win32',
-    show: true,
-    // backgroundColor: '#2e2c29',
-    hasShadow: process.platform !== 'darwin',
     webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      contextIsolation: false,
-    },
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
+    }
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    if (!process.env.IS_TEST || isDebug) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
-    await win.loadURL('app://./index.html')
-    win.webContents.openDevTools()
+    win.loadURL('app://./index.html')
+    if (isDebug) win.webContents.openDevTools()
   }
 }
 
@@ -62,7 +54,7 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
+  if (isDevelopment && !process.env.IS_TEST || isDebug) {
     // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS)
@@ -70,7 +62,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  await createWindow()
+  createWindow()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -87,23 +79,3 @@ if (isDevelopment) {
     })
   }
 }
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
