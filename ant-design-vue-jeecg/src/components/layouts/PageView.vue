@@ -9,8 +9,8 @@
 </template>
 
 <script>
+import RouteView from './RouteView'
   import PageLayout from '../page/PageLayout'
-  import RouteView from './RouteView'
 
   export default {
     name: "PageContent",

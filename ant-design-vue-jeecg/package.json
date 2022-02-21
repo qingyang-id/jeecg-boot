@@ -6,23 +6,18 @@
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production && vue-cli-service build --report",
     "lint": "vue-cli-service lint",
-    "build:dev:mac": "vue-cli-service electron:build --mode dev --mac",
-    "build:dev:win32": "vue-cli-service electron:build --mode dev --win --ia32",
-    "build:dev:win64": "vue-cli-service electron:build --mode dev --win --x64",
-    "build:prod:mac": "vue-cli-service electron:build --mode prod --mac",
-    "build:prod:win32": "vue-cli-service electron:build --mode prod --win --ia32",
-    "build:prod:win64": "vue-cli-service electron:build --mode prod --win --x64",
-    "build:test": "NODE_ENV=production && npm run vue-cli-service build --mode test",
-    "build:test:mac": "vue-cli-service electron:build --mode test --mac",
-    "build:test:win32": "vue-cli-service electron:build --mode test --win --ia32",
-    "build:test:win64": "vue-cli-service electron:build --mode test --win --x64",
+    "electron:build:test": "NODE_ENV=production && npm run vue-cli-service build --mode test",
+    "electron:build:test:mac": "vue-cli-service electron:build --mode test --mac",
+    "electron:build:test:win32": "vue-cli-service electron:build --mode test --win --ia32",
+    "electron:build:test:win64": "vue-cli-service electron:build --mode test --win --x64",
+    "electron:build:mac": "vue-cli-service electron:build --mac",
+    "electron:build:win32": "vue-cli-service electron:build --win --ia32",
+    "electron:build:win64": "vue-cli-service electron:build --win --x64",
     "electron:build": "vue-cli-service electron:build",
-    "electron:build:app": "vue-cli-service electron:build --mode app",
-    "electron:serve": "NODE_ENV=production && traceDeprecation=1 && vue-cli-service electron:serve",
+    "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },
-  "main": "background.js",
   "dependencies": {
     "@antv/data-set": "^0.11.4",
     "@jeecg/antd-online-mini": "3.0.0-RC",
@@ -45,6 +40,7 @@
     "lodash.pick": "^4.4.0",
     "md5": "^2.2.1",
     "nprogress": "^0.2.0",
+    "path-browserify": "^1.0.1",
     "tinymce": "5.4.1",
     "viser-vue": "^2.4.8",
     "vue": "^2.6.14",
@@ -73,7 +69,7 @@
     "babel-plugin-import": "^1.13.3",
     "compression-webpack-plugin": "^3.1.0",
     "cross-env": "^7.0.3",
-    "electron": "17.0.1",
+    "electron": "^16.0.9",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^7.32.0",
@@ -85,24 +81,13 @@
     "html-webpack-plugin": "^5.5.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "vue-cli-plugin-electron-builder": "~2.1.1",
-    "vue-loader": "^15.2.4",
+    "vue-cli-plugin-electron-builder": "^3.0.0-alpha.4",
     "vue-template-compiler": "^2.6.10"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
   ],
-  "appId": "com.qing.yang.erp",
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
-  }
+  "appId": "com.qing.yang.erp"
 }

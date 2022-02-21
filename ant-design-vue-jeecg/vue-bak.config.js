@@ -1,7 +1,7 @@
-const path = require('path')
-const CompressionPlugin = require('compression-webpack-plugin')
+const path = require('path');
+const CompressionPlugin = require('compression-webpack-plugin');
 const { defineConfig } = require('@vue/cli-service');
-const pkg = require('../package.json')
+const pkg = require('../package.json');
 // const { HashedModuleIdsPlugin } = require('webpack')
 
 /**
@@ -11,15 +11,15 @@ const pkg = require('../package.json')
  * that provide pure *.vue files that need compiling
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/webpack-configurations.html#white-listing-externals
  */
-const whiteListedModules = ['vue', 'ant-design-vue']
+const whiteListedModules = ['vue', 'ant-design-vue'];
 
-console.log(process.env) // remove this after you've confirmed it working
+console.log(process.env); // remove this after you've confirmed it working
 
-const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production' || process.env.BABEL_ENV === 'test'
-const isAPP = process.env.IS_ELECTRON
+const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production' || process.env.BABEL_ENV === 'test';
+const isAPP = process.env.IS_ELECTRON;
 
-console.log('is prod:', isProd)
-console.log('is app:', isAPP)
+console.log('is prod:', isProd);
+console.log('is app:', isAPP);
 
 // cdn 外部扩展，通过 cdn 引入，不会被webpack打包
 const assetsCDN = {
@@ -30,11 +30,11 @@ const assetsCDN = {
     vuex: 'Vuex',
     axios: 'axios',
     moment: 'moment',
-    'ant-design-vue': 'antd'
+    'ant-design-vue': 'antd',
   },
   // cdn的css链接
   css: [
-    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.css'
+    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.css',
   ],
   // cdn的js链接
   js: [
@@ -44,12 +44,12 @@ const assetsCDN = {
     'https://cdn.jsdelivr.net/npm/vue-router@3.3.4/dist/vue-router.min.js',
     'https://cdn.jsdelivr.net/npm/vuex@3.5.1/dist/vuex.min.js',
     'https://cdn.jsdelivr.net/npm/axios@0.18.1/dist/axios.min.js',
-    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.js'
-  ]
-}
+    'https://cdn.jsdelivr.net/npm/ant-design-vue@1.7.8/dist/antd.min.js',
+  ],
+};
 
 function resolve(dir) {
-  return path.join(__dirname, dir)
+  return path.join(__dirname, dir);
 }
 
 // vue-bak.config.js
@@ -87,7 +87,7 @@ module.exports = defineConfig({
   //     // chunks: ['chunk-vendors', 'chunk-common', 'index']
   //   }
   // },
-  configureWebpack: config => {
+  configureWebpack: (config) => {
     // Ignore related resources when building with cdn
     // config.externals = isProd ? assetsCDN.externals : {}
     // config.module.noParse = /^(vue|vue-router|vuex|vuex-router-sync|axios|ant-design-vue|moment)$/
@@ -106,7 +106,7 @@ module.exports = defineConfig({
       .set('@assets', resolve('src/assets'))
       .set('@comp', resolve('src/components'))
       .set('@config', resolve('src/config'))
-      .set('@views', resolve('src/views'))
+      .set('@views', resolve('src/views'));
 
     // config
     // Interact with entry points
@@ -182,8 +182,8 @@ module.exports = defineConfig({
         test: /\.(js|css|less|json)$/, // 匹配文件名
         threshold: 10240, // 对超过10k的数据压缩
         minRatio: 0.8, // 只有压缩率小于这个值的资源才会被处理
-        deleteOriginalAssets: false // 不删除源文件
-      }))
+        deleteOriginalAssets: false, // 不删除源文件
+      }));
     }
 
     // 配置 webpack 识别 markdown 为普通的文件
@@ -192,7 +192,7 @@ module.exports = defineConfig({
       .test(/\.md$/)
       .use()
       .loader('file-loader')
-      .end()
+      .end();
 
     // 编译vxe-table包里的es6代码，解决IE11兼容问题
     config.module
@@ -204,7 +204,7 @@ module.exports = defineConfig({
       .end()
       .use()
       .loader('babel-loader')
-      .end()
+      .end();
   },
 
   css: {
@@ -219,11 +219,11 @@ module.exports = defineConfig({
           /* less 变量覆盖，用于自定义 ant design 主题 */
           'primary-color': '#1890FF',
           'link-color': '#1890FF',
-          'border-radius-base': '4px'
+          'border-radius-base': '4px',
         },
-        javascriptEnabled: true
-      }
-    }
+        javascriptEnabled: true,
+      },
+    },
   },
 
   devServer: {
@@ -241,9 +241,9 @@ module.exports = defineConfig({
       '/portal': {
         target: 'http://localhost:8080', // 请求本地 需要jeecg-boot后台项目
         ws: false,
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
   },
 
   // 第三方插件配置
@@ -264,10 +264,10 @@ module.exports = defineConfig({
               // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
               arch: [
                 // 'x64',
-                'ia32'
-              ]
-            }
-          ]
+                'ia32',
+              ],
+            },
+          ],
         },
         dmg: {
           contents: [
@@ -275,21 +275,21 @@ module.exports = defineConfig({
               x: 410,
               y: 150,
               type: 'link',
-              path: '/Applications'
+              path: '/Applications',
             },
             {
               x: 130,
               y: 150,
-              type: 'file'
-            }
-          ]
+              type: 'file',
+            },
+          ],
         },
         linux: {
           icon: 'build/electron-icon/icon.png',
-          target: 'AppImage'
+          target: 'AppImage',
         },
         mac: {
-          icon: 'build/electron-icon/icon.icns'
+          icon: 'build/electron-icon/icon.icns',
         },
         productName: 'erp-admin', // 项目名称 打包生成exe的前缀名
         appId: 'com.qing.yang.erp', // 包名
@@ -316,27 +316,27 @@ module.exports = defineConfig({
           // 创建桌面图标
           createDesktopShortcut: true,
           // 创建开始菜单图标
-          createStartMenuShortcut: true
+          createStartMenuShortcut: true,
           // 桌面快捷键图标名称
           // shortcutName: 'erp-admin'
-        }
+        },
       },
       chainWebpackMainProcess: (config) => {
         config.plugin('define').tap((args) => {
-          args[0].IS_ELECTRON = true
-          return args
-        })
+          args[0].IS_ELECTRON = true;
+          return args;
+        });
       },
       chainWebpackRendererProcess: (config) => {
         config.plugin('define').tap((args) => {
-          args[0].IS_ELECTRON = true
-          return args
-        })
+          args[0].IS_ELECTRON = true;
+          return args;
+        });
       },
       outputDir: 'dist/electron',
       // mainProcessFile: 'electron/main/index.dev.js', // 主进程入口文件
       // rendererProcessFile: 'src/main.js', // 渲染进程入口文件
       // mainProcessWatch: ['electron/main'] // 检测主进程文件在更改时将重新编译主进程并重新启动
-    }
-  }
-})
+    },
+  },
+});

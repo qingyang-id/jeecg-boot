@@ -25,7 +25,7 @@
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
-            <mini-area />
+<!--            <mini-area />-->
           </div>
           <template slot="footer">日订单量<span> {{ '1234' | NumberFormat }}</span></template>
         </chart-card>
@@ -36,7 +36,7 @@
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
-            <mini-bar :height="40" />
+<!--            <mini-bar :height="40" />-->
           </div>
           <template slot="footer">转化率 <span>60%</span></template>
         </chart-card>
@@ -63,41 +63,41 @@
       </a-col>
     </a-row>
 
-    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>今日</a>
-              <a>本周</a>
-              <a>本月</a>
-              <a>本年</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="销售额" key="1">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额排行" :dataSource="barData"/>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-          <a-tab-pane tab="销售趋势" key="2">
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar title="销售额趋势" :dataSource="barData"/>
-              </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
-              </a-col>
-            </a-row>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </a-card>
+<!--    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">-->
+<!--      <div class="salesCard">-->
+<!--        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">-->
+<!--          <div class="extra-wrapper" slot="tabBarExtraContent">-->
+<!--            <div class="extra-item">-->
+<!--              <a>今日</a>-->
+<!--              <a>本周</a>-->
+<!--              <a>本月</a>-->
+<!--              <a>本年</a>-->
+<!--            </div>-->
+<!--            <a-range-picker :style="{width: '256px'}" />-->
+<!--          </div>-->
+<!--          <a-tab-pane loading="true" tab="销售额" key="1">-->
+<!--            <a-row>-->
+<!--              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <bar title="销售额排行" :dataSource="barData"/>-->
+<!--              </a-col>-->
+<!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <rank-list title="门店销售排行榜" :list="rankList"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
+<!--          </a-tab-pane>-->
+<!--          <a-tab-pane tab="销售趋势" key="2">-->
+<!--            <a-row>-->
+<!--              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <bar title="销售额趋势" :dataSource="barData"/>-->
+<!--              </a-col>-->
+<!--              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--                <rank-list title="门店销售排行榜" :list="rankList"/>-->
+<!--              </a-col>-->
+<!--            </a-row>-->
+<!--          </a-tab-pane>-->
+<!--        </a-tabs>-->
+<!--      </div>-->
+<!--    </a-card>-->
 
     <a-row>
       <a-col :span="24">
@@ -128,7 +128,7 @@
               </a-spin>
             </a-col>
           </a-row>
-          <line-chart-multid :fields="visitFields" :dataSource="visitInfo"></line-chart-multid>
+<!--          <line-chart-multid :fields="visitFields" :dataSource="visitInfo"></line-chart-multid>-->
         </a-card>
       </a-col>
     </a-row>
@@ -139,12 +139,12 @@
   import ChartCard from '@/components/ChartCard'
   import ACol from "ant-design-vue/es/grid/Col"
   import ATooltip from "ant-design-vue/es/tooltip/Tooltip"
-  import MiniArea from '@/components/chart/MiniArea'
-  import MiniBar from '@/components/chart/MiniBar'
+  // import MiniArea from '@/components/chart/MiniArea'
+  // import MiniBar from '@/components/chart/MiniBar'
   import MiniProgress from '@/components/chart/MiniProgress'
   import RankList from '@/components/chart/RankList'
-  import Bar from '@/components/chart/Bar'
-  import LineChartMultid from '@/components/chart/LineChartMultid'
+  // import Bar from '@/components/chart/Bar'
+  // import LineChartMultid from '@/components/chart/LineChartMultid'
   import HeadInfo from '@/components/tools/HeadInfo.vue'
 
   import Trend from '@/components/Trend'
@@ -170,13 +170,13 @@
       ATooltip,
       ACol,
       ChartCard,
-      MiniArea,
-      MiniBar,
+      // MiniArea,
+      // MiniBar,
       MiniProgress,
       RankList,
-      Bar,
+      // Bar,
       Trend,
-      LineChartMultid,
+      // LineChartMultid,
       HeadInfo
     },
     data() {
