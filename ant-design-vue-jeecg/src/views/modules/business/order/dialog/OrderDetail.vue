@@ -26,28 +26,28 @@
             </a-col>
           </a-row>
           <a-row class="form-row" :gutter="24">
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
                 <a-input v-decorator="['id', {}]" hidden/>
                 {{ model.orderCode }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
                 {{ model.orderTime }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
                 {{ model.customerId_dictText }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
                 {{ model.address }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
                 {{ model.remark }}
               </a-form-item>
@@ -75,38 +75,38 @@
             </a-col>
           </a-row>
           <a-row class="form-row" :gutter="24">
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
                 <a-input v-decorator="['id', {}]" hidden/>
                 {{ model.orderCode }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="总面积(m²)">
                 {{ model.totalArea }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单总额(元)">
                 {{ model.totalPrice }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
                 {{ model.customerId_dictText }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
                 {{ model.address }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="下单时间">
                 {{ model.orderTime }}
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
+            <a-col :span="8">
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
                 {{ model.remark }}
               </a-form-item>

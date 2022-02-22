@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
 
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production';
-console.log('isProd', isProd, process.env, process.argv);
+const isWeb = !process.argv.find(item => item.indexOf('electron') >= 0);
 
 const appSuffix = isProd ? '' : '-test';
 
@@ -11,11 +11,20 @@ function resolve(dir) {
 }
 
 module.exports = defineConfig({
-  transpileDependencies: true,
+  transpileDependencies: false,
   // 打包输出路径
   outputDir: 'dist/web',
 
   chainWebpack: (config) => {
+    if (isWeb) {
+      // 修改参数 解决无法打包web项目问题
+      config.plugin('define').tap((args) => {
+        // eslint-disable-next-line no-param-reassign
+        args[0]['process.env']['IS_ELECTRON'] = false;
+        return args;
+      });
+    }
+    // 设置别名
     config.resolve.alias
       .set('@$', resolve('src'))
       .set('@api', resolve('src/api'))
@@ -26,8 +35,6 @@ module.exports = defineConfig({
   },
 
   css: {
-    // 是否使用css分离插件 ExtractTextPlugin
-    // extract: isProd,
     // 开启 CSS source maps?
     sourceMap: !isProd,
     // css预设器配置项
@@ -45,7 +52,7 @@ module.exports = defineConfig({
   },
 
   devServer: {
-    open: !process.argv.includes('electron:serve'),
+    open: isWeb,
     port: 3000,
     proxy: {
       /* '/api': {
@@ -87,25 +94,21 @@ module.exports = defineConfig({
             }
           ]
         },
-        // dmg: {
-        //   contents: [
-        //     {
-        //       x: 410,
-        //       y: 150,
-        //       type: 'link',
-        //       path: '/Applications'
-        //     },
-        //     {
-        //       x: 130,
-        //       y: 150,
-        //       type: 'file'
-        //     }
-        //   ]
-        // },
-        // linux: {
-        //   icon: 'build/electron-icon/icon.png',
-        //   target: 'AppImage'
-        // },
+        dmg: {
+          contents: [
+            {
+              x: 410,
+              y: 150,
+              type: 'link',
+              path: '/Applications'
+            },
+            {
+              x: 130,
+              y: 150,
+              type: 'file'
+            }
+          ]
+        },
         mac: {
           icon: 'build/electron-icon/icon.icns',
         },
@@ -155,7 +158,7 @@ module.exports = defineConfig({
         });
       },
       outputDir: 'dist/electron',
-      mainProcessFile: 'electron/main/index.dev.js', // 主进程入口文件
+      mainProcessFile: isProd ? 'electron/main/index.js' : 'electron/main/index.dev.js', // 主进程入口文件
       // rendererProcessFile: 'src/main.js', // 渲染进程入口文件
       mainProcessWatch: ['electron/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
     },
