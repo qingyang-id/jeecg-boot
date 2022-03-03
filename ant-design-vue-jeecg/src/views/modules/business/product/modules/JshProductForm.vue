@@ -10,7 +10,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="商品条码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="barcode">
-              <a-input v-model="model.barcode" placeholder="请输入商品条码" :disabled="model.id"></a-input>
+              <a-input v-model="model.barcode" placeholder="请输入商品条码" :disabled="!!model.id"></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">

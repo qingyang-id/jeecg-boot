@@ -1,7 +1,7 @@
 <template>
   <j-modal
       :title="title"
-      :width="width"
+      width="90%"
       :visible="visible"
       :maskClosable="false"
       :keyboard="false"
@@ -53,7 +53,8 @@
               </a-form-item>
             </a-col>
           </a-row>
-          <div :style="tableWidth">
+<!--          <div :style="tableWidth">-->
+          <div>
             <a-table
                 ref="table"
                 size="middle"
@@ -112,7 +113,8 @@
               </a-form-item>
             </a-col>
           </a-row>
-          <div :style="tableWidth">
+<!--          <div :style="tableWidth">-->
+          <div>
             <a-table
                 ref="table"
                 size="middle"
@@ -150,9 +152,6 @@ export default {
       orderPrintFlag: false,
       tableWidth: {
         'width': '1550px'
-      },
-      tableWidthRetail: {
-        'width': '1150px'
       },
       labelCol: {
         xs: { span: 24 },

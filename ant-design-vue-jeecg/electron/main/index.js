@@ -3,9 +3,17 @@
 import { app, protocol, BrowserWindow, nativeTheme } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import {
+  isWindows,
+  isMac,
+  isLinux,
+  isDevelopment,
+  isCreateTray,
+  isCreateMpris,
+} from './platform';
 
 const isDebug = process.env.IS_DEBUG;
-const isDevelopment = process.env.NODE_ENV !== 'production';
+let win;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -14,9 +22,9 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1440,
-    height: 900,
+    height: 840,
     minWidth: 1080,
     minHeight: 720,
     title: process.platform === "win32" ? "ERP Admin" : "",
@@ -57,10 +65,26 @@ app.on('window-all-closed', () => {
   }
 });
 
+if (!isMac) {
+  app.on('second-instance', (e, cl, wd) => {
+    if (win) {
+      win.show();
+      if (win.isMinimized()) {
+        win.restore();
+      }
+      win.focus();
+    }
+  });
+}
+
 app.on('activate', async () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) await createWindow();
+  if (!win) {
+    await createWindow();
+  } else {
+    win.show();
+  }
 });
 
 // This method will be called when Electron has finished

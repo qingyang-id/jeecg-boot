@@ -80,7 +80,7 @@ module.exports = defineConfig({
       // 项目打包参数配置
       builderOptions: {
         win: {
-          icon: 'build/electron-icon/icon.ico',
+          icon: 'build/icons/icon.ico',
           // 图标路径 windows系统中icon需要256*256的ico格式图片，更换应用图标亦在此处
           target: [
             {
@@ -110,7 +110,7 @@ module.exports = defineConfig({
           ]
         },
         mac: {
-          icon: 'build/electron-icon/icon.icns',
+          icon: 'build/icons/icon.icns',
         },
         productName: `erp-admin${appSuffix}`, // 项目名称 打包生成exe的前缀名
         appId: `com.qing.yang.erp${appSuffix}`, // 包名
@@ -130,11 +130,11 @@ module.exports = defineConfig({
           // 允许修改安装目录，建议为 true，是否允许用户改变安装目录，默认是不允许
           allowToChangeInstallationDirectory: true,
           // 安装图标
-          installerIcon: 'build/electron-icon/icon.ico',
+          installerIcon: 'build/icons/icon.ico',
           // 卸载图标
-          uninstallerIcon: 'build/electron-icon/icon.ico',
+          uninstallerIcon: 'build/icons/icon.ico',
           // 安装时头部图标
-          installerHeaderIcon: 'build/electron-icon/icon.ico',
+          installerHeaderIcon: 'build/icons/icon.ico',
           // 创建桌面图标
           createDesktopShortcut: true,
           // 创建开始菜单图标
