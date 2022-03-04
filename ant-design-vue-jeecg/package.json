@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "NODE_ENV=production && vue-cli-service build --report",
+    "build": "vue-cli-service build",
+    "report": "vue-cli-service build --report",
     "lint": "vue-cli-service lint",
     "electron:build:test": "npm run vue-cli-service build --mode test",
     "electron:build:test:mac": "vue-cli-service electron:build --mode test --mac",
