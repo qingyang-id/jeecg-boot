@@ -14,6 +14,24 @@ module.exports = defineConfig({
   transpileDependencies: false,
   // 打包输出路径
   outputDir: 'dist/web',
+  // 多入口配置
+  pages: {
+    index: {
+      // entry for the page
+      entry: 'src/renderer/main.js',
+      // entry: path.join(__dirname, './src/renderer/main.js'),
+      // the source template
+      template: 'public/index.html',
+      // output as dist/index.html
+      filename: 'index.html',
+      // when using title option,
+      // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
+      title: process.env.VUE_APP_PLATFORM_NAME
+      // chunks to include on this page, by default includes
+      // extracted common chunks and vendor chunks.
+      // chunks: ['chunk-vendors', 'chunk-common', 'index']
+    }
+  },
 
   chainWebpack: (config) => {
     if (isWeb) {
@@ -26,12 +44,12 @@ module.exports = defineConfig({
     }
     // 设置别名
     config.resolve.alias
-      .set('@$', resolve('src'))
-      .set('@api', resolve('src/api'))
-      .set('@assets', resolve('src/assets'))
-      .set('@comp', resolve('src/components'))
-      .set('@config', resolve('src/config'))
-      .set('@views', resolve('src/views'));
+      .set('@', resolve('src/renderer'))
+      .set('@api', resolve('src/renderer/api'))
+      .set('@assets', resolve('src/renderer/assets'))
+      .set('@comp', resolve('src/renderer/components'))
+      .set('@config', resolve('src/renderer/config'))
+      .set('@views', resolve('src/renderer/views'));
   },
 
   css: {
@@ -85,13 +103,17 @@ module.exports = defineConfig({
           target: [
             {
               // 打包成一个独立的 exe 安装程序
-              target: 'nsis',
+              target: 'portable',
               // 这个意思是打出来32 bit + 64 bit的包，但是要注意：这样打包出来的安装包体积比较大，所以建议直接打32的安装包。
               arch: [
-                // 'x64',
-                'ia32'
+                'x64',
+                // 'ia32'
               ]
-            }
+            },
+            {
+              target: 'nsis',
+              arch: ['x64'],
+            },
           ]
         },
         dmg: {
@@ -110,7 +132,7 @@ module.exports = defineConfig({
           ]
         },
         mac: {
-          icon: 'build/icons/icon.icns',
+          icon: 'build/icons/mac/icon.icns',
         },
         productName: `erp-admin${appSuffix}`, // 项目名称 打包生成exe的前缀名
         appId: `com.qing.yang.erp${appSuffix}`, // 包名
@@ -158,9 +180,9 @@ module.exports = defineConfig({
         });
       },
       outputDir: 'dist/electron',
-      mainProcessFile: isProd ? 'electron/main/index.js' : 'electron/main/index.dev.js', // 主进程入口文件
-      // rendererProcessFile: 'src/main.js', // 渲染进程入口文件
-      mainProcessWatch: ['electron/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
+      mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
+      // rendererProcessFile: 'src/renderer/main.js', // 渲染进程入口文件
+      mainProcessWatch: ['src/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
     },
   },
 });
