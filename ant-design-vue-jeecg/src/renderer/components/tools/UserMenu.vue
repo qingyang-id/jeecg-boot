@@ -82,9 +82,10 @@
     <span class="action">
       <a class="logout_title" href="javascript:;" @click="handleLogout">
         <a-icon type="logout"/>
-        <span v-if="isDesktop()">&nbsp;退出登录</span>
+        <span v-if="isDesktop()">&nbsp;退出</span>
       </a>
     </span>
+    <frame-actions />
     <user-password ref="userPassword"></user-password>
     <depart-select ref="departSelect" :closable="true" title="部门切换"></depart-select>
     <setting-drawer ref="settingDrawer" :closable="true" title="系统设置"></setting-drawer>
@@ -95,6 +96,7 @@
   import HeaderNotice from './HeaderNotice'
   import UserPassword from './UserPassword'
   import SettingDrawer from "@/components/setting/SettingDrawer";
+  import FrameActions from "@/components/menu/FrameActions";
   import DepartSelect from './DepartSelect'
   import { mapActions, mapGetters,mapState } from 'vuex'
   import { mixinDevice } from '@/utils/mixin.js'
@@ -118,7 +120,8 @@
       HeaderNotice,
       UserPassword,
       DepartSelect,
-      SettingDrawer
+      SettingDrawer,
+      FrameActions,
     },
     props: {
       theme: {

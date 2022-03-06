@@ -54,10 +54,8 @@ import { rules } from '@/utils/rules'
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
 if (process.env.IS_ELECTRON) {
-  console.error('\n\n\nnot web', process.env)
   Vue.use(require("vue-electron"));
 }
-console.error('\n\n\nweb', process.env.IS_WEB, process.env)
 Vue.use(Storage, config.storageOptions)
 // Vue.use(Antd)
 Vue.use(VueAxios, router)

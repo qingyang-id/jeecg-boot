@@ -1,6 +1,6 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, nativeTheme } from 'electron';
+import { app, protocol, BrowserWindow, nativeTheme, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import {
@@ -12,6 +12,7 @@ import {
   isCreateMpris,
 } from './platform';
 import path from "path";
+import { initIpcMain, exitAsk } from './ipcMain.js';
 
 const isDebug = process.env.IS_DEBUG;
 let mainWindow;
@@ -22,10 +23,12 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 async function createWindow() {
+  // Make sure the app is singleton.
+  if (!app.requestSingleInstanceLock()) return app.quit();
   // Create the browser window.
   global.mainWindow = mainWindow = new BrowserWindow({
-    width: 1440,
-    height: 900,
+    width: 1366,
+    height: 768,
     minWidth: 960,
     minHeight: 540,
     title: isWindows ? "ERP Admin" : "",
@@ -46,7 +49,20 @@ async function createWindow() {
   });
 
   // hide menu bar on Microsoft Windows and Linux
-  mainWindow.setMenuBarVisibility(false);
+  // mainWindow.setMenuBarVisibility(false);
+
+  mainWindow.on("close", (event) => {
+    if (isMac) {
+      exitAsk(event, mainWindow);
+    }
+  });
+
+  mainWindow.on("closed", () => {
+    global.mainWindow = mainWindow = null;
+  });
+
+  // init ipcMain
+  initIpcMain(mainWindow);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -59,21 +75,21 @@ async function createWindow() {
     if (isDebug) mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.once("ready-to-show", () => {
-    // 设置任务栏操作和缩略图
-    if (process.platform === "win32") {
-      mainWindow.setThumbarButtons([
-        {
-          tooltip: "刷新",
-          icon: path.join(__dirname, "./img/icons/exit.png"),
-          click() {
-            mainWindow.reload();
-          },
-        }
-      ]);
-      mainWindow.setThumbnailClip({ x: 0, y: 0, width: 180, height: 50 });
-    }
-  });
+  // mainWindow.once("ready-to-show", () => {
+  //   // 设置任务栏操作和缩略图
+  //   if (isWindows) {
+  //     mainWindow.setThumbarButtons([
+  //       {
+  //         tooltip: "刷新",
+  //         icon: path.join(__dirname, "./img/icons/exit.png"),
+  //         click() {
+  //           mainWindow.reload();
+  //         },
+  //       }
+  //     ]);
+  //     mainWindow.setThumbnailClip({ x: 0, y: 0, width: 180, height: 50 });
+  //   }
+  // });
 }
 
 // Quit when all windows are closed.
@@ -102,8 +118,6 @@ app.on('activate', async () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0 && !mainWindow) {
-    // Make sure the app is singleton.
-    if (!app.requestSingleInstanceLock()) return app.quit();
     await createWindow();
   } else if (mainWindow) {
     mainWindow.show();

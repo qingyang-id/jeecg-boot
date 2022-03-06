@@ -27,7 +27,8 @@ const app = {
     autoHideHeader: false,
     color: null,
     weak: false,
-    multipage: true //默认多页签模式
+    multipage: true, //默认多页签模式
+    platform: process && process.platform,
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
