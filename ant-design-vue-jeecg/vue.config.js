@@ -1,6 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
 
+console.log('pkg ', process.env);
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production';
 const isWeb = !process.argv.find(item => item.indexOf('electron') >= 0);
 

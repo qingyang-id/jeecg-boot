@@ -15,8 +15,6 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.business.order.entity.JshOrder;
 import org.jeecg.modules.business.order.entity.JshOrderProduct;
-import org.jeecg.modules.business.order.service.IJshOrderProductDetailService;
-import org.jeecg.modules.business.order.service.IJshOrderProductExtendService;
 import org.jeecg.modules.business.order.service.IJshOrderProductService;
 import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
@@ -64,10 +62,6 @@ public class JshOrderController extends JeecgController<JshOrder, IJshOrderServi
     private IJshOrderService jshOrderService;
     @Autowired
     private IJshOrderProductService jshOrderProductService;
-    @Autowired
-    private IJshOrderProductExtendService jshOrderProductExtendService;
-    @Autowired
-    private IJshOrderProductDetailService jshOrderProductDetailService;
 
     /**
      * 分页列表查询

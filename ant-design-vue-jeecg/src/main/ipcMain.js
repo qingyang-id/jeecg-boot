@@ -1,5 +1,5 @@
 import { app, dialog, ipcMain } from 'electron';
-import { isMac } from './platform';
+import { isMac } from './util/platform';
 
 const log = console.log;
 

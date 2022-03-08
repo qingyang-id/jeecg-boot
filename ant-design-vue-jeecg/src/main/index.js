@@ -10,21 +10,38 @@ import {
   isDevelopment,
   isCreateTray,
   isCreateMpris,
-} from './platform';
-import path from "path";
+} from './util/platform';
 import { initIpcMain, exitAsk } from './ipcMain.js';
+import AppAutoUpdate from './module/appAutoUpdate.js';
+// const AppTray = require('./module/appTray')
 
 const isDebug = process.env.IS_DEBUG;
 let mainWindow;
+let tray;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ]);
 
-async function createWindow() {
-  // Make sure the app is singleton.
+function handleKeepSingleApp() {
+  // 限制只可以打开一个应用
   if (!app.requestSingleInstanceLock()) return app.quit();
+  app.on('second-instance', (e, cl, wd) => {
+    if (mainWindow) {
+      console.log('show...');
+      if (mainWindow.isMinimized()) {
+        console.log('restore...');
+        mainWindow.restore();
+      }
+      console.log('focus...');
+      mainWindow.focus();
+      mainWindow.show();
+    }
+  });
+}
+
+async function createWindow() {
   // Create the browser window.
   global.mainWindow = mainWindow = new BrowserWindow({
     width: 1366,
@@ -48,6 +65,11 @@ async function createWindow() {
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#222' : '#fff',
   });
 
+  // tray = new AppTray(this.mainWindow)
+
+  // Make sure the app is singleton.
+  handleKeepSingleApp();
+
   // hide menu bar on Microsoft Windows and Linux
   // mainWindow.setMenuBarVisibility(false);
 
@@ -64,12 +86,17 @@ async function createWindow() {
   // init ipcMain
   initIpcMain(mainWindow);
 
+  // init auto update
+  AppAutoUpdate.updateHandle(mainWindow);
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST || isDebug) mainWindow.webContents.openDevTools();
   } else {
     createProtocol('app');
+    // 主进程加载时的loading过渡，避免白屏
+    await mainWindow.loadURL('file://./loading.html');
     // Load the index.html when not in development
     await mainWindow.loadURL('app://./index.html');
     if (isDebug) mainWindow.webContents.openDevTools();
@@ -101,26 +128,11 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('second-instance', (e, cl, wd) => {
-  if (mainWindow) {
-    console.log('show...');
-    mainWindow.show();
-    if (mainWindow.isMinimized()) {
-      console.log('restore...');
-      mainWindow.restore();
-    }
-    console.log('focus...');
-    mainWindow.focus();
-  }
-});
-
-app.on('activate', async () => {
+app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0 && !mainWindow) {
-    await createWindow();
-  } else if (mainWindow) {
-    mainWindow.show();
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
   }
 });
 

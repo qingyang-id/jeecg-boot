@@ -55,6 +55,7 @@ Vue.prototype.rules = rules
 Vue.config.productionTip = false
 if (process.env.IS_ELECTRON) {
   Vue.use(require("vue-electron"));
+  console.log('is app:', process.env);
 }
 Vue.use(Storage, config.storageOptions)
 // Vue.use(Antd)

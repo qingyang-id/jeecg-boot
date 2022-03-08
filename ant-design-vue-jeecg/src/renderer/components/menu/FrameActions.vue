@@ -1,5 +1,5 @@
 <template>
-  <div class="action" v-show="this.platform === 'win32'">
+  <div class="action" v-show="this.isWindows">
     <a-icon
         type="minus"
         class="action"
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     ...mapState({
-      platform: state => state.app.platform,
+      isWindows: state => state.app.isWindows,
     }),
   },
   created() {
