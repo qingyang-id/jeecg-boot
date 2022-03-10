@@ -122,6 +122,7 @@ export default {
       searchMenuComp: 'span',
       searchMenuVisible: false,
       // update-begin author:sunjianlei date:20200219 for: 头部菜单搜索规范命名 --------------
+      isApp: false,
     };
   },
   components: {
@@ -141,12 +142,15 @@ export default {
   },
   /* update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
   created() {
+    if (process.env.IS_ELECTRON) {
+      this.isApp = true;
+    }
     let lists = [];
     this.searchMenus(lists, this.permissionMenuList);
     this.searchMenuOptions = [...lists];
   },
   mounted() {
-    //如果是单点登录模式
+    // 如果是单点登录模式
     if (process.env.VUE_APP_SSO == 'true') {
       let depart = this.userInfo().orgCode;
       if (!depart) {
@@ -158,8 +162,6 @@ export default {
     ...mapState({
       // 后台菜单
       permissionMenuList: state => state.user.permissionList,
-      // 是否app
-      isApp: state => state.app.isApp,
     })
   },
   /* update_end author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
@@ -273,8 +275,6 @@ export default {
     /*update_end author:liushaoqian date:20200507 for: 刷新缓存*/
     checkNewVersion() {
       // 检测新版本是否存在
-      // 热更新
-      // this.$electron.ipcRenderer.send("hot-update");
       this.$refs.version.show();
     },
   }

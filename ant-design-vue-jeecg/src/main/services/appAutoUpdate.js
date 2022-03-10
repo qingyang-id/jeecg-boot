@@ -92,11 +92,11 @@ function updateHandle(mainWindow) {
    */
   ipcMain.on('hot-update', async (e, msg) => {
     try {
-      if (fs.existsSync(`${localResourcePath}.back`)) { // 删除旧备份
-        electronMainUtils.deleteDirSync(`${localResourcePath}.back`);
+      if (fs.existsSync(`${localResourcePath}.bak`)) { // 删除旧备份
+        electronMainUtils.deleteDirSync(`${localResourcePath}.bak`);
       }
       if (fs.existsSync(localResourcePath)) {
-        fs.renameSync(localResourcePath, `${localResourcePath}.back`); // 备份目录
+        fs.renameSync(localResourcePath, `${localResourcePath}.bak`); // 备份目录
       }
       await electronMainUtils.downloadFile(remoteAppURL, appZipPath, (evt) => {
         console.log("progressEvent===", evt);
@@ -128,8 +128,8 @@ function updateHandle(mainWindow) {
       console.error(`checkForPartUpdatesERROR`, error);
       electronMainUtils.sendUpdateMessage(`ERROR: 检查更新出错:${error}`, mainWindow);
     } finally {
-      if (fs.existsSync(`${localResourcePath}.back`)) {
-        fs.renameSync(`${localResourcePath}.back`, localResourcePath);
+      if (fs.existsSync(`${localResourcePath}.bak`)) {
+        fs.renameSync(`${localResourcePath}.bak`, localResourcePath);
       }
     }
   });

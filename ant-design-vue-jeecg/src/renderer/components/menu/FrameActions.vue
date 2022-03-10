@@ -19,18 +19,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   data() {
     return {
       isMaximized: false,
+      isWindows: false
     };
-  },
-  computed: {
-    ...mapState({
-      isWindows: state => state.app.isWindows,
-    }),
   },
   created() {
     this.init();
@@ -39,6 +33,7 @@ export default {
     init() {
       console.log('init, ', process.env.IS_ELECTRON);
       if (process.env.IS_ELECTRON) {
+        this.isWindows = process.platform === 'win32';
         this.$electron.ipcRenderer.on('isMaximized', (event, value) => {
           console.log('isMaximized ', event, value);
           this.isMaximized = value;

@@ -28,11 +28,6 @@ const app = {
     color: null,
     weak: false,
     multipage: true, //默认多页签模式
-    platform: process.platform,
-    isWindows: process.platform === 'win32',
-    isMac: process.platform === 'darwin',
-    isApp: process.env.IS_ELECTRON,
-    version: process.env.VUE_APP_VERSION,
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {

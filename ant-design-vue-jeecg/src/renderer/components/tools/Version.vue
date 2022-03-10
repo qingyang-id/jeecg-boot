@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 import { getAction } from '@/api/manage';
 
 export default {
@@ -41,6 +39,7 @@ export default {
   data() {
     return {
       title: "版本升级",
+      version: '1.0.0',
       downloadProgress: 0,
       installProgress: 0,
       modalWidth: 600,
@@ -59,14 +58,9 @@ export default {
       url: "/business/version/new",
     };
   },
-  computed: {
-    ...mapState({
-      version: state => state.app.version,
-      platform: state => state.app.platform,
-    })
-  },
   created() {
     if (process.env.IS_ELECTRON) {
+      this.version = process.env.VUE_APP_VERSION;
       this.$electron.ipcRenderer.on('message', (event, value) => {
         console.log('message ', event, value);
         this.$message.error(value);
@@ -98,13 +92,13 @@ export default {
       }, 1000);
     },
     show() {
-      console.log('this.version ', this.version, this.platform);
+      console.log('this.version ', this.version, process.platform);
       const version = this.version || '1.0.0';
       let versionNo = '1';
       version.split('.').forEach(item => {
         versionNo = `${versionNo}${item.padStart(3, '0')}`;
       });
-      getAction(this.url, { versionNo, platform: this.platform }).then((res) => {
+      getAction(this.url, { versionNo, platform: process.platform }).then((res) => {
         if (!res.success) {
           this.$message.error(res.message);
         } else if (res.result.versionNo !== versionNo) {

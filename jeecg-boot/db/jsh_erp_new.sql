@@ -345,4 +345,4 @@ CREATE TABLE `jsh_version`
 -- ----------------------------
 INSERT INTO `jeecg-boot`.`jsh_version`(`id`, `platform`, `version`, `version_no`, `description`, `create_by`, `create_time`,
                                        `update_by`, `update_time`, `del_flag`, `status`)
-VALUES (1, 'darwin', '1.0.0', 1001000000, '1. 人更新修复\n2. 修复部分bug', '', '2022-03-07 22:33:21', '', '2022-03-07 22:33:21', 1, 1);
+VALUES (1, 'darwin', '1.0.0', 1001000000, '1. 人更新修复\n2. 修复部分bug', '', '2022-03-07 22:33:21', '', '2022-03-07 22:33:21', 0, 1);

@@ -1,5 +1,5 @@
 {
-  "name": "vue-antd-jeecg",
+  "name": "erp-admin",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -73,6 +73,7 @@
     "electron": "^16.0.9",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
+    "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.4.6",
     "electron-updater": "^4.6.5",
     "eslint": "^7.32.0",
@@ -81,6 +82,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
     "eslint-plugin-vuejs-accessibility": "^1.1.1",
+    "fs-extra": "^10.0.1",
     "html-webpack-plugin": "^5.5.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
@@ -92,6 +94,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ],
-  "appId": "com.qing.yang.erp"
+  ]
 }

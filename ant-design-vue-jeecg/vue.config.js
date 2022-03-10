@@ -1,11 +1,15 @@
 const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
+const pkg = require('./package.json');
 
-console.log('pkg ', process.env);
+console.log('pkg ', process.env, pkg);
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production';
 const isWeb = !process.argv.find(item => item.indexOf('electron') >= 0);
 
 const appSuffix = isProd ? '' : '-test';
+process.env.VUE_APP_NANE = `${pkg.name}${appSuffix}`;
+process.env.VUE_APP_VERSION = pkg.version;
+process.env.VUE_APP_ID = `com.qing.yang.${process.env.VUE_APP_NANE}`;
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -31,6 +35,16 @@ module.exports = defineConfig({
       // chunks to include on this page, by default includes
       // extracted common chunks and vendor chunks.
       // chunks: ['chunk-vendors', 'chunk-common', 'index']
+    },
+    // loader: 'src/loader/main.js',
+    loader: {
+      // entry for the page
+      entry: 'src/loader/main.js',
+      // entry: path.join(__dirname, './src/renderer/main.js'),
+      // the source template
+      template: 'public/index.html',
+      // output as dist/index.html
+      filename: 'loader.html',
     }
   },
 
@@ -135,13 +149,33 @@ module.exports = defineConfig({
         mac: {
           icon: 'build/icons/mac/icon.icns',
         },
-        productName: `erp-admin${appSuffix}`, // 项目名称 打包生成exe的前缀名
-        appId: `com.qing.yang.erp${appSuffix}`, // 包名
+        productName: process.env.VUE_APP_NANE, // 项目名称 打包生成exe的前缀名
+        appId: process.env.VUE_APP_ID, // 包名
         copyright: 'Copyright © 2023 QingYang', // 版权
         compression: 'maximum', // store|normal|maximum 打包压缩情况(store速度较快)
         // eslint-disable-next-line
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}', // 打包后安装包名称
+        extraMetadata: {
+          name: process.env.VUE_APP_NANE,
+          version: process.env.VUE_APP_VERSION
+        },
         asar: true, // asar打包
+        extraResources: [{
+          from: "dist/electron/bundled",
+          to: "app.asar.unpacked",
+          filter: [
+            "!**/icons",
+            "!**/preload.js",
+            "!**/node_modules",
+            "!**/background.js"
+          ]
+        }],
+        // files: [
+        //   "**/icons/*",
+        //   "**/preload.js",
+        //   "**/node_modules/**/*",
+        //   "**/background.js"
+        // ],
         files: ['**/*'],
         // files: ['dist/electron/**/*'],
         nsis: {
@@ -163,8 +197,9 @@ module.exports = defineConfig({
           // 创建开始菜单图标
           createStartMenuShortcut: true,
           // 桌面快捷键图标名称
-          shortcutName: `erp-admin${appSuffix}`
+          shortcutName: '${productName}'
         },
+        afterPack: './afterPack.js',
       },
       chainWebpackMainProcess: (config) => {
         config.plugin('define').tap((args) => {
@@ -182,7 +217,7 @@ module.exports = defineConfig({
       },
       outputDir: 'dist/electron',
       mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
-      // rendererProcessFile: 'src/renderer/main.js', // 渲染进程入口文件
+      // rendererProcessFile: 'src/renderer/main.js', // 渲染进程入口文件 如果添加了pages，请把electronBuilder里的rendererProcessFile删除，两个都是web页面的入口，是互斥的
       mainProcessWatch: ['src/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
     },
   },
