@@ -19,11 +19,11 @@ let resourcePath = ''; // 本地resource 路径
 let appZipPath = ''; // app压缩包位置
 let yourFileServer = process.env.VUE_APP_API_BASE_URL.match(new RegExp(/(\w+):\/\/([^/:]+)(:\d*)?/))[0]; // 文件服务器
 const remoteAppURL = `https://${yourFileServer}/electron/app.zip`; // yourFileServer: 你的远程文件服务器
-console.log('remote app url: ', remoteAppURL)
+console.log('remote app url: ', remoteAppURL);
 // windows 本地测试 admin:改为你的用户名
 if (isDevelopment) {
-  console.log('is develop ', isDevelopment)
-  console.log('dirname ', __dirname)
+  console.log('is develop ', isDevelopment);
+  console.log('dirname ', __dirname);
   // erp-admin: app名称，一般取自package.json
   if (isWindows) {
     // win 本地安装包路径
@@ -100,21 +100,25 @@ function updateHandle(mainWindow) {
    */
   ipcMain.on('hot-update', async (e, msg = {}) => {
     try {
-      console.log('download msg ', msg)
+      console.log('download msg ', msg);
+      electronMainUtils.sendUpdateMessage(`删除备份:${localResourcePath}.bak`, mainWindow);
       if (fs.existsSync(`${localResourcePath}.bak`)) { // 删除旧备份
         electronMainUtils.deleteDirSync(`${localResourcePath}.bak`);
       }
+      electronMainUtils.sendUpdateMessage(`备份:${localResourcePath}.bak`, mainWindow);
       if (fs.existsSync(localResourcePath)) {
         fs.renameSync(localResourcePath, `${localResourcePath}.bak`); // 备份目录
       }
+      electronMainUtils.sendUpdateMessage(`下载:${appZipPath}`, mainWindow);
       await electronMainUtils.downloadFile(msg.downloadUrl || remoteAppURL, appZipPath, (evt) => {
         console.log("progressEvent===", evt);
-        const percent = parseInt((evt.loaded / evt.total) * 100)
+        const percent = parseInt((evt.loaded / evt.total) * 100);
         // 通知渲染进程，进行指定操作 更新进度条
         mainWindow.webContents.send('downloadProgress', percent);
         // mac 程序坞、windows 任务栏显示进度
         mainWindow.setProgressBar(percent);
       });
+      electronMainUtils.sendUpdateMessage(`新建目录:${localResourcePath}`, mainWindow);
       if (!fs.existsSync(`${localResourcePath}`)) {
         fs.mkdirSync(localResourcePath); // 创建app来解压用
       }
@@ -130,12 +134,12 @@ function updateHandle(mainWindow) {
         mainWindow.webContents.send('quitAndUpdate');
       } catch (error) {
         console.error(`extractAllToERROR: ${error}`);
-        electronMainUtils.sendUpdateMessage(`ERROR: 检查更新出错:${error}`, mainWindow);
+        electronMainUtils.sendUpdateMessage(`ERROR: 下载出错:${error}`, mainWindow);
       }
       console.log('webContents reload完成');
     } catch (error) {
       console.error(`checkForPartUpdatesERROR`, error);
-      electronMainUtils.sendUpdateMessage(`ERROR: 检查更新出错:${error}`, mainWindow);
+      electronMainUtils.sendUpdateMessage(`ERROR: 更新出错:${error}`, mainWindow);
     } finally {
       if (fs.existsSync(`${localResourcePath}.bak`)) {
         fs.renameSync(`${localResourcePath}.bak`, localResourcePath);
@@ -144,9 +148,9 @@ function updateHandle(mainWindow) {
   });
 
   ipcMain.on("restart", (e, msg) => {
-      app.relaunch(); // 重启
-      app.exit(0);
-  })
+    app.relaunch(); // 重启
+    app.exit(0);
+  });
 }
 
 if (isWindows) {

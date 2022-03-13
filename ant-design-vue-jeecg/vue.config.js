@@ -4,6 +4,7 @@ const pkg = require('./package.json');
 
 console.log('pkg ', process.env, pkg);
 const isProd = process.env.NODE_ENV === 'production' || process.env.BABEL_ENV === 'production';
+process.env.NODE_ENV = isProd ? 'production' : process.env.NODE_ENV;
 const isWeb = !process.argv.find(item => item.indexOf('electron') >= 0);
 
 const appSuffix = isProd ? '' : '-test';
