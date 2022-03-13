@@ -41,6 +41,12 @@ class createTray {
           winShow(win);
         }
       }, {
+        label: '重新加载',
+        click: () => {
+          winShow(win);
+          win.reload();
+        }
+      }, {
         label: '退出',
         click: () => {
           app.quit();

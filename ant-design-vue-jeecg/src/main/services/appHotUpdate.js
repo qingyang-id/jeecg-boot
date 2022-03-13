@@ -44,10 +44,6 @@ if (isDevelopment) {
   appZipPath = `/Applications/${process.env.VUE_APP_NANE}.app/Contents/Resources/app.zip`;
 }
 
-console.log('local resource path ', localResourcePath);
-console.log('resource path ', resourcePath);
-console.log('app zip path ', appZipPath);
-
 /**
  * autoUpdater - 更新操作
  * @param {object} mainWindow 实例
@@ -58,16 +54,12 @@ function updateHandle(mainWindow) {
    */
   ipcMain.on('hot-update', async (e, msg = {}) => {
     try {
-      console.log('download msg ', msg);
-      electronMainUtils.sendUpdateMessage(`删除备份:${localResourcePath}.bak`, mainWindow);
       if (fs.existsSync(`${localResourcePath}.bak`)) { // 删除旧备份
         electronMainUtils.deleteDirSync(`${localResourcePath}.bak`);
       }
-      electronMainUtils.sendUpdateMessage(`备份:${localResourcePath}.bak`, mainWindow);
       if (fs.existsSync(localResourcePath)) {
         fs.renameSync(localResourcePath, `${localResourcePath}.bak`); // 备份目录
       }
-      electronMainUtils.sendUpdateMessage(`下载:${appZipPath}`, mainWindow);
       await electronMainUtils.downloadFile(msg.downloadUrl || remoteAppURL, appZipPath, (evt) => {
         console.log("progressEvent===", evt);
         const percent = parseInt((evt.loaded / evt.total) * 100);
@@ -76,7 +68,6 @@ function updateHandle(mainWindow) {
         // mac 程序坞、windows 任务栏显示进度
         mainWindow.setProgressBar(percent);
       });
-      electronMainUtils.sendUpdateMessage(`新建目录:${localResourcePath}`, mainWindow);
       if (!fs.existsSync(`${localResourcePath}`)) {
         fs.mkdirSync(localResourcePath); // 创建app来解压用
       }

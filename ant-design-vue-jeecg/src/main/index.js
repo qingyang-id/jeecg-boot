@@ -1,5 +1,5 @@
 'use strict';
-import { app, protocol, BrowserWindow, nativeTheme } from 'electron';
+import { app, protocol, BrowserWindow, nativeTheme, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import {
@@ -7,7 +7,7 @@ import {
   isMac,
   isDevelopment,
 } from './util/platform';
-import { initIpcMain, exitAsk } from './services/ipcMain.js';
+import { initIpcMain, exitAsk, exitAskWithoutMac } from './services/ipcMain.js';
 import AppHotUpdate from './services/appHotUpdate.js';
 import singleInstanceApp from './services/singleInstanceApp';
 import Tray from './services/tray';

@@ -18,7 +18,7 @@ const menuConfig = [{
   label: '设置',
   submenu: [{
     label: '快速重启',
-    accelerator: 'CmdOrCtrl+F5',
+    accelerator: 'CmdOrCtrl+R',
     role: 'reload'
   }, {
     label: '退出',
