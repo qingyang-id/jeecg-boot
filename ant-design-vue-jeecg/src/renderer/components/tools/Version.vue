@@ -92,6 +92,8 @@ export default {
       }, 1000);
     },
     show() {
+      this.downloadProgress = 0;
+      this.installProgress = 0;
       console.log('this.version ', this.version, process.platform);
       const version = this.version || '1.0.0';
       let versionNo = '1';
@@ -109,7 +111,8 @@ export default {
             content: h => (res.result.description.split('\n').map(item => h('p', item))),
             onOk() {
               // 热更新
-              that.$electron.ipcRenderer.send("hot-update");
+              console.log('version result ', res.result)
+              that.$electron.ipcRenderer.send("hot-update", res.result);
               that.visible = true;
             },
             onCancel() {

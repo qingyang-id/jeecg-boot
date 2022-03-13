@@ -330,6 +330,7 @@ CREATE TABLE `jsh_version`
     `version`     varchar(8)   NOT NULL DEFAULT '' COMMENT '版本号',
     `version_no`  bigint(10) NOT NULL DEFAULT 0 COMMENT '版本编号',
     `description` varchar(500) NOT NULL DEFAULT '' COMMENT '描述',
+    `download_url` varchar(128) NOT NULL DEFAULT '' COMMENT '下载地址',
     `create_by`   varchar(50)  NOT NULL DEFAULT '' COMMENT '创建人',
     `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_by`   varchar(50)  NOT NULL DEFAULT '' COMMENT '更新人',
@@ -343,6 +344,6 @@ CREATE TABLE `jsh_version`
 -- ----------------------------
 -- Records of jsh_sequence
 -- ----------------------------
-INSERT INTO `jeecg-boot`.`jsh_version`(`id`, `platform`, `version`, `version_no`, `description`, `create_by`, `create_time`,
+INSERT INTO `jeecg-boot`.`jsh_version`(`id`, `platform`, `version`, `version_no`, `description`, `download_url`, `create_by`, `create_time`,
                                        `update_by`, `update_time`, `del_flag`, `status`)
-VALUES (1, 'darwin', '1.0.0', 1001000000, '1. 人更新修复\n2. 修复部分bug', '', '2022-03-07 22:33:21', '', '2022-03-07 22:33:21', 0, 1);
+VALUES (1, 'darwin', '1.0.0', 1001000000, '1. 人更新修复\n2. 修复部分bug', 'https://erp.jijianxia.com/electron/app.zip', '', '2022-03-07 22:33:21', '', '2022-03-07 22:33:21', 0, 1);

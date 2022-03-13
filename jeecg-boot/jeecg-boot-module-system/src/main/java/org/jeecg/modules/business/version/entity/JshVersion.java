@@ -100,6 +100,13 @@ public class JshVersion implements Serializable {
     private String description;
 
     /**
+     * 下载地址
+     */
+    @Excel(name = "下载地址", width = 15)
+    @ApiModelProperty(value = "下载地址")
+    private String downloadUrl;
+
+    /**
      * 状态:1启用,0禁用
      */
     @Excel(name = "状态", width = 15, dicCode = "status")

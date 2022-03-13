@@ -23,26 +23,34 @@ console.log('remote app url: ', remoteAppURL)
 // windows 本地测试 admin:改为你的用户名
 if (isDevelopment) {
   console.log('is develop ', isDevelopment)
+  console.log('dirname ', __dirname)
   // erp-admin: app名称，一般取自package.json
   if (isWindows) {
     // win 本地安装包路径
-    localResourcePath = `C:/Users/admin/AppData/Local/Programs/erp-admin/resources/app`;
-    resourcePath = `C:/Users/admin/AppData/Local/Programs/erp-admin/resources`;
-    appZipPath = `C:/Users/admin/AppData/Local/Programs/erp-admin/resources/app.zip`;
+    // localResourcePath = `C:/Users/admin/AppData/Local/Programs/${process.env.VUE_APP_NANE}/resources/app`;
+    // resourcePath = `C:/Users/admin/AppData/Local/Programs/${process.env.VUE_APP_NANE}/resources/app`;
+    // appZipPath = `C:/Users/admin/AppData/Local/Programs/${process.env.VUE_APP_NANE}/resources/app.zip`;
+    localResourcePath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app`);
+    resourcePath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app`);
+    appZipPath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app.zip`);
   } else if (isMac) {
-    localResourcePath = `/Applications/erp-admin.app/Contents/Resources/app`;
-    resourcePath = `/Applications/erp-admin.app/Contents/Resources`;
-    appZipPath = `/Applications/erp-admin.app/Contents/Resources/app.zip`;
+    localResourcePath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app`);
+    resourcePath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app`);
+    appZipPath = path.join(__dirname, `./${process.env.VUE_APP_NANE}.app/Contents/Resources/app.zip`);
   }
 } else if (isWindows) { // win平台
   localResourcePath = `./resources/app`;
-  resourcePath = `./resources`;
+  resourcePath = `./resources/app`;
   appZipPath = `./resources/app.zip`;
 } else if (isMac) { // mac平台
-  localResourcePath = `/Applications/erp-admin.app/Contents/Resources/app`;
-  resourcePath = `/Applications/erp-admin.app/Contents/Resources`;
-  appZipPath = `/Applications/erp-admin.app/Contents/Resources/app.zip`;
+  localResourcePath = `/Applications/${process.env.VUE_APP_NANE}.app/Contents/Resources/app`;
+  resourcePath = `/Applications/${process.env.VUE_APP_NANE}.app/Contents/Resources/app`;
+  appZipPath = `/Applications/${process.env.VUE_APP_NANE}.app/Contents/Resources/app.zip`;
 }
+
+console.log('local resource path ', localResourcePath);
+console.log('resource path ', resourcePath);
+console.log('app zip path ', appZipPath);
 
 /**
  * autoUpdater - 更新操作
@@ -92,6 +100,7 @@ function updateHandle(mainWindow) {
    */
   ipcMain.on('hot-update', async (e, msg = {}) => {
     try {
+      console.log('download msg ', msg)
       if (fs.existsSync(`${localResourcePath}.bak`)) { // 删除旧备份
         electronMainUtils.deleteDirSync(`${localResourcePath}.bak`);
       }

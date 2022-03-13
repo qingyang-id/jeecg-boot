@@ -36,7 +36,7 @@ class createTray {
     global.tray = new Tray(this.image);
     let contextMenu = Menu.buildFromTemplate([
       {
-        label: '显示ERP-Admin',
+        label: '显示主页面',
         click: () => {
           winShow(win);
         }
