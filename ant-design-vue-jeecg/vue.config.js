@@ -225,8 +225,8 @@ module.exports = defineConfig({
         });
       },
       outputDir: 'dist/electron',
-      // mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
-      mainProcessFile: 'src/main/index.dev.js', // 主进程入口文件
+      mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
+      // mainProcessFile: 'src/main/index.dev.js', // 主进程入口文件
       // rendererProcessFile: 'src/renderer/main.js', // 渲染进程入口文件 如果添加了pages，请把electronBuilder里的rendererProcessFile删除，两个都是web页面的入口，是互斥的
       mainProcessWatch: ['src/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
     },
