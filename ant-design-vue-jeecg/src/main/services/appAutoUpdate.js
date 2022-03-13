@@ -17,9 +17,9 @@ const { isDevelopment, isWindows, isMac } = require('../util/platform');
 let localResourcePath = ''; // 本地resource/app路径
 let resourcePath = ''; // 本地resource 路径
 let appZipPath = ''; // app压缩包位置
-let yourFileServer = 'localhost:8081'; // 文件服务器
-// const remoteAppURL = `https://${yourFileServer}/app.zip`; // yourFileServer: 你的远程文件服务器
-const remoteAppURL = `http://${yourFileServer}/electron/erp-admin-1.0.0-darwin-x64.zip`; // yourFileServer: 你的远程文件服务器
+let yourFileServer = process.env.VUE_APP_API_BASE_URL.match(new RegExp(/(\w+):\/\/([^/:]+)(:\d*)?/))[0]; // 文件服务器
+const remoteAppURL = `https://${yourFileServer}/electron/app.zip`; // yourFileServer: 你的远程文件服务器
+console.log('remote app url: ', remoteAppURL)
 // windows 本地测试 admin:改为你的用户名
 if (isDevelopment) {
   console.log('is develop ', isDevelopment)
@@ -90,7 +90,7 @@ function updateHandle(mainWindow) {
   /**
    * 增量更新
    */
-  ipcMain.on('hot-update', async (e, msg) => {
+  ipcMain.on('hot-update', async (e, msg = {}) => {
     try {
       if (fs.existsSync(`${localResourcePath}.bak`)) { // 删除旧备份
         electronMainUtils.deleteDirSync(`${localResourcePath}.bak`);
@@ -98,7 +98,7 @@ function updateHandle(mainWindow) {
       if (fs.existsSync(localResourcePath)) {
         fs.renameSync(localResourcePath, `${localResourcePath}.bak`); // 备份目录
       }
-      await electronMainUtils.downloadFile(remoteAppURL, appZipPath, (evt) => {
+      await electronMainUtils.downloadFile(msg.downloadUrl || remoteAppURL, appZipPath, (evt) => {
         console.log("progressEvent===", evt);
         const percent = parseInt((evt.loaded / evt.total) * 100)
         // 通知渲染进程，进行指定操作 更新进度条
@@ -106,7 +106,7 @@ function updateHandle(mainWindow) {
         // mac 程序坞、windows 任务栏显示进度
         mainWindow.setProgressBar(percent);
       });
-      if (!fs.existsSync(`${localResourcePath}`)) { // 删除旧备份
+      if (!fs.existsSync(`${localResourcePath}`)) {
         fs.mkdirSync(localResourcePath); // 创建app来解压用
       }
       // 通知渲染进程，进行指定操作 更新进度条
@@ -116,7 +116,7 @@ function updateHandle(mainWindow) {
         const unzip = new AdmZip(appZipPath);
         unzip.extractAllTo(resourcePath, true);
         mainWindow.webContents.send('installProgress', 100);
-        console.log('app.asar.unpacked.zip 解压缩完成');
+        console.log('app.zip 解压缩完成');
         // 此处可以: 通知渲染进程，进行指定操作
         mainWindow.webContents.send('quitAndUpdate');
       } catch (error) {

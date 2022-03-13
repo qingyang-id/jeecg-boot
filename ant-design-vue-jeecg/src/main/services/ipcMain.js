@@ -80,4 +80,8 @@ export function initIpcMain(win) {
     isMaximized ? win.unmaximize() : win.maximize();
     win.webContents.send('isMaximized', isMaximized);
   });
+
+  ipcMain.on('set-global-config', (e, data) => {
+    global.globalConfig = data;
+  });
 }

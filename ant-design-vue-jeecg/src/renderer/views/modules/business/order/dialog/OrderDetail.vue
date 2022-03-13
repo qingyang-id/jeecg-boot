@@ -14,10 +14,11 @@
       <!--此处为解决缓存问题-->
       <a-button v-if="printType==='铝材生产单' || printType==='玻璃生产单'" v-print="'#orderProducePrint'">普通打印</a-button>
       <a-button v-if="printType==='订单信息'" v-print="'#orderDetailPrint'">普通打印</a-button>
+      <a-button v-if="printType==='生产单'" v-print="'#producePrint'">普通打印</a-button>
       <a-button key="back" @click="handleCancel">取消</a-button>
     </template>
     <a-form :form="form">
-      <!--铝材单/玻璃单-->
+      <!--铝材单/玻璃单打印-->
       <template v-if="printType==='铝材生产单' || printType==='玻璃生产单'">
         <section ref="print" id="orderProducePrint">
           <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
@@ -53,7 +54,7 @@
               </a-form-item>
             </a-col>
           </a-row>
-<!--          <div :style="tableWidth">-->
+          <!--          <div :style="tableWidth">-->
           <div>
             <a-table
                 ref="table"
@@ -67,6 +68,7 @@
           </div>
         </section>
       </template>
+      <!--订单打印-->
       <template v-else-if="printType==='订单信息'">
         <!--原尺寸-->
         <section ref="print" id="orderDetailPrint">
@@ -113,7 +115,7 @@
               </a-form-item>
             </a-col>
           </a-row>
-<!--          <div :style="tableWidth">-->
+          <!--          <div :style="tableWidth">-->
           <div>
             <a-table
                 ref="table"
@@ -125,6 +127,99 @@
                 :dataSource="dataSource">
             </a-table>
           </div>
+        </section>
+      </template>
+      <!--铝材单/玻璃单-->
+      <template v-if="printType==='生产单'">
+        <section ref="print" id="producePrint">
+          <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
+            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+              铝材单
+            </a-col>
+          </a-row>
+          <a-row class="form-row" :gutter="24">
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
+                <a-input v-decorator="['id', {}]" hidden/>
+                {{ model.orderCode }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
+                {{ model.orderTime }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
+                {{ model.customerId_dictText }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
+                {{ model.address }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
+                {{ model.remark }}
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row class="form-row" :gutter="24">
+            <a-table
+                ref="table"
+                size="middle"
+                bordered
+                rowKey="id"
+                :pagination="false"
+                :columns="aluminumColumns"
+                :dataSource="aluminumDataSource">
+            </a-table>
+          </a-row>
+          <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px; margin-top: 30px">
+            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+              玻璃单
+            </a-col>
+          </a-row>
+          <a-row class="form-row" :gutter="24">
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
+                <a-input v-decorator="['id', {}]" hidden/>
+                {{ model.orderCode }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
+                {{ model.orderTime }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
+                {{ model.customerId_dictText }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
+                {{ model.address }}
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
+                {{ model.remark }}
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row class="form-row" :gutter="24">
+            <a-table
+                ref="table"
+                size="middle"
+                bordered
+                rowKey="id"
+                :pagination="false"
+                :columns="glassColumns"
+                :dataSource="glassDataSource">
+            </a-table>
+          </a-row>
         </section>
       </template>
     </a-form>
@@ -348,6 +443,10 @@ export default {
           dataIndex: 'num'
         }
       ],
+      // 铝材数据源
+      aluminumDataSource: [],
+      // 玻璃数据源
+      glassDataSource: [],
       /* 分页参数 */
       ipagination: {
         current: 1,
@@ -398,12 +497,41 @@ export default {
         url = this.url.orderProductDetailList;
         params = { orderId: record.id, type: 2 };
         this.columns = this.glassColumns;
+      } else if (printType === '生产单') {
+        this.requestProduceData(record.id);
+        return;
       } else {
         this.$message.error('参数错误');
         this.close();
         return;
       }
       this.requestSubTableData(url, params);
+    },
+    requestProduceData(orderId) {
+      this.loading = true;
+      Promise.all([
+        getAction(this.url.orderProductDetailList, {
+          orderId,
+          type: 1
+        })
+            .then(res => {
+              if (res && res.code === 200) {
+                this.aluminumDataSource = res.result.records;
+              }
+            }),
+        getAction(this.url.orderProductDetailList, {
+          orderId,
+          type: 2
+        })
+            .then(res => {
+              if (res && res.code === 200) {
+                this.glassDataSource = res.result.records;
+              }
+            }),
+      ])
+          .finally(() => {
+            this.loading = false;
+          });
     },
     requestSubTableData(url, params) {
       this.loading = true;

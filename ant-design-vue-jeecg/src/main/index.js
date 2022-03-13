@@ -1,6 +1,5 @@
 'use strict';
-
-import { app, protocol, BrowserWindow, nativeTheme, ipcMain } from 'electron';
+import { app, protocol, BrowserWindow, nativeTheme } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import {
@@ -16,10 +15,14 @@ import Menu from './config/menu';
 import config from './config/index';
 import global from './config/global';
 import createWindow from './services/createWindow';
+// import createProtocol from './services/createProtocol'
+// import createProtocol from './util/createProtocol'
 
 const isDebug = process.env.IS_DEBUG;
 let win = null;
 let loaderWin = null;
+console.log('process.ev ', process.env);
+console.log('process.resourcesPath ', process.resourcesPath);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -141,14 +144,13 @@ async function onAppReady() {
     }
   }
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
-    // createProtocol('app', path.join(resourcesPath, './app.asar.unpacked'))
+    // createProtocol('app', path.join(process.resourcesPath, './app.asar.unpacked'));
     createProtocol('app');
   }
   await initWindow();
 }
 
 app.setAppUserModelId(config.VUE_APP_APPID);
-// app.isReady() ? onAppReady() : app.on('ready', onAppReady);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -172,7 +174,8 @@ app.on('activate', async () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', onAppReady);
+// app.on('ready', onAppReady);
+app.isReady() ? onAppReady() : app.on('ready', onAppReady);
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

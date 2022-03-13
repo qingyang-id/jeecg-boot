@@ -6,6 +6,7 @@
   </a-config-provider>
 </template>
 <script>
+import globalConfig from '@/config/globalConfig'
   import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
   import enquireScreen from '@/utils/device'
 
@@ -16,6 +17,10 @@
       }
     },
     created () {
+      console.log('global-config ', globalConfig)
+      if (process.env.IS_ELECTRON) {
+        this.$electron.ipcRenderer.send('set-global-config', globalConfig)
+      }
       let that = this
       enquireScreen(deviceType => {
         // tablet

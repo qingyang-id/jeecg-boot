@@ -91,9 +91,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="printDetail(record,'铝材生产单')">铝材打印</a>
-          <a-divider type="vertical"/>
-          <a @click="printDetail(record,'玻璃生产单')">玻璃打印</a>
+          <a @click="printDetail(record,'生产单')">生产单打印</a>
           <a-divider type="vertical"/>
           <a @click="handleEdit(record)">编辑</a>
 
@@ -103,6 +101,12 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="printDetail(record, '订单信息')">订单打印</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="printDetail(record,'铝材生产单')">铝材打印</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="printDetail(record,'玻璃生产单')">玻璃打印</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">

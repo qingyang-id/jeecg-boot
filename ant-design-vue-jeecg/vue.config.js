@@ -159,22 +159,29 @@ module.exports = defineConfig({
           name: process.env.VUE_APP_NANE,
           version: process.env.VUE_APP_VERSION
         },
-        asar: true, // asar打包
-        extraResources: [{
-          from: "dist/electron/bundled",
-          to: "app.asar.unpacked",
-          filter: [
-            "!**/icons",
-            "!**/preload.js",
-            "!**/node_modules",
-            "!**/background.js"
-          ]
-        }],
+        asar: false, // asar打包
+        // asarUnpack: [
+        //   'dist/electron/bundled',
+        //   'src/renderer',
+        //   'public',
+        //   'package.json',
+        // ],
+        // 复制资源
+        // extraResources: [{
+        //   from:'dist/electron/bundled',
+        //   to:'app.asar.unpacked',
+        //   filter: [
+        //    '!**/icons',
+        //    '!**/preload.js',
+        //    '!**/node_modules',
+        //    '!**/background.js'
+        //   ]
+        // }],
         // files: [
-        //   "**/icons/*",
-        //   "**/preload.js",
-        //   "**/node_modules/**/*",
-        //   "**/background.js"
+        //  '**/icons/*',
+        //  '**/preload.js',
+        //  '**/node_modules/**/*',
+        //  '**/background.js'
         // ],
         files: ['**/*'],
         // files: ['dist/electron/**/*'],
@@ -216,7 +223,8 @@ module.exports = defineConfig({
         });
       },
       outputDir: 'dist/electron',
-      mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
+      // mainProcessFile: isProd ? 'src/main/index.js' : 'src/main/index.dev.js', // 主进程入口文件
+      mainProcessFile: 'src/main/index.dev.js', // 主进程入口文件
       // rendererProcessFile: 'src/renderer/main.js', // 渲染进程入口文件 如果添加了pages，请把electronBuilder里的rendererProcessFile删除，两个都是web页面的入口，是互斥的
       mainProcessWatch: ['src/main'], // 检测主进程文件在更改时将重新编译主进程并重新启动
     },
