@@ -8,15 +8,13 @@ import {
   isDevelopment,
 } from './util/platform';
 import { initIpcMain, exitAsk } from './services/ipcMain.js';
-import AppAutoUpdate from './services/appAutoUpdate.js';
+import AppHotUpdate from './services/appHotUpdate.js';
 import singleInstanceApp from './services/singleInstanceApp';
 import Tray from './services/tray';
 import Menu from './config/menu';
 import config from './config/index';
 import global from './config/global';
 import createWindow from './services/createWindow';
-// import createProtocol from './services/createProtocol'
-// import createProtocol from './util/createProtocol'
 
 const isDebug = process.env.IS_DEBUG;
 let win = null;
@@ -108,7 +106,7 @@ async function initWindow() {
   // init tray
   Tray.init(win);
   // init auto update
-  AppAutoUpdate.updateHandle(win);
+  AppHotUpdate.updateHandle(win);
 
   win.on('enter-full-screen', () => {
     isMac && app.commandLine.appendSwitch('disable-pinch', true);
@@ -150,7 +148,7 @@ async function onAppReady() {
   await initWindow();
 }
 
-app.setAppUserModelId(config.VUE_APP_APPID);
+// app.setAppUserModelId(config.VUE_APP_APPID);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

@@ -37,16 +37,6 @@ module.exports = defineConfig({
       // extracted common chunks and vendor chunks.
       // chunks: ['chunk-vendors', 'chunk-common', 'index']
     },
-    // loader: 'src/loader/main.js',
-    loader: {
-      // entry for the page
-      entry: 'src/loader/main.js',
-      // entry: path.join(__dirname, './src/renderer/main.js'),
-      // the source template
-      template: 'public/index.html',
-      // output as dist/index.html
-      filename: 'loader.html',
-    }
   },
 
   chainWebpack: (config) => {
