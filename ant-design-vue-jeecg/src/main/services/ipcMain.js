@@ -1,5 +1,6 @@
 import { app, dialog, ipcMain } from 'electron';
 import { isMac } from '../util/platform';
+import * as Shortcut from './shortcut';
 
 const log = console.log;
 
@@ -53,6 +54,7 @@ export const exitAskWithoutMac = (e, win) => {
         // win.hidden(); //调用 最小化实例方法
         win.minimize(); //调用 最小化实例方法
       } else if (result.response === 1) {
+        Shortcut.unregisterAll(win);
         win = null;
         app.exit(); // exit()直接关闭客户端，不会执行quit();
       }

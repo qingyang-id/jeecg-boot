@@ -15,6 +15,7 @@ import Menu from './config/menu';
 import config from './config/index';
 import global from './config/global';
 import createWindow from './services/createWindow';
+import * as Shortcut from './services/shortcut';
 
 const isDebug = process.env.IS_DEBUG;
 let win = null;
@@ -119,6 +120,11 @@ async function initWindow() {
   win.once('ready-to-show', () => {
     loaderWin && loaderWin.destroy();
     win.show();
+    if (isWindows) {
+      Shortcut.register(win, ['F5'], () => {
+        win.reload();
+      });
+    }
   });
 
   win.on("close", (event) => {
