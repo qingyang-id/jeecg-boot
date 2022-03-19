@@ -1,6 +1,5 @@
 <template>
   <j-modal
-      :title="title"
       width="90%"
       :visible="visible"
       :maskClosable="false"
@@ -8,7 +7,8 @@
       :forceRender="true"
       @cancel="handleCancel"
       wrapClassName="ant-modal-cust-warp"
-      style="top:5%;height: 100%;overflow-y: hidden">
+      class="print-modal"
+      :dialog-style="{ top: '5%', maxWidth: '1200px'}">
     <template slot="footer">
       <!--            <a-button v-if="orderPrintFlag" @click="handlePrint">三联打印预览</a-button>-->
       <!--此处为解决缓存问题-->
@@ -17,45 +17,43 @@
       <a-button v-if="printType==='生产单'" v-print="'#producePrint'">普通打印</a-button>
       <a-button key="back" @click="handleCancel">取消</a-button>
     </template>
-    <a-form :form="form">
+    <a-form :form="form" class="print-form">
       <!--铝材单/玻璃单打印-->
       <template v-if="printType==='铝材生产单' || printType==='玻璃生产单'">
         <section ref="print" id="orderProducePrint">
           <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
-            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+            <a-col :p="6" style="font-size: 24px;">
               {{ title }}
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
-                <a-input v-decorator="['id', {}]" hidden/>
-                {{ model.orderCode }}
-              </a-form-item>
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-form-item handle>
+              <a-input v-decorator="['id', {}]" hidden/>
+            </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>订单:</span>
+              <span style="width: 80%"> {{ model.orderCode }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
-                {{ model.orderTime }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>时间:</span>
+              <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
-                {{ model.customerId_dictText }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
-                {{ model.address }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
-                {{ model.remark }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>客户:</span>
+              <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
           </a-row>
-          <!--          <div :style="tableWidth">-->
-          <div>
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-col :span="8" style="padding: 10px">
+              <span>地址:</span>
+              <span style="width: 80%"> {{ model.address }} </span>
+            </a-col>
+            <a-col :span="4" style="padding: 10px">
+              <span>备注:</span>
+              <span style="width: 80%"> {{ model.remark }} </span>
+            </a-col>
+          </a-row>
+          <a-row type="flex" justify="center">
             <a-table
                 ref="table"
                 size="middle"
@@ -65,58 +63,60 @@
                 :columns="columns"
                 :dataSource="dataSource">
             </a-table>
-          </div>
+          </a-row>
         </section>
       </template>
       <!--订单打印-->
       <template v-else-if="printType==='订单信息'">
         <!--原尺寸-->
         <section ref="print" id="orderDetailPrint">
-          <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
-            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+          <a-row type="flex" justify="center" :gutter="24" style="text-align: center; margin-bottom: 10px">
+            <a-col :p="6" style="font-size: 24px;">
               {{ title }}
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
-                <a-input v-decorator="['id', {}]" hidden/>
-                {{ model.orderCode }}
-              </a-form-item>
+          <a-row type="flex" justify="center" :gutter="24">
+            <a-form-item handle>
+              <a-input v-decorator="['id', {}]" hidden/>
+            </a-form-item>
+            <a-col :span="6" style="padding: 10px">
+              <span>订单:</span>
+              <span style="width: 80%"> {{ model.orderCode }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="总面积(m²)">
-                {{ model.totalArea }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单总额(元)">
-                {{ model.totalPrice }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
+            <a-col :span="6" style="padding: 10px">
+              <span>客户:</span>
+              <span style="width: 80%">
                 {{ model.customerId_dictText }}
-              </a-form-item>
+              </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
-                {{ model.address }}
-              </a-form-item>
+            <a-col :span="6" style="padding: 10px">
+              <span>总面积(m²):</span>
+              <span style="width: 80%"> {{ model.totalArea }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="下单时间">
-                {{ model.orderTime }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
-                {{ model.remark }}
-              </a-form-item>
+            <a-col :span="6" style="padding: 10px">
+              <span>订单总额(元):</span>
+              <span style="width: 80%"> {{ model.totalPrice }} </span>
             </a-col>
           </a-row>
-          <!--          <div :style="tableWidth">-->
-          <div>
+          <a-row type="flex" justify="center" :gutter="24">
+            <a-col :span="6" style="padding: 10px">
+              <span>时间:</span>
+              <span style="width: 80%">
+                {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }}
+              </span>
+            </a-col>
+            <a-col :span="8" style="padding: 10px">
+              <span>地址:</span>
+              <span style="width: 80%">
+                {{ model.address }}
+              </span>
+            </a-col>
+            <a-col :span="8" style="padding: 10px">
+              <span>备注:</span>
+              <span style="width: 80%"> {{ model.remark }} </span>
+            </a-col>
+          </a-row>
+          <a-row type="flex" justify="center">
             <a-table
                 ref="table"
                 size="middle"
@@ -126,46 +126,45 @@
                 :columns="columns"
                 :dataSource="dataSource">
             </a-table>
-          </div>
+          </a-row>
         </section>
       </template>
       <!--铝材单/玻璃单-->
       <template v-if="printType==='生产单'">
         <section ref="print" id="producePrint">
-          <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
-            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+          <a-row class="form-row" type="flex" justify="center">
+            <a-col :p="6" style="font-size: 24px;">
               铝材单
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
-                <a-input v-decorator="['id', {}]" hidden/>
-                {{ model.orderCode }}
-              </a-form-item>
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-form-item handle>
+              <a-input v-decorator="['id', {}]" hidden/>
+            </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>订单:</span>
+              <span style="width: 80%"> {{ model.orderCode }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
-                {{ model.orderTime }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>时间:</span>
+              <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
-                {{ model.customerId_dictText }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
-                {{ model.address }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
-                {{ model.remark }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>客户:</span>
+              <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-col :span="8" style="padding: 10px">
+              <span>地址:</span>
+              <span style="width: 80%"> {{ model.address }} </span>
+            </a-col>
+            <a-col :span="4" style="padding: 10px">
+              <span>备注:</span>
+              <span style="width: 80%"> {{ model.remark }} </span>
+            </a-col>
+          </a-row>
+          <a-row type="flex" justify="center">
             <a-table
                 ref="table"
                 size="middle"
@@ -176,40 +175,38 @@
                 :dataSource="aluminumDataSource">
             </a-table>
           </a-row>
-          <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px; margin-top: 30px">
-            <a-col :p="6" style="font-size: 24px;font-weight: 800">
+
+          <a-row class="form-row" type="flex" justify="center" style="margin-top: 100px">
+            <a-col :p="6" style="font-size: 24px;">
               玻璃单
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单编号">
-                <a-input v-decorator="['id', {}]" hidden/>
-                {{ model.orderCode }}
-              </a-form-item>
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-col :span="4" style="padding: 10px">
+              <span>订单:</span>
+              <span style="width: 80%"> {{ model.orderCode }} </span>
+              <a-input v-decorator="['id', {}]" hidden/>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="订单时间">
-                {{ model.orderTime }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>时间:</span>
+              <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="客户">
-                {{ model.customerId_dictText }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="地址">
-                {{ model.address }}
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
-              <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="备注">
-                {{ model.remark }}
-              </a-form-item>
+            <a-col :span="4" style="padding: 10px">
+              <span>客户:</span>
+              <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
           </a-row>
-          <a-row class="form-row" :gutter="24">
+          <a-row class="form-row" type="flex" justify="center" :gutter="24">
+            <a-col :span="8" style="padding: 10px">
+              <span>地址:</span>
+              <span style="width: 80%"> {{ model.address }} </span>
+            </a-col>
+            <a-col :span="4" style="padding: 10px">
+              <span>备注:</span>
+              <span style="width: 80%"> {{ model.remark }} </span>
+            </a-col>
+          </a-row>
+          <a-row type="flex" justify="center">
             <a-table
                 ref="table"
                 size="middle"
@@ -245,16 +242,13 @@ export default {
       model: {},
       printType: '',
       orderPrintFlag: false,
-      tableWidth: {
-        'width': '1550px'
-      },
-      labelCol: {
-        xs: { span: 24 },
+      spanCol: {
+        xs: { span: 5 },
         sm: { span: 5 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: { span: '80%' },
+        sm: { span: '80%' },
       },
       form: this.$form.createForm(this),
       loading: false,
@@ -274,52 +268,52 @@ export default {
         },
         {
           title: '产品',
-          align: "center",
+          align: "left",
           dataIndex: 'productId_dictText'
         },
         {
           title: '铝材颜色',
-          align: "center",
+          align: "left",
           dataIndex: 'color'
         },
         {
           title: '玻璃色号',
-          align: "center",
+          align: "left",
           dataIndex: 'glassColor'
         },
         {
           title: '高(mm)',
-          align: "center",
+          align: "left",
           dataIndex: 'height'
         },
         {
           title: '宽(mm)',
-          align: "center",
+          align: "left",
           dataIndex: 'width'
         },
         {
           title: '数量',
-          align: "center",
+          align: "left",
           dataIndex: 'num'
         },
         {
           title: '方向',
-          align: "center",
+          align: "left",
           dataIndex: 'direction_dictText'
         },
         {
           title: '抽/拉/条',
-          align: "center",
+          align: "left",
           dataIndex: 'extendType_dictText'
         },
         {
           title: '抽/拉/条数量',
-          align: "center",
+          align: "left",
           dataIndex: 'extendNum'
         },
         {
           title: '单价(元)',
-          align: "center",
+          align: "left",
           dataIndex: 'price',
           customRender: function (t) {
             return t / 100;
@@ -327,7 +321,7 @@ export default {
         },
         {
           title: '总面积(m²)',
-          align: "center",
+          align: "left",
           dataIndex: 'totalArea',
           customRender: function (t) {
             return t / 1000000;
@@ -335,7 +329,7 @@ export default {
         },
         {
           title: '总价(元)',
-          align: "center",
+          align: "left",
           dataIndex: 'totalPrice',
           customRender: function (t) {
             return t / 100;
@@ -348,61 +342,62 @@ export default {
           title: '#',
           dataIndex: '',
           key: 'rowIndex',
-          width: 60,
-          align: "center",
+          align: "left",
           customRender: function (t, r, index) {
             return parseInt(index) + 1;
           }
         },
         {
           title: '产品',
-          align: "center",
-          dataIndex: 'productId_dictText'
+          align: "left",
+          dataIndex: 'productId_dictText',
+          className: "print-table-row",
         },
         {
           title: '颜色',
-          align: "center",
-          dataIndex: 'color'
+          align: "left",
+          dataIndex: 'color',
+          className: "print-table-row",
         },
         {
           title: '参考高度(mm)',
-          align: "center",
-          dataIndex: 'referenceHeight'
+          align: "left",
+          dataIndex: 'referenceHeight',
         },
         {
           title: '参考宽度(mm)',
-          align: "center",
-          dataIndex: 'referenceWidth'
+          align: "left",
+          dataIndex: 'referenceWidth',
         },
         {
           title: '高(mm)',
-          align: "center",
-          dataIndex: 'height'
+          align: "left",
+          dataIndex: 'height',
         },
         {
           title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
+          align: "left",
+          dataIndex: 'width',
         },
         {
           title: '数量',
-          align: "center",
-          dataIndex: 'num'
+          align: "left",
+          dataIndex: 'num',
         },
         {
           title: '方向',
-          align: "center",
-          dataIndex: 'direction_dictText'
+          align: "left",
+          dataIndex: 'direction_dictText',
         },
         {
           title: '抽/拉/条',
-          align: "center",
-          dataIndex: 'extendType_dictText'
+          align: "left",
+          dataIndex: 'extendType_dictText',
         },
         {
           title: '抽/拉/条数量',
-          align: "center",
-          dataIndex: 'extendNum'
+          align: "left",
+          dataIndex: 'extendNum',
         }
       ],
       // 玻璃生产单
@@ -411,35 +406,34 @@ export default {
           title: '#',
           dataIndex: '',
           key: 'rowIndex',
-          width: 60,
-          align: "center",
+          align: "left",
           customRender: function (t, r, index) {
             return parseInt(index) + 1;
           }
         },
         {
           title: '产品',
-          align: "center",
+          align: "left",
           dataIndex: 'productId_dictText'
         },
         {
           title: '色号',
-          align: "center",
+          align: "left",
           dataIndex: 'color'
         },
         {
           title: '高(mm)',
-          align: "center",
+          align: "left",
           dataIndex: 'height'
         },
         {
           title: '宽(mm)',
-          align: "center",
+          align: "left",
           dataIndex: 'width'
         },
         {
           title: '数量',
-          align: "center",
+          align: "left",
           dataIndex: 'num'
         }
       ],
@@ -569,5 +563,21 @@ export default {
 </script>
 
 <style scoped>
+/*update_begin author:scott date:20191203 for:打印机打印的字体模糊问题 */
+* {
+  color: #000000 !important;
+  -webkit-tap-highlight-color: #000000 !important;
+}
 
+/*update_end author:scott date:20191203 for:打印机打印的字体模糊问题 */
+
+.ant-table-middle > .ant-table-content > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.print-form {
+  font-size: 16px;
+  font-weight: 500;
+}
 </style>
