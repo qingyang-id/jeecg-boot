@@ -105,7 +105,6 @@ export default {
             httpurl += this.url.edit;
             method = 'put';
           }
-          this.model['customerId'] = this.mainId;
           httpAction(httpurl, this.model, method).then((res) => {
             if (res.success) {
               that.$message.success(res.message);
