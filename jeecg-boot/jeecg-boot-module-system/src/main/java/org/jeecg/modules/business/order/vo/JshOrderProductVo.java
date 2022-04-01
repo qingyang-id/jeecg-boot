@@ -74,7 +74,7 @@ public class JshOrderProductVo {
     /**
      * 产品id
      */
-    @Excel(name = "产品", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Excel(name = "产品", width = 15, dictTable = "jsh_product", dicText = "name", dicCode = "id")
     @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
     @ApiModelProperty(value = "产品id")
     private java.lang.Long productId;
