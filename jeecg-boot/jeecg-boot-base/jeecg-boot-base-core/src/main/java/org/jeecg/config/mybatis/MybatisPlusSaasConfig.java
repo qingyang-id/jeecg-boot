@@ -42,7 +42,11 @@ public class MybatisPlusSaasConfig {
         // 生产管理
         tenantTable.add("jsh_product");
         tenantTable.add("jsh_customer");
+        tenantTable.add("jsh_customer_address");
         tenantTable.add("jsh_order");
+        tenantTable.add("jsh_order_product");
+        tenantTable.add("jsh_order_product_detail");
+        tenantTable.add("jsh_order_product_extend");
     }
 
 

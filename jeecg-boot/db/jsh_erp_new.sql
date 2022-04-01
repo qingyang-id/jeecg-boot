@@ -179,8 +179,10 @@ CREATE TABLE `jsh_customer_address`
     `del_flag`    int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
     `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id',
     `address`     varchar(300) NOT NULL DEFAULT '' COMMENT '地址',
+    `tenant_id`            bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
-    KEY           `idx_customer_id` (`customer_id`)
+    KEY           `idx_customer_id` (`customer_id`),
+    KEY           `idx_tenant_id` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户地址表';
 
 -- ----------------------------
@@ -236,10 +238,12 @@ CREATE TABLE `jsh_order_product`
     `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '总价(分)',
     `extend_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '扩展类型:1拉,2抽,3条',
     `extend_num`  int(11) NOT NULL DEFAULT 0 COMMENT '扩展数量',
+    `tenant_id`            bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
     KEY           `idx_order_id` (`order_id`),
     KEY           `idx_product_id` (`product_id`),
-    KEY           `idx_customer_id` (`customer_id`)
+    KEY           `idx_customer_id` (`customer_id`),
+    KEY           `idx_tenant_id` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品表';
 
 -- ----------------------------
@@ -258,9 +262,11 @@ CREATE TABLE `jsh_order_product_extend`
     `order_product_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '订单产品表ID',
     `type`             tinyint(1) NOT NULL DEFAULT 0 COMMENT '类型:1拉,2抽,3条',
     `num`              int(11) NOT NULL DEFAULT 0 COMMENT '数量',
+    `tenant_id`            bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
     KEY                `idx_order_id` (`order_id`),
-    KEY                `idx_order_product_id` (`order_product_id`)
+    KEY                `idx_order_product_id` (`order_product_id`),
+    KEY           `idx_tenant_id` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品扩展信息表';
 
 -- ----------------------------
@@ -289,11 +295,13 @@ CREATE TABLE `jsh_order_product_detail`
     `color`            varchar(50) NOT NULL DEFAULT '' COMMENT '颜色',
     `extend_type`      tinyint(1) NOT NULL DEFAULT 0 COMMENT '扩展类型:1拉,2抽,3条',
     `extend_num`       int(11) NOT NULL DEFAULT 0 COMMENT '扩展数量',
+    `tenant_id`            bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
     KEY                `idx_order_id` (`order_id`),
     KEY                `idx_order_product_id` (`order_product_id`),
     KEY                `idx_product_id` (`product_id`),
-    KEY                `idx_customer_id` (`customer_id`)
+    KEY                `idx_customer_id` (`customer_id`),
+    KEY           `idx_tenant_id` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品明细表';
 
 -- ----------------------------
