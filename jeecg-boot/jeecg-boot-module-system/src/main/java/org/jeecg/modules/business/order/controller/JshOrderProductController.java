@@ -237,7 +237,7 @@ public class JshOrderProductController extends JeecgController<JshOrderProduct, 
             JshOrderProductExportVo jshOrderProductExportVo = new JshOrderProductExportVo();
             BeanUtils.copyProperties(main, jshOrderProductExportVo);
             // 格式化单价/面积/资金
-            jshOrderProductExportVo.setPrice(BigDecimal.valueOf(main.getPrice()).divide(new BigDecimal("100"), 3, RoundingMode.CEILING));
+            jshOrderProductExportVo.setPrice(BigDecimal.valueOf(main.getPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
             jshOrderProductExportVo.setTotalArea(BigDecimal.valueOf(main.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
             jshOrderProductExportVo.setTotalPrice(BigDecimal.valueOf(main.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
             List<JshOrderProductDetail> jshOrderProductDetailList = jshOrderProductDetailService.selectByMainId(main.getId());
