@@ -158,6 +158,9 @@ export default {
             }, {
               text: '亮色',
               value: '亮色'
+            }, {
+              text: '哑光',
+              value: '哑光'
             }],
           },
           {
