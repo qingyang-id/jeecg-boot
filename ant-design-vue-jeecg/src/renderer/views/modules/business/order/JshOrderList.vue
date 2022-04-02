@@ -45,7 +45,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('订单信息')">导出</a-button>
       <!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
       <!--                @change="handleImportExcel">-->
       <!--        <a-button type="primary" icon="import">导入</a-button>-->
@@ -121,7 +121,7 @@
 
     <a-tabs defaultActiveKey="0">
       <a-tab-pane tab="原尺寸" key="0">
-        <JshOrderProductList :orderId="selectedMainId"/>
+        <JshOrderProductList :orderId="selectedMainId" :search="false"/>
       </a-tab-pane>
       <a-tab-pane tab="铝材" key="1">
         <JshOrderProductDetailList :orderId="selectedMainId" :type="1"/>

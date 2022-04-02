@@ -1,9 +1,50 @@
 <template>
   <a-card class="j-inner-table-wrapper" :bordered="false">
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper" v-show="search">
+      <a-form layout="inline" @keyup.enter.native="searchQuery">
+        <a-row :gutter="24">
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="订单编码">
+              <a-input placeholder="请输入订单编码" v-model="queryParam.orderCode"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="客户">
+              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" dict="jsh_customer,name,id"/>
+            </a-form-item>
+          </a-col>
+          <template v-if="toggleSearchStatus">
+            <a-col :xl="12" :lg="14" :md="16" :sm="24">
+              <a-form-item label="订单日期">
+                <a-range-picker
+                    style="width:100%"
+                    v-model="queryParam.orderTimeRange"
+                    format="YYYY-MM-DD"
+                    :placeholder="['开始时间', '结束时间']"
+                    @change="onOrderTimeChange"
+                />
+              </a-form-item>
+            </a-col>
+          </template>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
+    </div>
+    <!-- 查询区域-END -->
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('jsh_order_product')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('订单明细')">导出</a-button>
     </div>
     <!-- table区域 begin -->
     <a-table
@@ -27,7 +68,6 @@
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 
 import '@/assets/less/TableExpand.less';
-import { FormTypes } from "@/utils/JEditableTableUtil";
 
 export default {
   name: 'JshOrderProductList',
@@ -42,6 +82,11 @@ export default {
     type: {
       type: Number,
       default: 0,
+      required: false
+    },
+    search: {
+      type: Boolean,
+      default: true,
       required: false
     }
   },
