@@ -224,6 +224,7 @@ public class JshOrderController extends JeecgController<JshOrder, IJshOrderServi
                 BeanUtils.copyProperties(jshOrderProduct, jshOrderProductVo);
                 // 格式化单价/面积/资金
                 jshOrderProductVo.setPrice(BigDecimal.valueOf(jshOrderProduct.getPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
+                jshOrderProductVo.setExtendPrice(BigDecimal.valueOf(jshOrderProduct.getExtendPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
                 jshOrderProductVo.setTotalArea(BigDecimal.valueOf(jshOrderProduct.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
                 jshOrderProductVo.setTotalPrice(BigDecimal.valueOf(jshOrderProduct.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
 
