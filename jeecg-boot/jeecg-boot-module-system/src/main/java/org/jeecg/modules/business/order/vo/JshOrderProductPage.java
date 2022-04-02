@@ -149,6 +149,13 @@ public class JshOrderProductPage {
     private java.lang.Long price;
 
     /**
+     * 附加(分)
+     */
+    @Excel(name = "附加(元)", width = 15)
+    @ApiModelProperty(value = "附加(分)")
+    private java.lang.Long extendPrice;
+
+    /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)

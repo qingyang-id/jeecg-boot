@@ -234,6 +234,7 @@ CREATE TABLE `jsh_order_product`
     `color`       varchar(50) NOT NULL DEFAULT '' COMMENT '颜色',
     `glass_color` varchar(50) NOT NULL DEFAULT '' COMMENT '玻璃颜色',
     `price`       bigint(20) NOT NULL DEFAULT 0 COMMENT '单价(分)',
+    `extend_price`       bigint(20) NOT NULL DEFAULT 0 COMMENT '附加(分)',
     `total_area`  bigint(20) NOT NULL DEFAULT 0 COMMENT '总面积(mm²)',
     `total_price` bigint(20) NOT NULL DEFAULT 0 COMMENT '总价(分)',
     `extend_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '扩展类型:1拉,2抽,3条',

@@ -87,6 +87,12 @@ public class JshOrderProductExportVo {
     @Excel(name = "单价(元)", width = 15)
     private BigDecimal price;
 
+    /**
+     * 附加(分)
+     */
+    @Excel(name = "附加(分)", width = 15)
+    private BigDecimal extendPrice;
+
 
     /**
      * 总面积

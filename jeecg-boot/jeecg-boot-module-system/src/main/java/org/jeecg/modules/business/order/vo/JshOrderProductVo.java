@@ -143,6 +143,13 @@ public class JshOrderProductVo {
     private java.math.BigDecimal price;
 
     /**
+     * 单价(分)
+     */
+    @Excel(name = "单价(元)", width = 15)
+    @ApiModelProperty(value = "单价(分)")
+    private java.math.BigDecimal extendPrice;
+
+    /**
      * 总面积
      */
     @Excel(name = "总面积(m²)", width = 15)

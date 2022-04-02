@@ -239,6 +239,15 @@ export default {
             // },
           },
           {
+            title: '附加(元)',
+            key: 'extendPrice',
+            type: JVXETypes.input,
+            disabled: true,
+            width: "8%",
+            placeholder: '${title}',
+            defaultValue: '0',
+          },
+          {
             title: '总面积(m²)',
             key: 'totalArea',
             type: JVXETypes.input,
@@ -397,6 +406,7 @@ export default {
         rowKey: row.id,
         values: {
           price: new BigNumber(price / 100).toFixed(2, BigNumber.ROUND_UP),
+          extendPrice: new BigNumber(extendPrice / 100).toFixed(2, BigNumber.ROUND_UP),
           totalArea: new BigNumber(totalArea / 1000000).toFixed(3, BigNumber.ROUND_UP),
           totalPrice: new BigNumber(totalPrice / 100000000).toFixed(2, BigNumber.ROUND_UP),
         }
@@ -460,7 +470,6 @@ export default {
         case 'height':
         case 'width':
         case 'num': {
-          if (!value) return;
           // 更新价格信息
           this.updatePrices(event);
           break;
@@ -471,16 +480,14 @@ export default {
             // 此种设置方法，value change事件无法捕获行信息
             target.setValues([{
               rowKey: row.id,
-              values: Object.assign(row, { extendNum: 0 })
+              values: Object.assign(row, { extendNum: 0, extendPrice: 0 })
             }]);
-            return;
           }
           // 更新价格信息
           this.updatePrices(event);
           break;
         }
         case 'extendNum': {
-          if (!value || !row.extendType) return;
           // 更新价格信息
           this.updatePrices(event);
           break;
@@ -653,6 +660,7 @@ export default {
             jshOrderProductExtendList,
             jshOrderProductDetailList,
             price: new BigNumber(item.price).multipliedBy(100).toFixed(),
+            extendPrice: new BigNumber(item.extendPrice).multipliedBy(100).toFixed(),
             totalArea: new BigNumber(item.totalArea).multipliedBy(1000000).toFixed(),
             totalPrice: new BigNumber(item.totalPrice).multipliedBy(100).toFixed(),
           });

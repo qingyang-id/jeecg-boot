@@ -294,6 +294,14 @@ export default {
           }
         },
         {
+          title: '附加(元)',
+          align: "left",
+          dataIndex: 'extendPrice',
+          customRender: function (t) {
+            return t / 100;
+          }
+        },
+        {
           title: '总面积(m²)',
           align: "left",
           dataIndex: 'totalArea',
