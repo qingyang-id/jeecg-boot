@@ -22,7 +22,7 @@
       <template v-if="printType==='铝材生产单' || printType==='玻璃生产单'">
         <section ref="print" id="orderProducePrint">
           <a-row class="form-row" :gutter="24" style="text-align: center; margin-bottom: 10px">
-            <a-col :p="6" style="font-size: 24px;">
+            <a-col :p="6" style="font-size: 24px; font-weight: 500">
               {{ title }}
             </a-col>
           </a-row>
@@ -30,15 +30,15 @@
             <a-form-item handle>
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="3" style="padding: 10px">
+            <a-col :span="4" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col :span="8" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
             </a-col>
@@ -61,7 +61,7 @@
         <!--原尺寸-->
         <section ref="print" id="orderDetailPrint">
           <a-row type="flex" justify="center" :gutter="24" style="text-align: center; margin-bottom: 10px">
-            <a-col :p="6" style="font-size: 24px;">
+            <a-col :p="6" style="font-size: 24px; font-weight: 500">
               {{ title }}
             </a-col>
           </a-row>
@@ -123,7 +123,7 @@
       <template v-if="printType==='生产单'">
         <section ref="print" id="producePrint">
           <a-row class="form-row" type="flex" justify="center">
-            <a-col :p="6" style="font-size: 24px;">
+            <a-col :p="6" style="font-size: 24px; font-weight: 500">
               铝材单
             </a-col>
           </a-row>
@@ -131,15 +131,15 @@
             <a-form-item handle>
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="3" style="padding: 10px">
+            <a-col :span="4" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col :span="8" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
             </a-col>
@@ -157,7 +157,7 @@
           </a-row>
 
           <a-row class="form-row" type="flex" justify="center" style="margin-top: 100px">
-            <a-col :p="6" style="font-size: 24px;">
+            <a-col :p="6" style="font-size: 24px; font-weight: 500">
               玻璃单
             </a-col>
           </a-row>
@@ -165,15 +165,15 @@
             <a-form-item handle>
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="3" style="padding: 10px">
+            <a-col :span="4" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col :span="8" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
             </a-col>
@@ -222,8 +222,8 @@ export default {
         xs: { span: '80%' },
         sm: { span: '80%' },
       },
-      thStyle: { style: { 'font-size': '20px' } },
-      tdStyle: { style: { 'font-size': '18px' } },
+      thStyle: { style: { 'font-size': '20px', 'font-weight': "500" } },
+      tdStyle: { style: { 'font-size': '18px', 'font-weight': "500" } },
       form: this.$form.createForm(this),
       loading: false,
       dataSource: [],
@@ -553,6 +553,7 @@ export default {
 * {
   color: #000000 !important;
   -webkit-tap-highlight-color: #000000 !important;
+  font-size: 20px !important;
 }
 
 /*update_end author:scott date:20191203 for:打印机打印的字体模糊问题 */
