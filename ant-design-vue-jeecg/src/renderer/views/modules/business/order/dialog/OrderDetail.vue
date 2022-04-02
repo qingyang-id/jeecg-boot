@@ -31,26 +31,16 @@
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
             <a-col :span="4" style="padding: 10px">
-              <span>订单:</span>
-              <span style="width: 80%"> {{ model.orderCode }} </span>
-            </a-col>
-            <a-col :span="4" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="3" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-          </a-row>
-          <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-col :span="8" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
-            </a-col>
-            <a-col :span="4" style="padding: 10px">
-              <span>备注:</span>
-              <span style="width: 80%"> {{ model.remark }} </span>
             </a-col>
           </a-row>
           <a-row type="flex" justify="center">
@@ -142,26 +132,16 @@
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
             <a-col :span="4" style="padding: 10px">
-              <span>订单:</span>
-              <span style="width: 80%"> {{ model.orderCode }} </span>
-            </a-col>
-            <a-col :span="4" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="3" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-          </a-row>
-          <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-col :span="8" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
-            </a-col>
-            <a-col :span="4" style="padding: 10px">
-              <span>备注:</span>
-              <span style="width: 80%"> {{ model.remark }} </span>
             </a-col>
           </a-row>
           <a-row type="flex" justify="center">
@@ -182,28 +162,20 @@
             </a-col>
           </a-row>
           <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-col :span="4" style="padding: 10px">
-              <span>订单:</span>
-              <span style="width: 80%"> {{ model.orderCode }} </span>
+            <a-form-item handle>
               <a-input v-decorator="['id', {}]" hidden/>
-            </a-col>
+            </a-form-item>
             <a-col :span="4" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
             </a-col>
-            <a-col :span="4" style="padding: 10px">
+            <a-col :span="3" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%"> {{ model.customerId_dictText }} </span>
             </a-col>
-          </a-row>
-          <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-col :span="8" style="padding: 10px">
+            <a-col :span="6" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%"> {{ model.address }} </span>
-            </a-col>
-            <a-col :span="4" style="padding: 10px">
-              <span>备注:</span>
-              <span style="width: 80%"> {{ model.remark }} </span>
             </a-col>
           </a-row>
           <a-row type="flex" justify="center">
@@ -250,6 +222,8 @@ export default {
         xs: { span: '80%' },
         sm: { span: '80%' },
       },
+      thStyle: { style: { 'font-size': '20px' } },
+      tdStyle: { style: { 'font-size': '18px' } },
       form: this.$form.createForm(this),
       loading: false,
       dataSource: [],
@@ -462,6 +436,18 @@ export default {
     };
   },
   created() {
+    this.orderColumns.forEach(item => Object.assign(item, {
+      customHeaderCell: () => this.thStyle,
+      customCell: () => this.tdStyle
+    }));
+    this.aluminumColumns.forEach(item => Object.assign(item, {
+      customHeaderCell: () => this.thStyle,
+      customCell: () => this.tdStyle
+    }));
+    this.glassColumns.forEach(item => Object.assign(item, {
+      customHeaderCell: () => this.thStyle,
+      customCell: () => this.tdStyle
+    }));
   },
   methods: {
     show(record, printType) {
@@ -572,12 +558,12 @@ export default {
 /*update_end author:scott date:20191203 for:打印机打印的字体模糊问题 */
 
 .ant-table-middle > .ant-table-content > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-middle > .ant-table-content > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td, .ant-table-middle > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
 }
 
 .print-form {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 }
 </style>
