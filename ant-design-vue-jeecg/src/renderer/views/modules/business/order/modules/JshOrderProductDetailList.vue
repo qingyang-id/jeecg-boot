@@ -85,29 +85,20 @@ export default {
           dataIndex: 'color'
         },
         {
-          title: '参考高度(mm)',
-          align: "center",
-          dataIndex: 'referenceHeight'
+          title: '原尺寸(高*宽)',
+          align: "left",
+          dataIndex: 'referenceHeight',
+          customRender: function (t, r) {
+            return `${r.referenceHeight} * ${r.referenceWidth}`;
+          },
         },
         {
-          title: '参考宽度(mm)',
-          align: "center",
-          dataIndex: 'referenceWidth'
-        },
-        {
-          title: '高(mm)',
-          align: "center",
-          dataIndex: 'height'
-        },
-        {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
-          title: '数量',
-          align: "center",
-          dataIndex: 'num'
+          title: '规格(高*宽*数量)',
+          align: "left",
+          dataIndex: 'height',
+          customRender: function (t, r) {
+            return `${r.height} * ${r.width} * ${r.num}`;
+          },
         },
         {
           title: '方向',
@@ -116,14 +107,12 @@ export default {
         },
         {
           title: '抽/拉/条',
-          align: "center",
-          dataIndex: 'extendType_dictText'
+          align: "left",
+          dataIndex: 'extendType_dictText',
+          customRender: function (t, r) {
+            return `${r.extendType_dictText} * ${r.extendNum}`;
+          },
         },
-        {
-          title: '抽/拉/条数量',
-          align: "center",
-          dataIndex: 'extendNum'
-        }
       ],
       // 玻璃表头
       glassColumns: [
@@ -158,20 +147,13 @@ export default {
           dataIndex: 'color'
         },
         {
-          title: '高(mm)',
-          align: "center",
-          dataIndex: 'height'
+          title: '规格(高*宽*数量)',
+          align: "left",
+          dataIndex: 'height',
+          customRender: function (t, r) {
+            return `${r.height} * ${r.width} * ${r.num}`;
+          },
         },
-        {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
-          title: '数量',
-          align: "center",
-          dataIndex: 'num'
-        }
       ],
       /* 分页参数 */
       ipagination: {

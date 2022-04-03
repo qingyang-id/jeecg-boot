@@ -138,19 +138,12 @@ export default {
           dataIndex: 'glassColor'
         },
         {
-          title: '高(mm)',
-          align: "center",
-          dataIndex: 'height'
-        },
-        {
-          title: '宽(mm)',
-          align: "center",
-          dataIndex: 'width'
-        },
-        {
-          title: '数量',
-          align: "center",
-          dataIndex: 'num'
+          title: '规格(高*宽*数量)',
+          align: "left",
+          dataIndex: 'height',
+          customRender: function (t, r) {
+            return `${r.height} * ${r.width} * ${r.num}`;
+          },
         },
         {
           title: '方向',
@@ -159,13 +152,11 @@ export default {
         },
         {
           title: '抽/拉/条',
-          align: "center",
-          dataIndex: 'extendType_dictText'
-        },
-        {
-          title: '抽/拉/条数量',
-          align: "center",
-          dataIndex: 'extendNum'
+          align: "left",
+          dataIndex: 'extendType_dictText',
+          customRender: function (t, r) {
+            return `${r.extendType_dictText} * ${r.extendNum}`;
+          },
         },
         {
           title: '单价(元)',
