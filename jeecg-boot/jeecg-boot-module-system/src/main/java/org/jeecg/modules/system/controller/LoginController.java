@@ -111,11 +111,11 @@ public class LoginController {
 			String loginPasswordErrorKey = CacheConstant.getLoginPasswordErrorKey(sysUser.getId());
 			redisUtil.sSet(loginPasswordErrorKey, System.currentTimeMillis());
 			Set<Object> errors = redisUtil.sGet(loginPasswordErrorKey);
-			List<Long> expiredErrors = new ArrayList<>();
+			List<Object> expiredErrors = new ArrayList<>();
 			for (Object timeStr : errors) {
 				Long errorTime = (Long) timeStr;
-				if (errorTime > System.currentTimeMillis() - CommonConstant.LOGIN_ERROR_TIME) {
-					expiredErrors.add(errorTime);
+				if (errorTime <= System.currentTimeMillis() - CommonConstant.LOGIN_ERROR_TIME) {
+					expiredErrors.add(timeStr);
 				}
 			}
 			if (errors.size() - expiredErrors.size() >= CommonConstant.LOGIN_ERROR_TIMES) {
@@ -124,7 +124,7 @@ public class LoginController {
 			}
 			if (expiredErrors.size() > 0) {
 				// remove expired errors
-				redisUtil.setRemove(loginPasswordErrorKey, expiredErrors);
+				redisUtil.srem(loginPasswordErrorKey, expiredErrors);
 			}
 			result.error500("用户名或密码错误");
 			return result;

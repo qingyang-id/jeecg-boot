@@ -562,6 +562,7 @@ export default {
             direction: `${item.direction}`,
             extendType: `${item.extendType}`,
             price: `${item.price / 100}`,
+            extendPrice: `${item.extendPrice / 100}`,
             totalArea: `${item.totalArea / 1000000}`,
             totalPrice: `${item.totalPrice / 100}`,
           }));
