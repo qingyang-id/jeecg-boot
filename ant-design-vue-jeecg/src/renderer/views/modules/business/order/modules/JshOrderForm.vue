@@ -225,6 +225,20 @@ export default {
             width: "8%",
             placeholder: '请输入${title}',
             defaultValue: 0,
+            validateRules: [
+              {
+                // 自定义函数校验 handler
+                handler({ cellValue, row, column }, callback) {
+                  const extendNum = cellValue;
+                  if (Number(row.extendType) && !extendNum) {
+                    callback(false, '${title}不正确')
+                  } else {
+                    callback(true)
+                  }
+                },
+                message: '${title}不正确'
+              }
+            ]
           },
           {
             title: '单价(元)',

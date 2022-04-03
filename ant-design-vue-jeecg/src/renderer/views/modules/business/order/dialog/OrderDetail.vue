@@ -69,39 +69,39 @@
             <a-form-item handle>
               <a-input v-decorator="['id', {}]" hidden/>
             </a-form-item>
-            <a-col :span="6" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>订单:</span>
               <span style="width: 80%"> {{ model.orderCode }} </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>客户:</span>
               <span style="width: 80%">
                 {{ model.customerId_dictText }}
               </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>总面积(m²):</span>
               <span style="width: 80%"> {{ model.totalArea }} </span>
             </a-col>
-            <a-col :span="6" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>订单总额(元):</span>
               <span style="width: 80%"> {{ model.totalPrice }} </span>
             </a-col>
           </a-row>
           <a-row type="flex" justify="center" :gutter="24">
-            <a-col :span="6" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>时间:</span>
               <span style="width: 80%">
                 {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }}
               </span>
             </a-col>
-            <a-col :span="8" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>地址:</span>
               <span style="width: 80%">
                 {{ model.address }}
               </span>
             </a-col>
-            <a-col :span="8" style="padding: 10px">
+            <a-col type="flex" justify="center" style="padding: 10px">
               <span>备注:</span>
               <span style="width: 80%"> {{ model.remark }} </span>
             </a-col>
@@ -121,74 +121,77 @@
       </template>
       <!--铝材单/玻璃单-->
       <template v-if="printType==='生产单'">
-        <section ref="print" id="producePrint">
-          <a-row class="form-row" type="flex" justify="center">
-            <a-col :p="6" style="font-size: 24px; font-weight: 500">
-              铝材单
-            </a-col>
-          </a-row>
-          <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-form-item handle>
-              <a-input v-decorator="['id', {}]" hidden/>
-            </a-form-item>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>时间:</span>
-              <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
-            </a-col>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>客户:</span>
-              <span style="width: 80%"> {{ model.customerId_dictText }} </span>
-            </a-col>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>地址:</span>
-              <span style="width: 80%"> {{ model.address }} </span>
-            </a-col>
-          </a-row>
-          <a-row type="flex" justify="center">
-            <a-table
-                ref="table"
-                size="middle"
-                bordered
-                rowKey="id"
-                :pagination="false"
-                :columns="aluminumColumns"
-                :dataSource="aluminumDataSource">
-            </a-table>
-          </a-row>
-
-          <a-row class="form-row" type="flex" justify="center" style="margin-top: 50px">
-            <a-col :p="6" style="font-size: 24px; font-weight: 500">
-              玻璃单
-            </a-col>
-          </a-row>
-          <a-row class="form-row" type="flex" justify="center" :gutter="24">
-            <a-form-item handle>
-              <a-input v-decorator="['id', {}]" hidden/>
-            </a-form-item>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>时间:</span>
-              <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
-            </a-col>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>客户:</span>
-              <span style="width: 80%"> {{ model.customerId_dictText }} </span>
-            </a-col>
-            <a-col type="flex" justify="center" style="padding: 10px">
-              <span>地址:</span>
-              <span style="width: 80%"> {{ model.address }} </span>
-            </a-col>
-          </a-row>
-          <a-row type="flex" justify="center">
-            <a-table
-                ref="table"
-                size="middle"
-                bordered
-                rowKey="id"
-                :pagination="false"
-                :columns="glassColumns"
-                :dataSource="glassDataSource">
-            </a-table>
-          </a-row>
+        <section ref="print" id="producePrint" style="min-height: 800px; display: flex; flex-direction: column;">
+          <section style="flex: 1">
+            <a-row class="form-row" type="flex" justify="center">
+              <a-col :p="6" style="font-size: 24px; font-weight: 500">
+                铝材单
+              </a-col>
+            </a-row>
+            <a-row class="form-row" type="flex" justify="center" :gutter="24">
+              <a-form-item handle>
+                <a-input v-decorator="['id', {}]" hidden/>
+              </a-form-item>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>时间:</span>
+                <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
+              </a-col>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>客户:</span>
+                <span style="width: 80%"> {{ model.customerId_dictText }} </span>
+              </a-col>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>地址:</span>
+                <span style="width: 80%"> {{ model.address }} </span>
+              </a-col>
+            </a-row>
+            <a-row type="flex" justify="center">
+              <a-table
+                  ref="table"
+                  size="middle"
+                  bordered
+                  rowKey="id"
+                  :pagination="false"
+                  :columns="aluminumColumns"
+                  :dataSource="aluminumDataSource">
+              </a-table>
+            </a-row>
+          </section>
+          <section>
+            <a-row class="form-row" type="flex" justify="center" style="margin-top: 30px">
+              <a-col :p="6" style="font-size: 24px; font-weight: 500">
+                玻璃单
+              </a-col>
+            </a-row>
+            <a-row class="form-row" type="flex" justify="center" :gutter="24">
+              <a-form-item handle>
+                <a-input v-decorator="['id', {}]" hidden/>
+              </a-form-item>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>时间:</span>
+                <span style="width: 80%"> {{ model.orderTime ? model.orderTime.split(" ")[0] : '' }} </span>
+              </a-col>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>客户:</span>
+                <span style="width: 80%"> {{ model.customerId_dictText }} </span>
+              </a-col>
+              <a-col type="flex" justify="center" style="padding: 10px">
+                <span>地址:</span>
+                <span style="width: 80%"> {{ model.address }} </span>
+              </a-col>
+            </a-row>
+            <a-row type="flex" justify="center">
+              <a-table
+                  ref="table"
+                  size="middle"
+                  bordered
+                  rowKey="id"
+                  :pagination="false"
+                  :columns="glassColumns"
+                  :dataSource="glassDataSource">
+              </a-table>
+            </a-row>
+          </section>
         </section>
       </template>
     </a-form>
@@ -266,13 +269,18 @@ export default {
         {
           title: '方向',
           align: "left",
-          dataIndex: 'direction_dictText'
+          dataIndex: 'direction_dictText',
+          customRender: function (t, r) {
+            if (!r.direction) return '';
+            return t;
+          },
         },
         {
           title: '抽/拉/条',
           align: "left",
           dataIndex: 'extendType_dictText',
           customRender: function (t, r) {
+            if (!r.extendNum) return '';
             return `${r.extendType_dictText} * ${r.extendNum}`;
           },
         },
@@ -344,12 +352,17 @@ export default {
           title: '方向',
           align: "left",
           dataIndex: 'direction_dictText',
+          customRender: function (t, r) {
+            if (!r.direction) return '';
+            return t;
+          },
         },
         {
           title: '抽/拉/条',
           align: "left",
           dataIndex: 'extendType_dictText',
           customRender: function (t, r) {
+            if (!r.extendNum) return '';
             return `${r.extendType_dictText} * ${r.extendNum}`;
           },
         },
