@@ -452,7 +452,7 @@ export default {
         params = { ...params, orderId: record.id, type: 2 };
         this.columns = this.glassColumns;
       } else if (printType === '生产单') {
-        this.requestProduceData(record.id);
+        this.requestProduceData(record.id, params);
         return;
       } else {
         this.$message.error('参数错误');
