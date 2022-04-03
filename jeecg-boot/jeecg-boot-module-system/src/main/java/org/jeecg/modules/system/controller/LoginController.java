@@ -86,7 +86,7 @@ public class LoginController {
 			return result;
 		}
 		//update-end-author:taoyan date:20190828 for:校验验证码
-		
+
 		//1. 校验用户是否有效
 		//update-begin-author:wangshuai date:20200601 for: 登录代码验证用户是否注销bug，if条件永远为false
 		LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
@@ -97,15 +97,39 @@ public class LoginController {
 		if(!result.isSuccess()) {
 			return result;
 		}
-		
+
 		//2. 校验用户名或密码是否正确
 		String userpassword = PasswordUtil.encrypt(username, password, sysUser.getSalt());
 		String syspassword = sysUser.getPassword();
+		String lockKey = CacheConstant.getLoginLockKey(sysUser.getId());
+		long time = redisUtil.getExpire(lockKey);
+		if (time > 0) {
+			return result.error500(String.format("账号被锁定，请%s后再试", TimeUtils.formatDelayTime(time)));
+		}
 		if (!syspassword.equals(userpassword)) {
+			// 连续输错5次, 禁用账户
+			String loginPasswordErrorKey = CacheConstant.getLoginPasswordErrorKey(sysUser.getId());
+			redisUtil.sSet(loginPasswordErrorKey, System.currentTimeMillis());
+			Set<Object> errors = redisUtil.sGet(loginPasswordErrorKey);
+			List<Long> expiredErrors = new ArrayList<>();
+			for (Object timeStr : errors) {
+				Long errorTime = (Long) timeStr;
+				if (errorTime > System.currentTimeMillis() - CommonConstant.LOGIN_ERROR_TIME) {
+					expiredErrors.add(errorTime);
+				}
+			}
+			if (errors.size() - expiredErrors.size() >= CommonConstant.LOGIN_ERROR_TIMES) {
+				// 锁账户
+				redisUtil.set(lockKey, 1, CommonConstant.LOGIN_LOCK_TIME);
+			}
+			if (expiredErrors.size() > 0) {
+				// remove expired errors
+				redisUtil.setRemove(loginPasswordErrorKey, expiredErrors);
+			}
 			result.error500("用户名或密码错误");
 			return result;
 		}
-				
+
 		//用户登录信息
 		userInfo(sysUser, result);
 		//update-begin--Author:liusq  Date:20210126  for：登录成功，删除redis中的验证码
@@ -141,7 +165,7 @@ public class LoginController {
 		return result;
 
 	}
-	
+
 	/**
 	 * 退出登录
 	 * @param request
@@ -175,7 +199,7 @@ public class LoginController {
 	    	return Result.error("Token无效!");
 	    }
 	}
-	
+
 	/**
 	 * 获取访问量
 	 * @return
@@ -206,7 +230,7 @@ public class LoginController {
 		result.success("登录成功");
 		return result;
 	}
-	
+
 	/**
 	 * 获取访问量
 	 * @return
@@ -227,8 +251,8 @@ public class LoginController {
 		result.setResult(oConvertUtils.toLowerCasePageList(list));
 		return result;
 	}
-	
-	
+
+
 	/**
 	 * 登陆成功选择用户当前部门
 	 * @param user
@@ -253,7 +277,7 @@ public class LoginController {
 
 	/**
 	 * 短信登录接口
-	 * 
+	 *
 	 * @param jsonObject
 	 * @return
 	 */
@@ -302,7 +326,7 @@ public class LoginController {
 					}
 					return result;
 				}
-				
+
 				/**
 				 * smsmode 短信模板方式  0 .登录模板、1.注册模板、2.忘记密码模板
 				 */
@@ -334,11 +358,11 @@ public class LoginController {
 		}
 		return result;
 	}
-	
+
 
 	/**
 	 * 手机号登录接口
-	 * 
+	 *
 	 * @param jsonObject
 	 * @return
 	 */
@@ -347,14 +371,14 @@ public class LoginController {
 	public Result<JSONObject> phoneLogin(@RequestBody JSONObject jsonObject) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String phone = jsonObject.getString("mobile");
-		
+
 		//校验用户有效性
 		SysUser sysUser = sysUserService.getUserByPhone(phone);
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
 			return result;
 		}
-		
+
 		String smscode = jsonObject.getString("captcha");
 		Object code = redisUtil.get(phone);
 		if (!smscode.equals(code)) {
@@ -453,7 +477,7 @@ public class LoginController {
 			String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
 			String lowerCaseCode = code.toLowerCase();
 			String realKey = MD5Util.MD5Encode(lowerCaseCode+key, "utf-8");
-			redisUtil.set(realKey, lowerCaseCode, 60);
+			redisUtil.set(realKey, lowerCaseCode, 120);
 			String base64 = RandImageUtil.generate(code);
 			res.setSuccess(true);
 			res.setResult(base64);
@@ -463,7 +487,7 @@ public class LoginController {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * app登录
 	 * @param sysLoginModel
@@ -475,14 +499,14 @@ public class LoginController {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String username = sysLoginModel.getUsername();
 		String password = sysLoginModel.getPassword();
-		
+
 		//1. 校验用户是否有效
 		SysUser sysUser = sysUserService.getUserByName(username);
 		result = sysUserService.checkUserIsEffective(sysUser);
 		if(!result.isSuccess()) {
 			return result;
 		}
-		
+
 		//2. 校验用户名或密码是否正确
 		String userpassword = PasswordUtil.encrypt(username, password, sysUser.getSalt());
 		String syspassword = sysUser.getPassword();
@@ -490,7 +514,7 @@ public class LoginController {
 			result.error500("用户名或密码错误");
 			return result;
 		}
-		
+
 		String orgCode = sysUser.getOrgCode();
 		if(oConvertUtils.isEmpty(orgCode)) {
 			//如果当前用户无选择部门 查看部门关联信息
@@ -506,7 +530,7 @@ public class LoginController {
 		JSONObject obj = new JSONObject();
 		//用户登录信息
 		obj.put("userInfo", sysUser);
-		
+
 		// 生成token
 		String token = JwtUtil.sign(username, syspassword);
 		// 设置超时时间

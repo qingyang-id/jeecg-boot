@@ -96,4 +96,17 @@ public interface CacheConstant {
 	 * online图表
 	 */
 	public static final String ONLINE_GRAPH = "sys:cache:online:graph";
+	/**
+	 * 用户账户锁缓存KEY
+	 */
+	public static final String LOGIN_PASSWORD_ERROR_KEY = "bc-u:login-password-error:%s"; // 登陆密码错误时间缓存key $uid值为用户ID，格式为集合，成员为错误时间，失效时间为2小时
+	public static final String LOGIN_LOCK_KEY = "bc-u:login-lock:%s"; // 登陆锁定缓存key $uid值为用户ID 失效时间2小时
+
+	public static String getLoginPasswordErrorKey(String uuid) {
+		return String.format(LOGIN_PASSWORD_ERROR_KEY, uuid);
+	}
+
+	public static String getLoginLockKey(String uuid) {
+		return String.format(LOGIN_LOCK_KEY, uuid);
+	}
 }
