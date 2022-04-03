@@ -221,7 +221,7 @@ export default {
       /* 分页参数 */
       ipagination: {
         current: 1,
-        pageSize: 30,
+        pageSize: 10,
         pageSizeOptions: ['5', '10', '30', '50'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条";
