@@ -109,7 +109,7 @@ public class LoginController {
 		if (!syspassword.equals(userpassword)) {
 			// 连续输错5次, 禁用账户
 			String loginPasswordErrorKey = CacheConstant.getLoginPasswordErrorKey(sysUser.getId());
-			redisUtil.sSet(loginPasswordErrorKey, System.currentTimeMillis());
+			redisUtil.sSetAndTime(loginPasswordErrorKey, CommonConstant.LOGIN_ERROR_TIME, System.currentTimeMillis());
 			Set<Object> errors = redisUtil.sGet(loginPasswordErrorKey);
 			List<Object> expiredErrors = new ArrayList<>();
 			for (Object timeStr : errors) {
@@ -124,7 +124,7 @@ public class LoginController {
 			}
 			if (expiredErrors.size() > 0) {
 				// remove expired errors
-				redisUtil.srem(loginPasswordErrorKey, expiredErrors);
+				redisUtil.srem(loginPasswordErrorKey, expiredErrors.toArray());
 			}
 			result.error500("用户名或密码错误");
 			return result;

@@ -78,9 +78,9 @@ public interface CommonConstant {
     /** Token缓存时间：3600秒即一小时 */
     public static final int  TOKEN_EXPIRE_TIME  = 3600;
     /** 错误窗口：2小时 */
-    public static final long  LOGIN_ERROR_TIME  = 60 * 1000;
+    public static final long  LOGIN_ERROR_TIME  = 2 * 60 * 60 * 1000;
     /** 错误次数 */
-    public static final long  LOGIN_ERROR_TIMES  = 2;
+    public static final long  LOGIN_ERROR_TIMES  = 10;
     /** 账户锁定时间：1天 */
     public static final long  LOGIN_LOCK_TIME  = 24 * 60 * 60;
 
