@@ -391,8 +391,8 @@ export default {
       /* 分页参数 */
       ipagination: {
         current: 1,
-        pageSize: 50,
-        pageSizeOptions: ['5', '10', '50'],
+        pageSize: 100,
+        pageSizeOptions: ['5', '10', '50', '100'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条";
         },
@@ -426,6 +426,7 @@ export default {
     show(record, printType) {
       this.dataSource = [];
       this.ipagination.current = 1;
+      this.ipagination.pageSize = 100;
       this.printType = printType;
       this.title = printType;
       this.visible = true;
@@ -437,18 +438,18 @@ export default {
         this.form.setFieldsValue(pick(this.model, 'id'));
       });
       let url = '';
-      let params = {};
+      let params = { pageNo: 1, pageSize: 100 };
       if (printType === '订单信息') {
         url = this.url.orderProductList;
-        params = { orderId: this.model.id };
+        params = { ...params, orderId: this.model.id };
         this.columns = this.orderColumns;
       } else if (printType === '铝材生产单') {
         url = this.url.orderProductDetailList;
-        params = { orderId: record.id, type: 1 };
+        params = { ...params, orderId: record.id, type: 1 };
         this.columns = this.aluminumColumns;
       } else if (printType === '玻璃生产单') {
         url = this.url.orderProductDetailList;
-        params = { orderId: record.id, type: 2 };
+        params = { ...params, orderId: record.id, type: 2 };
         this.columns = this.glassColumns;
       } else if (printType === '生产单') {
         this.requestProduceData(record.id);
@@ -460,12 +461,13 @@ export default {
       }
       this.requestSubTableData(url, params);
     },
-    requestProduceData(orderId) {
+    requestProduceData(orderId, params) {
       this.loading = true;
       Promise.all([
         getAction(this.url.orderProductDetailList, {
           orderId,
-          type: 1
+          type: 1,
+          ...params,
         })
             .then(res => {
               if (res && res.code === 200) {
@@ -474,7 +476,8 @@ export default {
             }),
         getAction(this.url.orderProductDetailList, {
           orderId,
-          type: 2
+          type: 2,
+          ...params,
         })
             .then(res => {
               if (res && res.code === 200) {

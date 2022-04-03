@@ -604,6 +604,7 @@ export default {
             referenceHeight: Number(item.height),
             num: Number(item.num),
             color: item.color,
+            direction: item.direction,
             extendType: item.extendType,
             extendNum: item.extendNum,
           };
