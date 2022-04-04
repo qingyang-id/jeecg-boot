@@ -21,7 +21,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
-              <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id" @change="updateAddresses"/>
+              <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id,del_flag=0" @change="updateAddresses"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -132,7 +132,7 @@ export default {
             key: 'productId',
             type: JVXETypes.select,
             options: [],
-            dictCode: 'jsh_product,name,id',
+            dictCode: 'jsh_product,name,id,del_flag=0',
             allowSearch: true,
             width: "10%",
             placeholder: '请选择${title}',
