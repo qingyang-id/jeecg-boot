@@ -135,6 +135,7 @@ export default {
             dictCode: 'jsh_product,name,id,del_flag=0',
             allowSearch: true,
             width: "10%",
+            minWidth: '100px',
             placeholder: '请选择${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -144,6 +145,7 @@ export default {
             key: 'color',
             type: JVXETypes.select,
             width: "8%",
+            minWidth: '100px',
             placeholder: '请输入${title}',
             defaultValue: '',
             options: [{
@@ -168,6 +170,7 @@ export default {
             key: 'glassColor',
             type: JVXETypes.input,
             width: "8%",
+            minWidth: '100px',
             placeholder: '请输入${title}',
             defaultValue: '',
           },
@@ -176,6 +179,7 @@ export default {
             key: 'height',
             type: JVXETypes.inputNumber,
             width: "8%",
+            minWidth: '80px',
             placeholder: '请输入${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -185,6 +189,7 @@ export default {
             key: 'width',
             type: JVXETypes.inputNumber,
             width: "8%",
+            minWidth: '80px',
             placeholder: '请输入${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -194,6 +199,7 @@ export default {
             key: 'num',
             type: JVXETypes.inputNumber,
             width: "6%",
+            minWidth: '80px',
             placeholder: '请输入${title}',
             defaultValue: '',
             validateRules: [{ required: true, message: '${title}不能为空' }],
@@ -205,6 +211,7 @@ export default {
             options: [],
             dictCode: "direction",
             width: "8%",
+            minWidth: '80px',
             placeholder: '请选择${title}',
             defaultValue: '0',
           },
@@ -215,6 +222,7 @@ export default {
             options: [],
             dictCode: "product_extend",
             width: "10%",
+            minWidth: '80px',
             placeholder: '请选择${title}',
             defaultValue: '0',
           },
@@ -223,6 +231,7 @@ export default {
             key: 'extendNum',
             type: JVXETypes.inputNumber,
             width: "8%",
+            minWidth: '80px',
             placeholder: '请输入${title}',
             defaultValue: 0,
             validateRules: [
@@ -246,6 +255,7 @@ export default {
             type: JVXETypes.input,
             disabled: true,
             width: "8%",
+            minWidth: '80px',
             placeholder: '${title}',
             defaultValue: '0',
             // formatter({ cellValue }) {
@@ -258,6 +268,7 @@ export default {
             type: JVXETypes.input,
             disabled: true,
             width: "8%",
+            minWidth: '80px',
             placeholder: '${title}',
             defaultValue: '0',
           },
@@ -267,6 +278,7 @@ export default {
             type: JVXETypes.input,
             disabled: true,
             width: "8%",
+            minWidth: '80px',
             placeholder: '${title}',
             defaultValue: '0',
             // formatter({ cellValue }) {
@@ -279,6 +291,7 @@ export default {
             type: JVXETypes.input,
             disabled: true,
             width: "8%",
+            minWidth: '80px',
             placeholder: '${title}',
             defaultValue: '0',
             // formatter({ cellValue }) {
@@ -290,7 +303,8 @@ export default {
             key: 'action',
             type: JVXETypes.slot,
             fixed: 'right',
-            minWidth: '6%',
+            width: '6%',
+            minWidth: '80px',
             align: 'center',
             slotName: 'action',
           }
@@ -497,6 +511,33 @@ export default {
               rowKey: row.id,
               values: Object.assign(row, { extendNum: 0, extendPrice: 0 })
             }]);
+          } else if (!row.extendNum) {
+            switch (Number(value)) {
+              case 1: {
+                // 抽
+                target.setValues([{
+                  rowKey: row.id,
+                  values: Object.assign(row, { extendNum: (row.num || 1) * 3 })
+                }]);
+                break;
+              }
+              case 2: {
+                // 拉
+                target.setValues([{
+                  rowKey: row.id,
+                  values: Object.assign(row, { extendNum: (row.num || 1) * 2 })
+                }]);
+                break;
+              }
+              case 3: {
+                // 条
+                target.setValues([{
+                  rowKey: row.id,
+                  values: Object.assign(row, { extendNum: row.num || 1 })
+                }]);
+                break;
+              }
+            }
           }
           // 更新价格信息
           this.updatePrices(event);
