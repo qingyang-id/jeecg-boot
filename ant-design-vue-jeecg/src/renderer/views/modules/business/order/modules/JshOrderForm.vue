@@ -382,6 +382,7 @@ export default {
     },
 
     calculateCurrentRowPrice(row) {
+      let price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0);
       let extendPrice = 0;
       switch (Number(row.extendType)) {
         case 1: {
@@ -405,14 +406,14 @@ export default {
           break;
         }
         case 3: {
-          // 条 12/条
-          extendPrice = (row.extendNum || 0) * 1200;
+          // 条 15/条
+          extendPrice = (row.extendNum || 0) * 1500;
+          price = 0;
           break;
         }
         default: {
         }
       }
-      const price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0);
       const totalArea = (row.num || 0) * (row.width || 0) * (row.height || 0);
       const totalPrice = (price * totalArea) + (extendPrice * 1000000);
       // 此种设置方法，value change事件无法捕获行信息
