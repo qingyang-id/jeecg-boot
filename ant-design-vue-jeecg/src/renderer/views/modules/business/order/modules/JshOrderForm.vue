@@ -365,7 +365,7 @@ export default {
       if (!customerId) {
         this.resetAddresses();
       }
-      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId })
+      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId, pageNo: 1, pageSize: 1000 })
           .then((res) => {
             if (res.success) {
               if (res.result.records.length) {
