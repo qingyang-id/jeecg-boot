@@ -59,7 +59,7 @@
 </template>
 
 <script>
-
+import moment from 'moment';
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import { getAction } from '@/api/manage';
 import '@/assets/less/TableExpand.less';
@@ -92,14 +92,20 @@ export default {
           dataIndex: 'totalNum'
         },
         {
-          title: '总面积(mm²)',
+          title: '总面积(m²)',
           align: "center",
-          dataIndex: 'totalArea'
+          dataIndex: 'totalArea',
+          customRender: function (t) {
+            return t / 1000000;
+          }
         },
         {
-          title: '订单总额(分)',
+          title: '总价(元)',
           align: "center",
-          dataIndex: 'totalPrice'
+          dataIndex: 'totalPrice',
+          customRender: function (t) {
+            return t / 100;
+          }
         },
       ],
       url: {
@@ -125,8 +131,8 @@ export default {
   },
   methods: {
     onTimeChange(value, dateString) {
-      this.queryParam.time_begin = dateString[0];
-      this.queryParam.time_end = dateString[1];
+      this.queryParam.time_begin = dateString[0] && moment(dateString[0],'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
+      this.queryParam.time_end = dateString[1] && moment(dateString[1], 'YYYY-MM').endOf("month").format("YYYY-MM-DD") || '';
     },
     initDictConfig() {
     },

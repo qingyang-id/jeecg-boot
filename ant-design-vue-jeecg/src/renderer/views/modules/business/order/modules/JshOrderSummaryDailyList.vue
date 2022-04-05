@@ -92,14 +92,20 @@ export default {
           dataIndex: 'totalNum'
         },
         {
-          title: '总面积(mm²)',
+          title: '总面积(m²)',
           align: "center",
-          dataIndex: 'totalArea'
+          dataIndex: 'totalArea',
+          customRender: function (t) {
+            return t / 1000000;
+          }
         },
         {
-          title: '订单总额(分)',
+          title: '总价(元)',
           align: "center",
-          dataIndex: 'totalPrice'
+          dataIndex: 'totalPrice',
+          customRender: function (t) {
+            return t / 100;
+          }
         },
       ],
       url: {

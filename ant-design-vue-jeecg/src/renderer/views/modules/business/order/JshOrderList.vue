@@ -180,7 +180,15 @@ export default {
           dataIndex: 'customerId_dictText'
         },
         {
-          title: '订单总额(元)',
+          title: '总面积(m²)',
+          align: "center",
+          dataIndex: 'totalArea',
+          customRender: function (t) {
+            return t / 1000000;
+          }
+        },
+        {
+          title: '总价(元)',
           align: "center",
           dataIndex: 'totalPrice',
           customRender: function (t) {
