@@ -11,6 +11,7 @@
         FROM
             jsh_order_summary_daily
         WHERE `time` BETWEEN #{startTime} AND #{endTime}
+        AND tenant_id != 0
         GROUP BY
             tenant_id
     </select>
@@ -28,7 +29,7 @@
         VALUES
         <foreach collection="list" item="item" index="index"
                  separator=",">
-            (#{item.time}, #{item.tenantId}, #{item.customerId}, #{item.totalNum}, #{item.totalArea}, #{item.totalPrice})
+            (#{item.time,jdbcType=DATE}, #{item.tenantId}, #{item.customerId}, #{item.totalNum}, #{item.totalArea}, #{item.totalPrice})
         </foreach>
         ON DUPLICATE KEY UPDATE total_num=VALUES(total_num), total_area=VALUES(total_area), total_price=VALUES(total_price);
     </insert>

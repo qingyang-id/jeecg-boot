@@ -652,16 +652,9 @@ public class DateUtils extends PropertyEditorSupport {
         return calendar.get(Calendar.YEAR);
     }
 
-    public static Date addDays(Date date, int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(5, days);
-        return calendar.getTime();
-    }
-
     public static Date getDateBegin(Date date) {
         Assert.notNull(date, "date cannot be null");
-        return org.apache.commons.lang3.time.DateUtils.truncate(date, 5);
+        return org.apache.commons.lang3.time.DateUtils.truncate(date, Calendar.DATE);
     }
 
     public static Date getDateEnd(Date date) {
@@ -677,8 +670,23 @@ public class DateUtils extends PropertyEditorSupport {
         return getDateBegin(new Date());
     }
 
-    public static Date getTodayEnd() {
-        return getDateEnd(new Date());
+    public static Date getMonthBegin(Date date) {
+        Assert.notNull(date, "date cannot be null");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, 1);
+        return getDateBegin(calendar.getTime());
     }
 
+    public static Date getMonthEnd(Date date) {
+        Assert.notNull(date, "date cannot be null");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        return getDateEnd(calendar.getTime());
+    }
+
+    public static Date getTodayMonthBegin() {
+        return getMonthBegin(new Date());
+    }
 }

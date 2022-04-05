@@ -28,6 +28,8 @@ public class JshOrderSummary implements Serializable {
     /**
      * 时间
      */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "时间")
     private Date time;
 
@@ -97,7 +99,8 @@ public class JshOrderSummary implements Serializable {
         this.totalPrice = 0L;
     }
 
-    public JshOrderSummary(Long tenantId, Long customerId, Long totalNum, Long totalArea, Long totalPrice) {
+    public JshOrderSummary(Date time, Long tenantId, Long customerId, Long totalNum, Long totalArea, Long totalPrice) {
+        this.time = time;
         this.tenantId = tenantId;
         this.customerId = customerId;
         this.totalNum = totalNum;
@@ -106,7 +109,11 @@ public class JshOrderSummary implements Serializable {
     }
 
     public JshOrderSummary(JshOrderSummary jshOrderSummary, Date time) {
-        jshOrderSummary.setTime(time);
-        if (jshOrderSummary.getCustomerId() == null) jshOrderSummary.setCustomerId(0L);
+        this(time, jshOrderSummary.getTenantId(), jshOrderSummary.getCustomerId(),
+                jshOrderSummary.getTotalNum(), jshOrderSummary.getTotalArea(),
+                jshOrderSummary.getTotalPrice());
+        if (this.getCustomerId() == null) {
+            this.setCustomerId(0L);
+        }
     }
 }

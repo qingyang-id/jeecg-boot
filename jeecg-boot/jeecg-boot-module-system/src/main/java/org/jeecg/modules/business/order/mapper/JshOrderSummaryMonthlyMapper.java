@@ -1,5 +1,6 @@
 package org.jeecg.modules.business.order.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.business.order.entity.JshOrderSummary;
@@ -19,5 +20,6 @@ public interface JshOrderSummaryMonthlyMapper extends BaseMapper<JshOrderSummary
      * @param list
      * @return
      */
+    @InterceptorIgnore(tenantLine = "true")
     public void batchInsertOrUpdate(@Param("list") List<JshOrderSummary> list);
 }

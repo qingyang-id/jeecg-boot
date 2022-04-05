@@ -42,11 +42,11 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
     if (deeps >= 10) return;
     // 查询当前日期
     Date endTime = DateUtils.getDateEnd(startTime);
-    List<JshOrderSummaryDaily> jshOrderSummaryDailyList = jshOrderMapper.selectDailyOrderSummary(startTime, endTime);
-    if (jshOrderSummaryDailyList.size() > 0 && jshOrderSummaryDailyList.get(0).getTime() != null) {
+    List<JshOrderSummary> jshOrderSummaryList = jshOrderMapper.selectDailyOrderSummary(startTime, endTime);
+    if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
       // 计算总账
       JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime);
-      List<JshOrderSummary> jshOrderSummaryList = jshOrderSummaryDailyList.stream()
+      jshOrderSummaryList = jshOrderSummaryList.stream()
               .map(item -> {
                 jshOrderSummary.setTotalNum(jshOrderSummary.getTotalNum() + item.getTotalNum());
                 jshOrderSummary.setTotalArea(jshOrderSummary.getTotalArea() + item.getTotalArea());
@@ -59,7 +59,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
       jshOrderSummaryDailyMapper.batchInsertOrUpdate(Collections.singletonList(new JshOrderSummary(startTime)));
     }
     // 检查前一天数据是否已统计, 最多复合近10天的数据
-    Date lastDay = DateUtils.addDays(startTime, -1);
+    Date lastDay = org.apache.commons.lang3.time.DateUtils.addDays(startTime, -1);
     LambdaUpdateWrapper<JshOrderSummaryDaily> jshOrderSummaryDailyLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
     jshOrderSummaryDailyLambdaUpdateWrapper.eq(JshOrderSummary::getTime, lastDay);
     JshOrderSummaryDaily jshOrderSummaryDaily = jshOrderSummaryDailyMapper.selectOne(jshOrderSummaryDailyLambdaUpdateWrapper);
@@ -73,9 +73,9 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
     // 向前复合近2条数据
     if (deeps >= 2) return;
     // 查询当前日期
-    Date endTime = DateUtils.getDateEnd(startTime);
+    Date endTime = DateUtils.getMonthEnd(startTime);
     List<JshOrderSummary> jshOrderSummaryList = jshOrderSummaryDailyMapper.selectOrderSummary(startTime, endTime);
-    if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTime() != null) {
+    if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
       // 计算总账
       JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime);
       jshOrderSummaryList = jshOrderSummaryList.stream()
@@ -90,13 +90,13 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
     } else {
       jshOrderSummaryMonthlyMapper.batchInsertOrUpdate(Collections.singletonList(new JshOrderSummary(startTime)));
     }
-    // 检查前一天数据是否已统计
-    Date lastDay = DateUtils.addDays(startTime, -1);
+    // 检查上一月数据是否已统计
+    Date lastMonth = org.apache.commons.lang3.time.DateUtils.addMonths(startTime, -1);
     LambdaUpdateWrapper<JshOrderSummaryMonthly> jshOrderSummaryDailyLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-    jshOrderSummaryDailyLambdaUpdateWrapper.eq(JshOrderSummary::getTime, lastDay);
+    jshOrderSummaryDailyLambdaUpdateWrapper.eq(JshOrderSummary::getTime, lastMonth);
     JshOrderSummaryMonthly jshOrderSummaryMonthly = jshOrderSummaryMonthlyMapper.selectOne(jshOrderSummaryDailyLambdaUpdateWrapper);
     if (jshOrderSummaryMonthly == null) {
-      this.statisticMonthlyOrders(lastDay, deeps + 1);
+      this.statisticMonthlyOrders(lastMonth, deeps + 1);
     }
   }
 }

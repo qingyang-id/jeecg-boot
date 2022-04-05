@@ -15,15 +15,16 @@ import javax.annotation.Resource;
  * @date 2022/4/5 15:50
  */
 @Slf4j
-public class StatisticDailyOrderJob implements Job {
+public class StatisticOrderJob implements Job {
     @Resource
     IJshOrderSummaryService jshOrderSummaryService;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         long start = System.currentTimeMillis();
-        log.info("Job {}, start statistic daily orders", jobExecutionContext.getJobDetail().getKey());
+        log.info("Job {}, start statistic orders", jobExecutionContext.getJobDetail().getKey());
         jshOrderSummaryService.statisticDailyOrders(DateUtils.getTodayBegin(), 0);
-        log.info("Job {}, statistic daily orders end, executed time: {}ms", jobExecutionContext.getJobDetail().getKey(), System.currentTimeMillis() - start);
+        jshOrderSummaryService.statisticMonthlyOrders(DateUtils.getTodayMonthBegin(), 0);
+        log.info("Job {}, statistic orders end, executed time: {}ms", jobExecutionContext.getJobDetail().getKey(), System.currentTimeMillis() - start);
     }
 }

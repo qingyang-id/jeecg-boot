@@ -1,9 +1,10 @@
 package org.jeecg.modules.business.order.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.business.order.entity.JshOrder;
-import org.jeecg.modules.business.order.entity.JshOrderSummaryDaily;
+import org.jeecg.modules.business.order.entity.JshOrderSummary;
 
 import java.util.Date;
 import java.util.List;
@@ -21,5 +22,6 @@ public interface JshOrderMapper extends BaseMapper<JshOrder> {
      * @param endTime
      * @return
      */
-    public List<JshOrderSummaryDaily> selectDailyOrderSummary(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    @InterceptorIgnore(tenantLine = "true")
+    public List<JshOrderSummary> selectDailyOrderSummary(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }
