@@ -24,7 +24,7 @@ CREATE TABLE `sys_quartz_job`  (
 INSERT INTO `sys_quartz_job` VALUES ('5b3d2c087ad41aa755fc4f89697b01e7', 'admin', '2019-04-11 19:04:21', 0, 'admin', '2020-05-02 15:48:48', 'org.jeecg.modules.message.job.SendMsgJob', '0/50 * * * * ? *', NULL, NULL, -1);
 INSERT INTO `sys_quartz_job` VALUES ('a253cdfc811d69fa0efc70d052bc8128', 'admin', '2019-03-30 12:44:48', 0, 'admin', '2020-05-02 15:48:49', 'org.jeecg.modules.quartz.job.SampleJob', '0/1 * * * * ?', NULL, NULL, -1);
 INSERT INTO `sys_quartz_job` VALUES ('df26ecacf0f75d219d746750fe84bbee', NULL, NULL, 0, 'admin', '2020-05-02 15:40:35', 'org.jeecg.modules.quartz.job.SampleParamJob', '0/1 * * * * ?', 'scott', '带参测试 后台将每隔1秒执行输出日志', -1);
-
+INSERT INTO `sys_quartz_job`(`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `job_class_name`, `cron_expression`, `parameter`, `description`, `status`) VALUES ('1511267922611875842', 'admin', '2022-04-05 04:02:05', 0, 'admin', '2022-04-05 07:06:55', 'org.jeecg.modules.quartz.job.order.StatisticOrderJob	', '0 */10 * * * ? *', NULL, '订单日数据统计任务', 0);
 -- ----------------------------
 -- Table structure for qrtz_job_details
 -- ----------------------------
