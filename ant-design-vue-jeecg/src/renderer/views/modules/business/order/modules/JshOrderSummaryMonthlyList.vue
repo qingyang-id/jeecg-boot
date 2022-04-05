@@ -78,7 +78,7 @@ export default {
           sorter: true,
           dataIndex: 'time',
           customRender: function (text) {
-            return !text ? "" : (text.length > 10 ? text.substr(0, 10) : text);
+            return !text ? "" : (text.length > 7 ? text.substr(0, 7) : text);
           }
         },
         {
