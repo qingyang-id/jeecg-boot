@@ -1,5 +1,8 @@
 package org.jeecg.common.util;
 
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
 import java.beans.PropertyEditorSupport;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -8,8 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import org.springframework.util.StringUtils;
 
 /**
  * 类描述：时间操作定义类
@@ -649,6 +650,35 @@ public class DateUtils extends PropertyEditorSupport {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(getDate());
         return calendar.get(Calendar.YEAR);
+    }
+
+    public static Date addDays(Date date, int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(5, days);
+        return calendar.getTime();
+    }
+
+    public static Date getDateBegin(Date date) {
+        Assert.notNull(date, "date cannot be null");
+        return org.apache.commons.lang3.time.DateUtils.truncate(date, 5);
+    }
+
+    public static Date getDateEnd(Date date) {
+        Assert.notNull(date, "date cannot be null");
+        date = org.apache.commons.lang3.time.DateUtils.setHours(date, 23);
+        date = org.apache.commons.lang3.time.DateUtils.setMinutes(date, 59);
+        date = org.apache.commons.lang3.time.DateUtils.setSeconds(date, 59);
+        date = org.apache.commons.lang3.time.DateUtils.setMilliseconds(date, 999);
+        return date;
+    }
+
+    public static Date getTodayBegin() {
+        return getDateBegin(new Date());
+    }
+
+    public static Date getTodayEnd() {
+        return getDateEnd(new Date());
     }
 
 }

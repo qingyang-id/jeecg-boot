@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.order.mapper.JshOrderSummaryDailyMapper">
+    <select id="selectOrderSummary"  parameterType="Object"
+            resultType="org.jeecg.modules.business.order.entity.JshOrderSummary">
+        SELECT
+            tenant_id AS tenantId,
+            SUM( total_num ) AS totalNum,
+            SUM( total_area ) AS totalArea,
+            SUM( total_price ) AS totalPrice
+        FROM
+            jsh_order_summary_daily
+        WHERE `time` BETWEEN #{startTime} AND #{endTime}
+        GROUP BY
+            tenant_id
+    </select>
+
+    <!-- 批量插入数据 -->
+    <insert id="batchInsertOrUpdate" parameterType="java.util.List">
+        INSERT INTO jsh_order_summary_daily (
+        `time`,
+        tenant_id,
+        customer_id,
+        total_num,
+        total_area,
+        total_price
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.time}, #{item.tenantId}, #{item.customerId}, #{item.totalNum}, #{item.totalArea}, #{item.totalPrice})
+        </foreach>
+        ON DUPLICATE KEY UPDATE total_num=VALUES(total_num), total_area=VALUES(total_area), total_price=VALUES(total_price);
+    </insert>
+</mapper>

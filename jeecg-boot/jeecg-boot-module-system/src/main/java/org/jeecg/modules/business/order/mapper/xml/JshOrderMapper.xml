@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.business.order.mapper.JshOrderMapper">
-
+    <select id="selectDailyOrderSummary"  parameterType="Object"
+            resultType="org.jeecg.modules.business.order.entity.JshOrderSummary">
+        SELECT
+            tenant_id AS tenantId,
+            customer_id AS customerId,
+            COUNT( * ) AS totalNum,
+            SUM( total_area ) AS totalArea,
+            SUM( total_price ) AS totalPrice
+        FROM
+            jsh_order
+        WHERE order_time BETWEEN #{startTime} AND #{endTime}
+        GROUP BY
+            customer_id,
+            tenant_id
+    </select>
 </mapper>
