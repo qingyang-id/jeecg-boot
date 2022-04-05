@@ -4,7 +4,6 @@ import lombok.Data;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @Description: jsh_order_summary
@@ -14,12 +13,6 @@ import java.util.Date;
  */
 @Data
 public class JshOrderSummaryExportVo {
-    /**
-     * 时间
-     */
-    @Excel(name = "时间", width = 15, format = "yyyy-MM-dd")
-    private Date time;
-
     /**
      * 客户
      */
