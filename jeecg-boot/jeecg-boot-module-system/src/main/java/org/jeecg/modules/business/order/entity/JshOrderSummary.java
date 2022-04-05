@@ -1,5 +1,7 @@
 package org.jeecg.modules.business.order.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,8 +28,16 @@ public class JshOrderSummary implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 主键
+     */
+    @TableId(type = IdType.AUTO)
+    @ApiModelProperty(value = "主键")
+    private java.lang.Long id;
+
+    /**
      * 时间
      */
+    @Excel(name = "时间", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "时间")
@@ -39,7 +49,7 @@ public class JshOrderSummary implements Serializable {
     @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
     @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
     @ApiModelProperty(value = "客户id")
-    private Long customerId;
+    private java.lang.Long customerId;
 
     /**
      * 总订单数

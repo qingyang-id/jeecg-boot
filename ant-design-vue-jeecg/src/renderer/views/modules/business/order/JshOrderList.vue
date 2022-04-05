@@ -175,7 +175,7 @@ export default {
           dataIndex: 'orderCode'
         },
         {
-          title: '客户id',
+          title: '客户',
           align: "center",
           dataIndex: 'customerId_dictText'
         },

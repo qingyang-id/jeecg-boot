@@ -14,7 +14,7 @@
               <a-range-picker
                   style="width:100%"
                   v-model="queryParam.timeRange"
-                  format="YYYY-MM-DD"
+                  format="YYYY-MM"
                   :placeholder="['开始时间', '结束时间']"
                   @change="onTimeChange"
               />
@@ -33,7 +33,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单日数据')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('订单月数据')">导出</a-button>
       <!-- 高级查询区域 -->
       <j-super-query :fieldList="superFieldList" ref="superQueryModal"
                      @handleSuperQuery="handleSuperQuery"></j-super-query>
@@ -65,11 +65,11 @@ import { getAction } from '@/api/manage';
 import '@/assets/less/TableExpand.less';
 
 export default {
-  name: "JshOrderSummaryDailyList",
+  name: "JshOrderSummaryMonthlyList",
   mixins: [JeecgListMixin],
   data() {
     return {
-      description: 'jsh_order_summary_daily管理页面',
+      description: 'jsh_order_summary_monthly管理页面',
       // 表头
       columns: [
         {
@@ -84,7 +84,7 @@ export default {
         {
           title: '客户',
           align: "center",
-          dataIndex: 'customerId'
+          dataIndex: 'customerId_dictText'
         },
         {
           title: '总订单数',
@@ -103,8 +103,8 @@ export default {
         },
       ],
       url: {
-        list: "/business/order/jshOrderSummaryDaily/list",
-        exportXlsUrl: "/business/order/jshOrderSummaryDaily/exportXls",
+        list: "/business/order/jshOrderSummaryMonthly/list",
+        exportXlsUrl: "/business/order/jshOrderSummaryMonthly/exportXls",
       },
       dictOptions: {},
       /* 分页参数 */

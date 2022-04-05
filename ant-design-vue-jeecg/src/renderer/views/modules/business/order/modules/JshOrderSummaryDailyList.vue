@@ -1,11 +1,5 @@
 <template>
   <a-card :bordered="false">
-    <a-tabs>
-      <a-tab-pane tab="日数据" key="daily">
-      </a-tab-pane>
-      <a-tab-pane tab="月数据" key="monthly">
-      </a-tab-pane>
-    </a-tabs>
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
@@ -90,7 +84,7 @@ export default {
         {
           title: '客户',
           align: "center",
-          dataIndex: 'customerId'
+          dataIndex: 'customerId_dictText'
         },
         {
           title: '总订单数',

@@ -5,6 +5,7 @@
             resultType="org.jeecg.modules.business.order.entity.JshOrderSummary">
         SELECT
             tenant_id AS tenantId,
+            customer_id AS customerId,
             SUM( total_num ) AS totalNum,
             SUM( total_area ) AS totalArea,
             SUM( total_price ) AS totalPrice
@@ -13,7 +14,8 @@
         WHERE `time` BETWEEN #{startTime} AND #{endTime}
         AND tenant_id != 0
         GROUP BY
-            tenant_id
+            tenant_id,
+            customer_id
     </select>
 
     <!-- 批量插入数据 -->

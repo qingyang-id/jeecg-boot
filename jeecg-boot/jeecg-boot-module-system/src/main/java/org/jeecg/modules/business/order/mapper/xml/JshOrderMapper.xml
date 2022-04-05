@@ -13,7 +13,7 @@
             jsh_order
         WHERE order_time BETWEEN #{startTime} AND #{endTime}
         GROUP BY
-            customer_id,
-            tenant_id
+            tenant_id,
+            customer_id
     </select>
 </mapper>

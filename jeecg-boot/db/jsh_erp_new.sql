@@ -363,6 +363,7 @@ VALUES (1, 'darwin', '1.0.0', 1001000000, '1. 人更新修复\n2. 修复部分bu
 DROP TABLE IF EXISTS `jsh_order_summary_daily`;
 CREATE TABLE `jsh_order_summary_daily`
 (
+    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `time`  date     NOT NULL COMMENT '时间',
     `tenant_id`   bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id, 0代表所有',
@@ -372,7 +373,8 @@ CREATE TABLE `jsh_order_summary_daily`
     `del_flag`    int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
     `update_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    PRIMARY KEY (`time`, `tenant_id`, `customer_id`) USING BTREE,
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_time_tenant_id_customer_id`(`time`, `tenant_id`, `customer_id`) USING BTREE,
     KEY           `idx_tenant_id` (`tenant_id`),
     KEY           `idx_customer_id` (`customer_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单每日汇总表';
@@ -383,6 +385,7 @@ CREATE TABLE `jsh_order_summary_daily`
 DROP TABLE IF EXISTS `jsh_order_summary_monthly`;
 CREATE TABLE `jsh_order_summary_monthly`
 (
+    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `time`  date     NOT NULL COMMENT '时间',
     `tenant_id`   bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     `customer_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '客户id, 0代表所有',
@@ -392,7 +395,8 @@ CREATE TABLE `jsh_order_summary_monthly`
     `del_flag`    int(1) NOT NULL DEFAULT 0 COMMENT '删除状态:0未删除,1删除',
     `update_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    PRIMARY KEY (`time`, `tenant_id`, `customer_id`) USING BTREE,
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_time_tenant_id_customer_id`(`time`, `tenant_id`, `customer_id`) USING BTREE,
     KEY           `idx_tenant_id` (`tenant_id`),
     KEY           `idx_customer_id` (`customer_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单每月汇总表';

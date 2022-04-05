@@ -32,7 +32,7 @@
           <a-col :md="8" :sm="24">
             <a-form-model-item label="下单时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderTime">
               <j-date placeholder="请选择下单时间" v-model="model.orderTime" :show-time="true"
-                      date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
+                      date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" :disabled="model.id"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">

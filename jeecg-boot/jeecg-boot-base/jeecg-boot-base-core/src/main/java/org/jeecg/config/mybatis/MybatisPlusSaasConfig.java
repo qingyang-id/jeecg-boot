@@ -47,6 +47,8 @@ public class MybatisPlusSaasConfig {
         tenantTable.add("jsh_order_product");
         tenantTable.add("jsh_order_product_detail");
         tenantTable.add("jsh_order_product_extend");
+        tenantTable.add("jsh_order_summary_daily");
+        tenantTable.add("jsh_order_summary_monthly");
     }
 
 
