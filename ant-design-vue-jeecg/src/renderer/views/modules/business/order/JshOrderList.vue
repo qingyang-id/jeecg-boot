@@ -294,28 +294,6 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
       this.selectionRows = selectionRows;
     },
-    loadData(arg) {
-      if (!this.url.list) {
-        this.$message.error("请设置url.list属性!");
-        return;
-      }
-      // 加载数据 若传入参数1则加载第一页的内容
-      if (arg === 1) {
-        this.ipagination.current = 1;
-      }
-      this.onClearSelected();
-      const params = this.getQueryParams();//查询条件
-      this.loading = true;
-      getAction(this.url.list, params).then((res) => {
-        if (res.success) {
-          this.dataSource = res.result.records;
-          this.ipagination.total = res.result.total;
-        } else {
-          this.$message.warning(res.message);
-        }
-        this.loading = false;
-      });
-    },
     getSuperFieldList() {
       let fieldList = [];
       fieldList.push({ type: 'string', value: 'orderCode', text: '订单编码', dictCode: '' });
@@ -327,8 +305,6 @@ export default {
         dictText: 'name',
         dictCode: 'id'
       });
-      fieldList.push({ type: 'double', value: 'totalArea', text: '总面积(m²)', dictCode: '' });
-      fieldList.push({ type: 'double', value: 'totalPrice', text: '订单总额(元)', dictCode: '' });
       fieldList.push({ type: 'date', value: 'orderTime', text: '下单时间' });
       fieldList.push({ type: 'string', value: 'address', text: '地址', dictTable: '' });
       fieldList.push({ type: 'string', value: 'remark', text: '备注', dictCode: '' });

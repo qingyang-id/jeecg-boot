@@ -85,6 +85,9 @@ public class JshOrderSummaryMonthlyController extends JeecgController<JshOrderSu
    public ModelAndView exportXls(HttpServletRequest request, JshOrderSummaryMonthly jshOrderSummaryMonthly) {
        // Step.1 组装查询条件查询数据
        QueryWrapper<JshOrderSummaryMonthly> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderSummaryMonthly, request.getParameterMap());
+       if (jshOrderSummaryMonthly.getCustomerId() == null) {
+           queryWrapper.ne("customer_id", 0L);
+       }
        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
        //Step.2 获取导出数据

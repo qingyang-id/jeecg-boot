@@ -85,6 +85,9 @@ public class JshOrderSummaryDailyController extends JeecgController<JshOrderSumm
    public ModelAndView exportXls(HttpServletRequest request, JshOrderSummaryDaily jshOrderSummaryDaily) {
        // Step.1 组装查询条件查询数据
        QueryWrapper<JshOrderSummaryDaily> queryWrapper = QueryGenerator.initQueryWrapper(jshOrderSummaryDaily, request.getParameterMap());
+       if (jshOrderSummaryDaily.getCustomerId() == null) {
+           queryWrapper.ne("customer_id", 0L);
+       }
        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
        //Step.2 获取导出数据
