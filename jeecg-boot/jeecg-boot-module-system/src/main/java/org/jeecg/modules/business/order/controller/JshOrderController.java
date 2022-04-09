@@ -18,7 +18,6 @@ import org.jeecg.modules.business.order.entity.JshOrderProduct;
 import org.jeecg.modules.business.order.service.IJshOrderProductService;
 import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
-import org.jeecg.modules.business.order.vo.JshOrderProductVo;
 import org.jeecg.modules.business.order.vo.JshOrderVo;
 import org.jeecg.modules.business.sequence.constant.SequenceConstant;
 import org.jeecg.modules.business.sequence.service.IJshSequenceService;
@@ -37,9 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -194,48 +190,25 @@ public class JshOrderController extends JeecgController<JshOrder, IJshOrderServi
     public ModelAndView exportXls(HttpServletRequest request, JshOrder jshOrder) {
         // Step.1 组装查询条件查询数据
         QueryWrapper<JshOrder> queryWrapper = QueryGenerator.initQueryWrapper(jshOrder, request.getParameterMap());
-        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-
-        //Step.2 获取导出数据
-        List<JshOrder> queryList = jshOrderService.list(queryWrapper);
         // 过滤选中数据
         String selections = request.getParameter("selections");
-        List<JshOrder> jshOrderList;
-        if (oConvertUtils.isEmpty(selections)) {
-            jshOrderList = queryList;
-        } else {
-            List<String> selectionList = Arrays.asList(selections.split(","));
-            jshOrderList = queryList.stream().filter(item -> selectionList.contains(String.valueOf(item.getId()))).collect(Collectors.toList());
+        if (!oConvertUtils.isEmpty(selections)) {
+            List<Long> ids = Arrays.stream(selections.split(",")).map(idStr -> {
+                try {
+                    return Long.parseLong(idStr);
+                } catch (Exception e){
+                    log.error("Id {} parse to long error:", idStr, e);
+                    return 0L;
+                }
+            }).collect(Collectors.toList());
+            queryWrapper.in("id", ids);
         }
-
+        // Step.2 获取导出数据
         // Step.3 组装pageList
-        List<JshOrderVo> pageList = new ArrayList<>();
-        for (JshOrder main : jshOrderList) {
-            JshOrderVo vo = new JshOrderVo();
-            BeanUtils.copyProperties(main, vo);
-            // 格式化面积/资金
-            vo.setTotalArea(BigDecimal.valueOf(main.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
-            vo.setTotalPrice(BigDecimal.valueOf(main.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
-
-            List<JshOrderProductVo> jshOrderProductVoList = new ArrayList<>();
-            List<JshOrderProduct> jshOrderProductList = jshOrderProductService.selectByMainId(main.getId());
-            for (JshOrderProduct jshOrderProduct : jshOrderProductList) {
-                JshOrderProductVo jshOrderProductVo = new JshOrderProductVo();
-                BeanUtils.copyProperties(jshOrderProduct, jshOrderProductVo);
-                // 格式化单价/面积/资金
-                jshOrderProductVo.setPrice(BigDecimal.valueOf(jshOrderProduct.getPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
-                jshOrderProductVo.setExtendPrice(BigDecimal.valueOf(jshOrderProduct.getExtendPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
-                jshOrderProductVo.setTotalArea(BigDecimal.valueOf(jshOrderProduct.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
-                jshOrderProductVo.setTotalPrice(BigDecimal.valueOf(jshOrderProduct.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
-
-                jshOrderProductVoList.add(jshOrderProductVo);
-            }
-            vo.setJshOrderProductVoList(jshOrderProductVoList);
-
-            pageList.add(vo);
-        }
+        List<JshOrderVo> pageList = jshOrderService.getOrderExportList(queryWrapper);
 
         // Step.4 AutoPoi 导出Excel
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         mv.addObject(NormalExcelConstants.FILE_NAME, "订单信息");
         mv.addObject(NormalExcelConstants.CLASS, JshOrderVo.class);

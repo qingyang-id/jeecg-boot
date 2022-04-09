@@ -12,10 +12,15 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.system.vo.LoginUser;
-import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.util.DateUtils;
+import org.jeecg.modules.business.order.entity.JshOrder;
 import org.jeecg.modules.business.order.entity.JshOrderSummaryDaily;
+import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.service.IJshOrderSummaryDailyService;
+import org.jeecg.modules.business.order.vo.JshOrderProductVo;
 import org.jeecg.modules.business.order.vo.JshOrderSummaryDailyExportVo;
+import org.jeecg.modules.business.order.vo.JshOrderSummaryDetailExportVo;
+import org.jeecg.modules.business.order.vo.JshOrderVo;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
@@ -31,9 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
 * @Description: jsh_order_summary_daily
@@ -49,6 +53,9 @@ public class JshOrderSummaryDailyController extends JeecgController<JshOrderSumm
 
    @Autowired
    private IJshOrderSummaryDailyService jshOrderSummaryDailyService;
+
+   @Autowired
+   private IJshOrderService jshOrderService;
 
 
    /*---------------------------------主表处理-begin-------------------------------------*/
@@ -92,24 +99,34 @@ public class JshOrderSummaryDailyController extends JeecgController<JshOrderSumm
 
        //Step.2 获取导出数据
        List<JshOrderSummaryDaily> queryList = jshOrderSummaryDailyService.list(queryWrapper);
-       // 过滤选中数据
-       String selections = request.getParameter("selections");
-       List<JshOrderSummaryDaily> jshOrderSummaryDailyList;
-       if (oConvertUtils.isEmpty(selections)) {
-           jshOrderSummaryDailyList = queryList;
-       } else {
-           List<String> selectionList = Arrays.asList(selections.split(","));
-           jshOrderSummaryDailyList = queryList.stream().filter(item -> selectionList.contains(String.valueOf(item.getId()))).collect(Collectors.toList());
-       }
 
        // Step.3 组装pageList
        List<JshOrderSummaryDailyExportVo> pageList = new ArrayList<>();
-       for (JshOrderSummaryDaily main : jshOrderSummaryDailyList) {
+       for (JshOrderSummaryDaily main : queryList) {
            JshOrderSummaryDailyExportVo jshOrderSummaryDailyExportVo = new JshOrderSummaryDailyExportVo();
            BeanUtils.copyProperties(main, jshOrderSummaryDailyExportVo);
            // 格式化面积/资金
            jshOrderSummaryDailyExportVo.setTotalArea(BigDecimal.valueOf(main.getTotalArea()).divide(new BigDecimal("1000000"), 3, RoundingMode.CEILING));
            jshOrderSummaryDailyExportVo.setTotalPrice(BigDecimal.valueOf(main.getTotalPrice()).divide(new BigDecimal("100"), 2, RoundingMode.CEILING));
+
+           // 查询当天订单明细
+           Date startTime = DateUtils.getDateBegin(main.getTime());
+           Date endTime = DateUtils.getDateEnd(main.getTime());
+           QueryWrapper<JshOrder> jshOrderQueryWrapper = new QueryWrapper<>();
+           jshOrderQueryWrapper.between("order_time", startTime, endTime);
+           if (main.getCustomerId() != 0) jshOrderQueryWrapper.eq("customer_id", main.getCustomerId());
+           jshOrderQueryWrapper.orderByDesc("id");
+           List<JshOrderVo> jshOrderVoList = jshOrderService.getOrderExportList(jshOrderQueryWrapper);
+           List<JshOrderSummaryDetailExportVo> jshOrderSummaryDetailExportVoList = new ArrayList<>();
+           for (JshOrderVo jshOrderVo : jshOrderVoList) {
+               for (JshOrderProductVo jshOrderProductVo: jshOrderVo.getJshOrderProductVoList()) {
+                   JshOrderSummaryDetailExportVo jshOrderSummaryDetailExportVo = new JshOrderSummaryDetailExportVo();
+                   BeanUtils.copyProperties(jshOrderVo, jshOrderSummaryDetailExportVo);
+                   BeanUtils.copyProperties(jshOrderProductVo, jshOrderSummaryDetailExportVo);
+                   jshOrderSummaryDetailExportVoList.add(jshOrderSummaryDetailExportVo);
+               }
+           }
+           jshOrderSummaryDailyExportVo.setJshOrderSummaryDetailExportVoList(jshOrderSummaryDetailExportVoList);
            pageList.add(jshOrderSummaryDailyExportVo);
        }
 

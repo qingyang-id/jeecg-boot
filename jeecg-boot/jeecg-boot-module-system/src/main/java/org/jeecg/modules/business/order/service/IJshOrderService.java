@@ -1,11 +1,14 @@
 package org.jeecg.modules.business.order.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.business.order.entity.JshOrder;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
+import org.jeecg.modules.business.order.vo.JshOrderVo;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @Description: jsh_order
@@ -37,4 +40,5 @@ public interface IJshOrderService extends IService<JshOrder> {
 	 */
 	public void delBatchMain (Collection<? extends Serializable> idList);
 
+	List<JshOrderVo> getOrderExportList(QueryWrapper<JshOrder> queryWrapper);
 }

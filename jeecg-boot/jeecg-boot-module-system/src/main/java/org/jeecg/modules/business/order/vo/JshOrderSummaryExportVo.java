@@ -2,8 +2,10 @@ package org.jeecg.modules.business.order.vo;
 
 import lombok.Data;
 import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelCollection;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Description: jsh_order_summary
@@ -36,4 +38,7 @@ public class JshOrderSummaryExportVo {
      */
     @Excel(name = "订单总额(元)", width = 15)
     private BigDecimal totalPrice;
+
+    @ExcelCollection(name = "订单明细")
+    private List<JshOrderSummaryDetailExportVo> jshOrderSummaryDetailExportVoList;
 }
