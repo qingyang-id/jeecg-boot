@@ -53,7 +53,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
       jshOrderSummaryList.add(jshOrderSummary);
       jshOrderSummaryDailyMapper.batchInsertOrUpdate(jshOrderSummaryList);
     }
-    // 复合近10天的数据
+    // 复合近2天的数据
     Date lastDay = org.apache.commons.lang3.time.DateUtils.addDays(startTime, -1);
     this.statisticDailyOrders(lastDay, deeps + 1);
   }
