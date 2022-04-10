@@ -1,11 +1,9 @@
 package org.jeecg.modules.business.order.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.modules.business.order.entity.JshOrderSummary;
 import org.jeecg.modules.business.order.entity.JshOrderSummaryDaily;
-import org.jeecg.modules.business.order.entity.JshOrderSummaryMonthly;
 import org.jeecg.modules.business.order.mapper.JshOrderMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderSummaryDailyMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderSummaryMonthlyMapper;
@@ -13,7 +11,6 @@ import org.jeecg.modules.business.order.service.IJshOrderSummaryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +42,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
     List<JshOrderSummary> jshOrderSummaryList = jshOrderMapper.selectDailyOrderSummary(startTime, endTime);
     if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
       // 计算总账
-      JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime);
+      JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime, jshOrderSummaryList.get(0).getTenantId());
       jshOrderSummaryList = jshOrderSummaryList.stream()
               .map(item -> {
                 jshOrderSummary.setTotalNum(jshOrderSummary.getTotalNum() + item.getTotalNum());
@@ -55,17 +52,10 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
               }).collect(Collectors.toList());
       jshOrderSummaryList.add(jshOrderSummary);
       jshOrderSummaryDailyMapper.batchInsertOrUpdate(jshOrderSummaryList);
-    } else {
-      jshOrderSummaryDailyMapper.batchInsertOrUpdate(Collections.singletonList(new JshOrderSummary(startTime)));
     }
-    // 检查前一天数据是否已统计, 最多复合近10天的数据
+    // 复合近10天的数据
     Date lastDay = org.apache.commons.lang3.time.DateUtils.addDays(startTime, -1);
-    LambdaUpdateWrapper<JshOrderSummaryDaily> jshOrderSummaryDailyLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-    jshOrderSummaryDailyLambdaUpdateWrapper.eq(JshOrderSummary::getTime, lastDay);
-    JshOrderSummaryDaily jshOrderSummaryDaily = jshOrderSummaryDailyMapper.selectOne(jshOrderSummaryDailyLambdaUpdateWrapper);
-    if (jshOrderSummaryDaily == null) {
-      this.statisticDailyOrders(lastDay, deeps + 1);
-    }
+    this.statisticDailyOrders(lastDay, deeps + 1);
   }
 
   @Override
@@ -77,7 +67,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
     List<JshOrderSummary> jshOrderSummaryList = jshOrderSummaryDailyMapper.selectOrderSummary(startTime, endTime);
     if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
       // 计算总账
-      JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime);
+      JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime, jshOrderSummaryList.get(0).getTenantId());
       jshOrderSummaryList = jshOrderSummaryList.stream()
               .map(item -> {
                 jshOrderSummary.setTotalNum(jshOrderSummary.getTotalNum() + item.getTotalNum());
@@ -87,16 +77,9 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
               }).collect(Collectors.toList());
       jshOrderSummaryList.add(jshOrderSummary);
       jshOrderSummaryMonthlyMapper.batchInsertOrUpdate(jshOrderSummaryList);
-    } else {
-      jshOrderSummaryMonthlyMapper.batchInsertOrUpdate(Collections.singletonList(new JshOrderSummary(startTime)));
     }
-    // 检查上一月数据是否已统计
+    // 重新统计上一月数据
     Date lastMonth = org.apache.commons.lang3.time.DateUtils.addMonths(startTime, -1);
-    LambdaUpdateWrapper<JshOrderSummaryMonthly> jshOrderSummaryDailyLambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-    jshOrderSummaryDailyLambdaUpdateWrapper.eq(JshOrderSummary::getTime, lastMonth);
-    JshOrderSummaryMonthly jshOrderSummaryMonthly = jshOrderSummaryMonthlyMapper.selectOne(jshOrderSummaryDailyLambdaUpdateWrapper);
-    if (jshOrderSummaryMonthly == null) {
-      this.statisticMonthlyOrders(lastMonth, deeps + 1);
-    }
+    this.statisticMonthlyOrders(lastMonth, deeps + 1);
   }
 }

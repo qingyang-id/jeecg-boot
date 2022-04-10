@@ -100,10 +100,10 @@ public class JshOrderSummary implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    public JshOrderSummary(Date time) {
+    public JshOrderSummary(Date time, Long tenantId) {
         this.time = time;
         this.customerId = 0L;
-        this.tenantId = 0L;
+        this.tenantId = tenantId;
         this.totalNum = 0L;
         this.totalArea = 0L;
         this.totalPrice = 0L;
