@@ -61,49 +61,36 @@
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
-        style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+          style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
       <a-table
-        ref="table"
-        size="middle"
-        bordered
-        rowKey="id"
-        class="j-table-force-nowrap"
-        :scroll="{x:true}"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :sorter="isorter"
-        :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type:'radio'}"
-        :customRow="clickThenSelect"
-        @change="handleTableChange">
-
-        <template slot="htmlSlot" slot-scope="text">
-          <div v-html="text"></div>
-        </template>
-        <template slot="imgSlot" slot-scope="text">
-          <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="getImgView(text)" height="25px" alt=""
-               style="max-width:80px;font-size: 12px;font-style: italic;"/>
-        </template>
-        <template slot="fileSlot" slot-scope="text">
-          <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
-          <a-button
-            v-else
-            :ghost="true"
-            type="primary"
-            icon="download"
-            size="small"
-            @click="downloadFile(text)">
-            下载
-          </a-button>
-        </template>
+          ref="table"
+          size="middle"
+          bordered
+          rowKey="id"
+          class="j-table-force-nowrap"
+          :scroll="{x:true}"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="ipagination"
+          :sorter="isorter"
+          :loading="loading"
+          :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, type:'radio'}"
+          :customRow="clickThenSelect"
+          @change="handleTableChange">
+        <span slot="status" slot-scope="text, record, index">
+            <a-tag color="pink" v-if="text==0">禁用</a-tag>
+            <a-tag color="#87d068" v-if="text==1" >正常</a-tag>
+        </span>
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical"/>
+          <a-popconfirm :title="`确定${ record.status === 1 ? '禁用' : '启用' }吗?`" @confirm="() => handleStatus(record)">
+                  <a>{{ record.status === 1 ? '禁用' : '启用' }}</a>
+                </a-popconfirm>
 
           <a-divider type="vertical"/>
           <a-dropdown>
@@ -126,11 +113,11 @@
 
     <a-tabs defaultActiveKey="1">
       <a-tab-pane tab="客户地址信息" key="1">
-        <JshCustomerAddressList :mainId="selectedMainId"/>
+        <JshCustomerAddressList :mainId="selectedMainId+''"/>
       </a-tab-pane>
     </a-tabs>
 
-    <jsh-customer-modal :mainId="selectedMainId" ref="modalForm" @ok="modalFormOk"></jsh-customer-modal>
+    <jsh-customer-modal :mainId="selectedMainId+''" ref="modalForm" @ok="modalFormOk"></jsh-customer-modal>
   </a-card>
 </template>
 
@@ -138,7 +125,7 @@
 
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshCustomerModal from './modules/JshCustomerModal';
-import { getAction } from '@/api/manage';
+import { getAction, postAction } from '@/api/manage';
 import JshCustomerAddressList from './JshCustomerAddressList';
 import '@/assets/less/TableExpand.less';
 
@@ -190,6 +177,18 @@ export default {
           dataIndex: 'phone'
         },
         {
+          title: '排序',
+          align: 'center',
+          dataIndex: 'rank',
+          sorter: true,
+        },
+        {
+          title: '状态',
+          align: 'center',
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: "center",
@@ -220,6 +219,7 @@ export default {
       ],
       url: {
         list: "/business/customer/jshCustomer/list",
+        updateStatus: "/business/customer/jshCustomer/status",
         delete: "/business/customer/jshCustomer/delete",
         deleteBatch: "/business/customer/jshCustomer/deleteBatch",
         exportXlsUrl: "/business/customer/jshCustomer/exportXls",
@@ -228,7 +228,7 @@ export default {
       dictOptions: {
         sex: [],
       },
-      selectedMainId: 0,
+      selectedMainId: '',
       superFieldList: [],
     };
   },
@@ -281,6 +281,19 @@ export default {
         }
         if (res.code === 510) {
           this.$message.warning(res.message);
+        }
+        this.loading = false;
+      });
+    },
+    handleStatus(record) {
+      console.log('\n\n\n record', record)
+      this.loading = true;
+      postAction(this.url.updateStatus, record).then((res) => {
+        if (res.success) {
+          this.$message.success(res.message);
+          this.loadData();
+        } else {
+          this.$message.error(res.message);
         }
         this.loading = false;
       });

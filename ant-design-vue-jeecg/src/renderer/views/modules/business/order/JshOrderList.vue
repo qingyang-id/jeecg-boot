@@ -11,18 +11,19 @@
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="客户">
-              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" dict="jsh_customer,name,id"/>
+              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId"
+                                   :dictOptions="customerDictOptions"/>
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
             <a-col :xl="12" :lg="14" :md="16" :sm="24">
               <a-form-item label="订单日期">
                 <a-range-picker
-                  style="width:100%"
-                  v-model="queryParam.orderTimeRange"
-                  format="YYYY-MM-DD"
-                  :placeholder="['开始时间', '结束时间']"
-                  @change="onOrderTimeChange"
+                    style="width:100%"
+                    v-model="queryParam.orderTimeRange"
+                    format="YYYY-MM-DD"
+                    :placeholder="['开始时间', '结束时间']"
+                    @change="onOrderTimeChange"
                 />
               </a-form-item>
             </a-col>
@@ -70,25 +71,25 @@
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
-        style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+          style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
       <a-table
-        ref="table"
-        size="middle"
-        bordered
-        rowKey="id"
-        class="j-table-force-nowrap"
-        :scroll="{x:true}"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :sorter="isorter"
-        :loading="loading"
-        :rowSelection="{selectedRowKeys, onChange: onSelectChange, type:'radio'}"
-        :customRow="clickThenSelect"
-        @change="handleTableChange">
+          ref="table"
+          size="middle"
+          bordered
+          rowKey="id"
+          class="j-table-force-nowrap"
+          :scroll="{x:true}"
+          :columns="columns"
+          :dataSource="dataSource"
+          :pagination="ipagination"
+          :sorter="isorter"
+          :loading="loading"
+          :rowSelection="{selectedRowKeys, onChange: onSelectChange, type:'radio'}"
+          :customRow="clickThenSelect"
+          @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
           <a @click="printDetail(record,'生产单')">生产单打印</a>
@@ -138,14 +139,13 @@
 </template>
 
 <script>
-
+import { getAction } from '@/api/manage';
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshOrderModal from './modules/JshOrderModal';
 import JshOrderProductDetailList from './modules/JshOrderProductDetailList';
 import JshOrderProductList from './modules/JshOrderProductList';
 import OrderDetail from './dialog/OrderDetail';
 import '@/assets/less/TableExpand.less';
-import { getAction } from "@api/manage";
 
 export default {
   name: "JshOrderList",
@@ -254,10 +254,12 @@ export default {
       },
       selectedMainId: 0, // 选中的ID
       superFieldList: [],
+      customerDictOptions: [],
     };
   },
   created() {
     this.getSuperFieldList();
+    this.initDictConfig();
   },
   computed: {
     currentId() {
@@ -274,6 +276,18 @@ export default {
       this.queryParam.orderTime_end = dateString[1];
     },
     initDictConfig() {
+      //初始化字典 - 客户
+      getAction('/business/customer/jshCustomer/list?status=1&pageSize=5000&column=rank&order=asc').then((res) => {
+        if (res.success) {
+          this.customerDictOptions = res.result.records
+              .sort((a, b) => a.rank - b.rank)
+              .map(item => ({
+                value: `${item.id}`,
+                text: item.name,
+                title: item.name,
+              }));
+        }
+      });
     },
     clickThenSelect(record) {
       return {

@@ -87,9 +87,12 @@ CREATE TABLE `jsh_customer`
     `sex`         tinyint(1) NOT NULL DEFAULT 0 COMMENT '客户性别:1男,2女,0未知',
     `address`     varchar(300) NOT NULL DEFAULT '' COMMENT '地址',
     `phone`       varchar(32)  NOT NULL DEFAULT '' COMMENT '手机',
+    `rank`   int(10) NOT NULL DEFAULT 0 COMMENT '排序',
+    `status`               tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态:1启用,0禁用',
     `tenant_id`   bigint(20) NOT NULL DEFAULT 0 COMMENT '租户id',
     PRIMARY KEY (`id`) USING BTREE,
     KEY           `idx_name` (`name`),
+    KEY           `idx_rank` (`rank`),
     KEY           `idx_tenant_id` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户表';
 

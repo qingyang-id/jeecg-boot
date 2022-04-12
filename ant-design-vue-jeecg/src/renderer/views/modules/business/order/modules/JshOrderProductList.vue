@@ -11,7 +11,7 @@
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="客户">
-              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" dict="jsh_customer,name,id"/>
+              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" :dictOptions="customerDictOptions"/>
             </a-form-item>
           </a-col>
           <template v-if="toggleSearchStatus">
@@ -66,6 +66,7 @@
 
 <script>
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
+import { getAction } from '@/api/manage';
 
 import '@/assets/less/TableExpand.less';
 
@@ -219,6 +220,7 @@ export default {
         exportXlsUrl: "/business/order/jshOrderProduct/exportXls",
       },
       superFieldList: [],
+      customerDictOptions: [],
     };
   },
   created() {
@@ -229,6 +231,20 @@ export default {
       this.dataSource = [];
       this.selectedRowKeys = [];
       this.ipagination.current = 1;
+    },
+    initDictConfig() {
+      //初始化字典 - 客户
+      getAction('/business/customer/jshCustomer/list?status=1&pageSize=5000&column=rank&order=asc').then((res) => {
+        if (res.success) {
+          this.customerDictOptions = res.result.records
+              .sort((a, b) => a.rank - b.rank)
+              .map(item => ({
+                value: `${item.id}`,
+                text: item.name,
+                title: item.name,
+              }));
+        }
+      });
     },
   }
 };

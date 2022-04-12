@@ -1,6 +1,7 @@
 package org.jeecg.modules.business.customer.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -104,6 +105,32 @@ public class JshCustomerController extends JeecgController<JshCustomer, IJshCust
   public Result<?> edit(@RequestBody JshCustomer jshCustomer) {
     jshCustomerService.updateById(jshCustomer);
     return Result.OK("编辑成功!");
+  }
+
+  /**
+   * 修改状态
+   *
+   * @param map
+   * @return
+   */
+  @AutoLog(value = "jsh_customer-修改状态")
+  @ApiOperation(value = "jsh_customer-修改状态", notes = "jsh_customer-修改状态")
+  @PostMapping(value = "/status")
+  public Result<?> updateStatus(@RequestBody Map<String, String> map) {
+    if (map.get("id") == null) return Result.error("请求参数错误");
+    if (map.get("status") == null) return Result.error("请求参数错误");
+    Long id = Long.parseLong(map.get("id"));
+    int status = Integer.parseInt(map.get("status"));
+    UpdateWrapper<JshCustomer> jshCustomerUpdateWrapper = new UpdateWrapper<>();
+    if (status == 0) {
+      // enable
+      jshCustomerUpdateWrapper.set("status", 1);
+    } else {
+      jshCustomerUpdateWrapper.set("status", 0);
+    }
+    jshCustomerUpdateWrapper.eq("id", id);
+    jshCustomerService.update(jshCustomerUpdateWrapper);
+    return Result.OK("操作成功!");
   }
 
   /**

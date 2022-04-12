@@ -1,12 +1,12 @@
 <template>
   <a-card :bordered="false">
     <!-- 查询区域 -->
-    <div class="table-page-search-wrapper">
+    <div class="table-page-search-wrapper" v-show="!customerId">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="客户">
-              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" dict="jsh_customer,name,id"/>
+              <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" :dictOptions="customerDictOptions"/>
             </a-form-item>
           </a-col>
           <a-col :xl="12" :lg="14" :md="16" :sm="24">
@@ -34,9 +34,6 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button type="primary" icon="download" @click="handleExportXls('订单月数据')">导出</a-button>
-      <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal"
-                     @handleSuperQuery="handleSuperQuery"></j-super-query>
     </div>
 
     <!-- table区域-begin -->
@@ -67,6 +64,13 @@ import '@/assets/less/TableExpand.less';
 export default {
   name: "JshOrderSummaryMonthlyList",
   mixins: [JeecgListMixin],
+  props: {
+    customerId: {
+      type: String,
+      default: null,
+      required: false
+    }
+  },
   data() {
     return {
       description: 'jsh_order_summary_monthly管理页面',
@@ -126,36 +130,33 @@ export default {
         total: 0
       },
       selectedMainId: '',
-      superFieldList: [],
+      customerDictOptions: [],
     };
+  },
+  created() {
+    if (this.customerId) {
+      this.queryParam.customerId = this.customerId;
+      this.columns = this.columns.filter(item => item.title !== '客户');
+    }
+    console.log('\n\n\n this.customer id: ', this.customerId, typeof this.customerId, this.queryParam);
   },
   methods: {
     onTimeChange(value, dateString) {
-      this.queryParam.time_begin = dateString[0] && moment(dateString[0],'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
+      this.queryParam.time_begin = dateString[0] && moment(dateString[0], 'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
       this.queryParam.time_end = dateString[1] && moment(dateString[1], 'YYYY-MM').endOf("month").format("YYYY-MM-DD") || '';
     },
     initDictConfig() {
-    },
-    loadData(arg) {
-      if (!this.url.list) {
-        this.$message.error("请设置url.list属性!");
-        return;
-      }
-      //加载数据 若传入参数1则加载第一页的内容
-      if (arg === 1) {
-        this.ipagination.current = 1;
-      }
-      var params = this.getQueryParams();//查询条件
-      this.loading = true;
-      getAction(this.url.list, params).then((res) => {
+      //初始化字典 - 客户
+      getAction('/business/customer/jshCustomer/list?status=1&pageSize=5000&column=rank&order=asc').then((res) => {
         if (res.success) {
-          this.dataSource = res.result.records;
-          this.ipagination.total = res.result.total;
+          this.customerDictOptions = res.result.records
+              .sort((a, b) => a.rank - b.rank)
+              .map(item => ({
+                value: `${item.id}`,
+                text: item.name,
+                title: item.name,
+              }));
         }
-        if (res.code === 510) {
-          this.$message.warning(res.message);
-        }
-        this.loading = false;
       });
     },
   }

@@ -83,7 +83,7 @@
       </a-table>
     </div>
 
-    <jshCustomerAddress-modal ref="modalForm" @ok="modalFormOk" :mainId="mainId"></jshCustomerAddress-modal>
+    <jshCustomerAddress-modal ref="modalForm" @ok="modalFormOk" :mainId="mainId+''"></jshCustomerAddress-modal>
   </a-card>
 </template>
 
@@ -98,8 +98,8 @@ export default {
   components: { JshCustomerAddressModal },
   props: {
     mainId: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: null,
       required: false
     }
   },

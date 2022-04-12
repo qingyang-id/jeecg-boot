@@ -36,9 +36,9 @@ export default {
   components: {},
   props: {
     mainId: {
-      type: Number,
+      type: String,
       required: false,
-      default: 0
+      default: null
     }
   },
   data() {

@@ -21,7 +21,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
-              <j-search-select-tag v-model="model.customerId" dict="jsh_customer,name,id,del_flag=0" @change="updateAddresses"/>
+              <j-search-select-tag v-model="model.customerId" :dictOptions="customerDictOptions" @change="updateAddresses"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -32,7 +32,7 @@
           <a-col :md="8" :sm="24">
             <a-form-model-item label="下单时间" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="orderTime">
               <j-date placeholder="请选择下单时间" v-model="model.orderTime" :show-time="true"
-                      date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" :disabled="model.id"/>
+                      date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" :disabled="!!model.id"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -326,7 +326,8 @@ export default {
         jshCustomer: {
           listJshCustomerAddressByMainId: "/business/customer/jshCustomer/listJshCustomerAddressByMainId"
         },
-      }
+      },
+      customerDictOptions: [],
     };
   },
   props: {
@@ -347,8 +348,23 @@ export default {
     // 备份model原始值
     this.modelDefault = JSON.parse(JSON.stringify(this.model));
     this.initProductsMap();
+    this.initDictConfig()
   },
   methods: {
+    initDictConfig() {
+      //初始化字典 - 客户
+      getAction('/business/customer/jshCustomer/list?status=1&pageSize=5000&column=rank&order=asc').then((res) => {
+        if (res.success) {
+          this.customerDictOptions = res.result.records
+              .sort((a, b) => a.rank - b.rank)
+              .map(item => ({
+                value: `${item.id}`,
+                text: item.name,
+                title: item.name,
+              }));
+        }
+      });
+    },
     initProductsMap() {
       getAction(this.url.jshProduct.list)
           .then((res) => {

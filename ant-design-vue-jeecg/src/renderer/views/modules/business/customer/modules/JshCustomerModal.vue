@@ -31,6 +31,17 @@
               <a-input v-model="model.phone" placeholder="请输入手机"></a-input>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <a-input-number v-model="model.rank" :min="0" :max="100000" placeholder="请输入排序值，越小越靠前"/>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
+              <j-dict-select-tag v-model="model.status" type="radioButton" title="状态" dictCode="status"
+                                 placeholder="请选择状态"/>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </a-spin>

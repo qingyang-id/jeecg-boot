@@ -98,6 +98,20 @@ public class JshCustomer implements Serializable {
     @Excel(name = "手机", width = 15)
     @ApiModelProperty(value = "手机")
     private java.lang.String phone;
+
+    /**
+     * 排序
+     */
+    @ApiModelProperty(value = "排序")
+    private java.lang.Integer rank;
+
+    /**
+     * 状态:1启用,0禁用
+     */
+    @Excel(name = "状态", width = 15, dicCode = "status")
+    @Dict(dicCode = "status")
+    @ApiModelProperty(value = "状态")
+    private java.lang.Integer status;
     /**
      * 租户id
      */
