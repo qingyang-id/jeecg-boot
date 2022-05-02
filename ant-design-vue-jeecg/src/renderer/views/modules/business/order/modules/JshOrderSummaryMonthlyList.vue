@@ -1,21 +1,20 @@
 <template>
   <a-card :bordered="false">
     <!-- 查询区域 -->
-    <div class="table-page-search-wrapper" v-show="!customerId">
+    <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+          <a-col :xl="6" :lg="7" :md="8" :sm="24" v-show="!customerId">
             <a-form-item label="客户">
               <j-search-select-tag placeholder="请选择客户" v-model="queryParam.customerId" :dictOptions="customerDictOptions"/>
             </a-form-item>
           </a-col>
-          <a-col :xl="12" :lg="14" :md="16" :sm="24">
-            <a-form-item label="日期">
-              <a-range-picker
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="月份">
+              <a-month-picker
                   style="width:100%"
-                  v-model="queryParam.timeRange"
-                  format="YYYY-MM"
-                  :placeholder="['开始时间', '结束时间']"
+                  v-model="queryParam.month"
+                  placeholder="请选择月份"
                   @change="onTimeChange"
               />
             </a-form-item>
@@ -138,12 +137,12 @@ export default {
       this.queryParam.customerId = this.customerId;
       this.columns = this.columns.filter(item => item.title !== '客户');
     }
-    console.log('\n\n\n this.customer id: ', this.customerId, typeof this.customerId, this.queryParam);
   },
   methods: {
     onTimeChange(value, dateString) {
-      this.queryParam.time_begin = dateString[0] && moment(dateString[0], 'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
-      this.queryParam.time_end = dateString[1] && moment(dateString[1], 'YYYY-MM').endOf("month").format("YYYY-MM-DD") || '';
+      console.log('value ', value, dateString)
+      this.queryParam.time = dateString && moment(dateString, 'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
+      console.log('value ', value, dateString, this.queryParam)
     },
     initDictConfig() {
       //初始化字典 - 客户
@@ -157,6 +156,30 @@ export default {
                 title: item.name,
               }));
         }
+      });
+    },
+    loadData(arg) {
+      if (!this.url.list) {
+        this.$message.error("请设置url.list属性!");
+        return;
+      }
+      //加载数据 若传入参数1则加载第一页的内容
+      if (arg === 1) {
+        this.ipagination.current = 1;
+      }
+      this.onClearSelected();
+      var params = this.getQueryParams();//查询条件
+      if (this.customerId) params.customerId = this.customerId;
+      this.loading = true;
+      getAction(this.url.list, params).then((res) => {
+        if (res.success) {
+          this.dataSource = res.result.records;
+          this.ipagination.total = res.result.total;
+        }
+        if (res.code === 510) {
+          this.$message.warning(res.message);
+        }
+        this.loading = false;
       });
     },
   }
