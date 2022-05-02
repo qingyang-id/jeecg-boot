@@ -140,9 +140,7 @@ export default {
   },
   methods: {
     onTimeChange(value, dateString) {
-      console.log('value ', value, dateString)
       this.queryParam.time = dateString && moment(dateString, 'YYYY-MM').startOf("month").format("YYYY-MM-DD") || '';
-      console.log('value ', value, dateString, this.queryParam)
     },
     initDictConfig() {
       //初始化字典 - 客户
