@@ -36,7 +36,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
   @Override
   public void statisticDailyOrders(Date startTime, Integer deeps) {
     // 最多复合近10天的数据
-    if (deeps >= 10) return;
+    if (deeps >= 45) return;
     // 查询当前日期
     Date endTime = DateUtils.getDateEnd(startTime);
     List<JshOrderSummary> jshOrderSummaryList = jshOrderMapper.selectDailyOrderSummary(startTime, endTime);
