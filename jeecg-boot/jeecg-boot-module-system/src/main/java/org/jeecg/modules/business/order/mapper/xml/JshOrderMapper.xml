@@ -12,6 +12,9 @@
         FROM
             jsh_order
         WHERE order_time BETWEEN #{startTime} AND #{endTime}
+        AND tenant_id != 0
+        AND customer_id != 0
+        AND del_flag = 0
         GROUP BY
             tenant_id,
             customer_id
