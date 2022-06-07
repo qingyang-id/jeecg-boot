@@ -16,9 +16,13 @@ public interface JshOrderProductExtendMapper extends BaseMapper<JshOrderProductE
 
   public boolean deleteByMainId(@Param("mainId") Long mainId);
 
+  public boolean logicDeleteByMainId(@Param("mainId") Long mainId);
+
   public List<JshOrderProductExtend> selectByMainId(@Param("mainId") Long mainId);
 
   public boolean deleteByOrderId(@Param("orderId") Long orderId);
+
+  public boolean logicDeleteByOrderId(@Param("orderId") Long orderId);
 
   public List<JshOrderProductExtend> selectByOrderId(@Param("orderId") Long orderId);
 }

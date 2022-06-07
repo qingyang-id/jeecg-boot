@@ -15,9 +15,13 @@ import java.util.List;
 public interface JshOrderProductDetailMapper extends BaseMapper<JshOrderProductDetail> {
   public boolean deleteByMainId(@Param("mainId") Long mainId);
 
+  public boolean logicDeleteByMainId(@Param("mainId") Long mainId);
+
   public List<JshOrderProductDetail> selectByMainId(@Param("mainId") Long mainId);
 
   public boolean deleteByOrderId(@Param("orderId") Long orderId);
+
+  public boolean logicDeleteByOrderId(@Param("orderId") Long orderId);
 
   public List<JshOrderProductDetail> selectByOrderId(@Param("orderId") Long orderId);
 }

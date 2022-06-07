@@ -8,6 +8,12 @@
     WHERE order_product_id = #{mainId}
   </delete>
 
+  <update id="logicDeleteByMainId" parameterType="java.lang.Long">
+    UPDATE jsh_order_product_extend
+    SET del_flag = 1
+    WHERE order_product_id = #{mainId}
+  </update>
+
   <select id="selectByMainId" parameterType="java.lang.Long"
           resultType="org.jeecg.modules.business.order.entity.JshOrderProductExtend">
     SELECT *
@@ -19,6 +25,12 @@
     FROM jsh_order_product_extend
     WHERE order_id = #{orderId}
   </delete>
+
+  <update id="logicDeleteByOrderId" parameterType="java.lang.Long">
+    UPDATE jsh_order_product_extend
+    SET del_flag = 1
+    WHERE order_id = #{orderId}
+  </update>
 
   <select id="selectByOrderId" parameterType="java.lang.Long"
           resultType="org.jeecg.modules.business.order.entity.JshOrderProductExtend">

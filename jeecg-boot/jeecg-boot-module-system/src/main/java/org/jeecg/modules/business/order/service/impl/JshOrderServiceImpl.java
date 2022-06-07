@@ -12,7 +12,6 @@ import org.jeecg.modules.business.order.mapper.JshOrderMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderProductDetailMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderProductExtendMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderProductMapper;
-import org.jeecg.modules.business.order.service.IJshOrderProductService;
 import org.jeecg.modules.business.order.service.IJshOrderService;
 import org.jeecg.modules.business.order.vo.JshOrderPage;
 import org.jeecg.modules.business.order.vo.JshOrderProductPage;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -50,8 +48,6 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
     private JshOrderProductExtendMapper jshOrderProductExtendMapper;
     @Autowired
     private JshOrderProductDetailMapper jshOrderProductDetailMapper;
-    @Resource
-    IJshOrderProductService jshOrderProductService;
 
     void saveSubs(JshOrder jshOrder, List<JshOrderProductPage> jshOrderProductPageList) {
         if (jshOrderProductPageList != null && jshOrderProductPageList.size() > 0) {
@@ -135,9 +131,9 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
     @Override
     @Transactional
     public void delMain(Long id) {
-        jshOrderProductDetailMapper.deleteByOrderId(id);
-        jshOrderProductExtendMapper.deleteByOrderId(id);
-        jshOrderProductMapper.deleteByMainId(id);
+        jshOrderProductDetailMapper.logicDeleteByOrderId(id);
+        jshOrderProductExtendMapper.logicDeleteByOrderId(id);
+        jshOrderProductMapper.logicDeleteByMainId(id);
         jshOrderMapper.deleteById(id);
     }
 
@@ -146,10 +142,7 @@ public class JshOrderServiceImpl extends ServiceImpl<JshOrderMapper, JshOrder> i
     public void delBatchMain(Collection<? extends Serializable> idList) {
         for (Serializable id : idList) {
             Long mainId = Long.parseLong(id.toString());
-            jshOrderProductDetailMapper.deleteByOrderId(mainId);
-            jshOrderProductExtendMapper.deleteByOrderId(mainId);
-            jshOrderProductMapper.deleteByMainId(mainId);
-            jshOrderMapper.deleteById(id);
+            this.delMain(mainId);
         }
     }
 

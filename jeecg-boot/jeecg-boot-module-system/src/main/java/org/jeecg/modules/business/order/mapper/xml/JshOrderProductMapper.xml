@@ -8,6 +8,12 @@
     WHERE order_id = #{mainId}
   </delete>
 
+  <update id="logicDeleteByMainId" parameterType="java.lang.Long">
+    UPDATE jsh_order_product
+    SET del_flag = 1
+    WHERE order_id = #{mainId}
+  </update>
+
   <select id="selectByMainId" parameterType="java.lang.Long"
           resultType="org.jeecg.modules.business.order.entity.JshOrderProduct">
     SELECT *
