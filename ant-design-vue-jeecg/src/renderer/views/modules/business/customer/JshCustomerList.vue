@@ -82,7 +82,7 @@
           @change="handleTableChange">
         <span slot="status" slot-scope="text, record, index">
             <a-tag color="pink" v-if="text==0">禁用</a-tag>
-            <a-tag color="#87d068" v-if="text==1" >正常</a-tag>
+            <a-tag color="#87d068" v-if="text==1">正常</a-tag>
         </span>
 
         <span slot="action" slot-scope="text, record">
@@ -110,13 +110,6 @@
 
       </a-table>
     </div>
-
-    <a-tabs defaultActiveKey="1">
-      <a-tab-pane tab="客户地址信息" key="1">
-        <JshCustomerAddressList :mainId="selectedMainId+''"/>
-      </a-tab-pane>
-    </a-tabs>
-
     <jsh-customer-modal :mainId="selectedMainId+''" ref="modalForm" @ok="modalFormOk"></jsh-customer-modal>
   </a-card>
 </template>
@@ -126,14 +119,12 @@
 import { JeecgListMixin } from '@/mixins/JeecgListMixin';
 import JshCustomerModal from './modules/JshCustomerModal';
 import { getAction, postAction } from '@/api/manage';
-import JshCustomerAddressList from './JshCustomerAddressList';
 import '@/assets/less/TableExpand.less';
 
 export default {
   name: 'JshCustomerList',
   mixins: [JeecgListMixin],
   components: {
-    JshCustomerAddressList,
     JshCustomerModal
   },
   data() {
@@ -286,7 +277,7 @@ export default {
       });
     },
     handleStatus(record) {
-      console.log('\n\n\n record', record)
+      console.log('\n\n\n record', record);
       this.loading = true;
       postAction(this.url.updateStatus, record).then((res) => {
         if (res.success) {

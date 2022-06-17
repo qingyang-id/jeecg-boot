@@ -21,12 +21,12 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="customerId">
-              <j-search-select-tag v-model="model.customerId" :dictOptions="customerDictOptions" @change="updateAddresses"/>
+              <j-search-select-tag v-model="model.customerId" :dictOptions="customerDictOptions"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="地址" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="address">
-              <j-search-select-tag v-model="model.address" :dictOptions="addressDictOptions"/>
+              <a-input v-model="model.address" placeholder="地址" style="width: 100%"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -37,7 +37,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="remark">
-              <a-textarea v-model="model.remark" rows="4" placeholder="请输入备注" />
+              <a-textarea v-model="model.remark" rows="4" placeholder="请输入备注"/>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -62,12 +62,14 @@
             @valueChange="handleValueChange">
           <template v-slot:toolbarSuffix>
             <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
-            <a-button :disabled="disabled" style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin: 0px 0px 8px 0px" @click="batchSetSize('width')">宽-批量设置
+            </a-button>
             <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
-            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
+            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置
+            </a-button>
           </template>
           <template v-slot:action="props">
-            <a :disabled="disabled"  @click="handleCopy(props)">复制</a>
+            <a :disabled="disabled" @click="handleCopy(props)">复制</a>
           </template>
         </j-vxe-table>
         <!-- 表单区域 -->
@@ -98,7 +100,6 @@ export default {
   },
   data() {
     return {
-      addressDictOptions: [{ text: '请选择', value: '', disabled: true }],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 6 },
@@ -116,7 +117,7 @@ export default {
           { required: true, message: '请选择客户!' },
         ],
         address: [
-          { required: true, message: '请选择地址!' },
+          { required: true, message: '请输入地址!' },
         ],
       },
       refKeys: ['jshOrderProduct',],
@@ -240,9 +241,9 @@ export default {
                 handler({ cellValue, row, column }, callback) {
                   const extendNum = cellValue;
                   if (Number(row.extendType) && !extendNum) {
-                    callback(false, '${title}不正确')
+                    callback(false, '${title}不正确');
                   } else {
-                    callback(true)
+                    callback(true);
                   }
                 },
                 message: '${title}不正确'
@@ -340,7 +341,7 @@ export default {
   },
   computed: {
     formDisabled() {
-      console.log('this.disabled ', this.disabled)
+      console.log('this.disabled ', this.disabled);
       return this.disabled;
     },
   },
@@ -348,7 +349,7 @@ export default {
     // 备份model原始值
     this.modelDefault = JSON.parse(JSON.stringify(this.model));
     this.initProductsMap();
-    this.initDictConfig()
+    this.initDictConfig();
   },
   methods: {
     initDictConfig() {
@@ -387,30 +388,6 @@ export default {
       this.calculateSumPrice();
     },
 
-    resetAddresses() {
-      this.addressDictOptions = [{ text: '请先去客户管理-客户信息页面为该用户添加地址', value: '' }];
-    },
-
-    updateAddresses(customerId) {
-      if (!customerId) {
-        this.resetAddresses();
-      }
-      getAction(this.url.jshCustomer.listJshCustomerAddressByMainId, { customerId, pageNo: 1, pageSize: 1000, column: 'id', order: 'desc' })
-          .then((res) => {
-            if (res.success) {
-              if (res.result.records.length) {
-                this.addressDictOptions = res.result.records
-                    .map(item => ({ text: item.address, value: item.address }));
-              } else {
-                this.resetAddresses();
-              }
-            } else {
-              this.$message.error(res.message);
-              this.resetAddresses();
-            }
-          });
-    },
-
     calculateCurrentRowPrice(row) {
       let price = (this.jshProductPricesMap[row.productId] && this.jshProductPricesMap[row.productId].wholesalePrice || 0);
       let extendPrice = 0;
@@ -430,15 +407,18 @@ export default {
           extendPrice = (row.extendNum || 0) * 2000 / 3;
           break;
         }
-        case 2: {
-          // 拉 10/拉
-          extendPrice = (row.extendNum || 0) * 1000;
-          break;
-        }
         case 3: {
           // 条 15/条
           extendPrice = (row.extendNum || 0) * 1500;
           price = 0;
+          break;
+        }
+        case 2: // 拉 10/拉
+        case 4: // 调味篮 10/位
+        case 5:
+        case 6:
+        case 7: {
+          extendPrice = (row.extendNum || 0) * 1000;
           break;
         }
         default: {
@@ -469,7 +449,7 @@ export default {
         totalArea = new BigNumber(totalArea).plus(item.totalArea || 0).toFixed();
         totalPrice = new BigNumber(totalPrice).plus(item.totalPrice || 0).toFixed();
       });
-      console.log('price: ', totalPrice, totalArea)
+      console.log('price: ', totalPrice, totalArea);
       this.model.totalArea = totalArea;
       this.model.totalPrice = totalPrice;
     },
@@ -615,8 +595,6 @@ export default {
         let params = { id: this.model.id, };
         this.model.totalArea = this.model.totalArea ? `${this.model.totalArea / 1000000}` : '0';
         this.model.totalPrice = this.model.totalPrice ? `${this.model.totalPrice / 100}` : '0';
-        // 更新地址列表
-        this.updateAddresses(this.model.customerId);
         // 格式化不起作用
         // this.requestSubTableData(this.url.jshOrderProduct.list, params, this.jshOrderProductTable);
         this.jshOrderProductTable.loading = true;
