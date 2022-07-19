@@ -367,7 +367,7 @@ export default {
       });
     },
     initProductsMap() {
-      getAction(this.url.jshProduct.list)
+      getAction(this.url.jshProduct.list, { pageSize: 5000 })
           .then((res) => {
             if (!res.success) {
               return this.$message.error(res.message);
