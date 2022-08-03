@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.business.order.entity.JshOrderSummary;
 import org.jeecg.modules.business.order.entity.JshOrderSummaryMonthly;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,4 +23,12 @@ public interface JshOrderSummaryMonthlyMapper extends BaseMapper<JshOrderSummary
      */
     @InterceptorIgnore(tenantLine = "true")
     public void batchInsertOrUpdate(@Param("list") List<JshOrderSummary> list);
+
+    /**
+     *  批量初始化数据
+     * @param time
+     * @return
+     */
+    @InterceptorIgnore(tenantLine = "true")
+    public void batchResetByTime(Date time);
 }

@@ -32,4 +32,12 @@ public interface JshOrderSummaryDailyMapper extends BaseMapper<JshOrderSummaryDa
      */
     @InterceptorIgnore(tenantLine = "true")
     public void batchInsertOrUpdate(@Param("list") List<JshOrderSummary> list);
+
+    /**
+     *  批量初始化数据
+     * @param time
+     * @return
+     */
+    @InterceptorIgnore(tenantLine = "true")
+    public void batchResetByTime(Date time);
 }

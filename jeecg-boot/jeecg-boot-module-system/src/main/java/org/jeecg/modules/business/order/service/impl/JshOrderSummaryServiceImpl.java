@@ -1,11 +1,9 @@
 package org.jeecg.modules.business.order.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.modules.business.order.entity.JshOrderSummary;
 import org.jeecg.modules.business.order.entity.JshOrderSummaryDaily;
-import org.jeecg.modules.business.order.entity.JshOrderSummaryMonthly;
 import org.jeecg.modules.business.order.mapper.JshOrderMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderSummaryDailyMapper;
 import org.jeecg.modules.business.order.mapper.JshOrderSummaryMonthlyMapper;
@@ -43,13 +41,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
         Date endTime = DateUtils.getDateEnd(startTime);
         List<JshOrderSummary> jshOrderSummaryList = jshOrderMapper.selectDailyOrderSummary(startTime, endTime);
         // update all to zero
-        LambdaUpdateChainWrapper<JshOrderSummaryDaily> jshOrderSummaryDailyLambdaUpdateChainWrapper = new LambdaUpdateChainWrapper<>(jshOrderSummaryDailyMapper);
-        jshOrderSummaryDailyLambdaUpdateChainWrapper
-                .eq(JshOrderSummaryDaily::getTime, startTime)
-                .set(JshOrderSummaryDaily::getTotalNum, 0L)
-                .set(JshOrderSummaryDaily::getTotalArea, 0L)
-                .set(JshOrderSummaryDaily::getTotalPrice, 0L)
-                .update();
+        jshOrderSummaryDailyMapper.batchResetByTime(startTime);
         if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
             // 计算总账
             JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime, jshOrderSummaryList.get(0).getTenantId());
@@ -76,13 +68,7 @@ public class JshOrderSummaryServiceImpl extends ServiceImpl<JshOrderSummaryDaily
         Date endTime = DateUtils.getMonthEnd(startTime);
         List<JshOrderSummary> jshOrderSummaryList = jshOrderSummaryDailyMapper.selectOrderSummary(startTime, endTime);
         // update all to zero
-        LambdaUpdateChainWrapper<JshOrderSummaryMonthly> jshOrderSummaryMonthlyLambdaUpdateChainWrapper = new LambdaUpdateChainWrapper<>(jshOrderSummaryMonthlyMapper);
-        jshOrderSummaryMonthlyLambdaUpdateChainWrapper
-                .eq(JshOrderSummaryMonthly::getTime, startTime)
-                .set(JshOrderSummaryMonthly::getTotalNum, 0L)
-                .set(JshOrderSummaryMonthly::getTotalArea, 0L)
-                .set(JshOrderSummaryMonthly::getTotalPrice, 0L)
-                .update();
+        jshOrderSummaryMonthlyMapper.batchResetByTime(startTime);
         if (jshOrderSummaryList.size() > 0 && jshOrderSummaryList.get(0).getTenantId() != null) {
             // 计算总账
             JshOrderSummary jshOrderSummary = new JshOrderSummary(startTime, jshOrderSummaryList.get(0).getTenantId());

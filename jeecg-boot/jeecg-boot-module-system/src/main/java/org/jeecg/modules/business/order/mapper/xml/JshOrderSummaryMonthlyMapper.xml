@@ -18,4 +18,10 @@
         </foreach>
         ON DUPLICATE KEY UPDATE total_num=VALUES(total_num), total_area=VALUES(total_area), total_price=VALUES(total_price);
     </insert>
+
+    <update id="batchResetByTime" parameterType="date">
+        UPDATE jsh_order_summary_monthly
+        SET total_num = 0, total_area = 0, total_price = 0
+        WHERE time = #{time,jdbcType=DATE}
+    </update>
 </mapper>
