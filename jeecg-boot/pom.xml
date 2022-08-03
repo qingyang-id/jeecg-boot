@@ -13,6 +13,7 @@
 	</parent>
 
 	<properties>
+		<resource.delimiter>@</resource.delimiter>
 		<jeecgboot.version>3.0</jeecgboot.version>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -323,6 +324,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <configuration>
+					<delimiters>
+						<delimiter>${resource.delimiter}</delimiter>
+					</delimiters>
+					<useDefaultDelimiters>false</useDefaultDelimiters>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>woff</nonFilteredFileExtension>
                         <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
