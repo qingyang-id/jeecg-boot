@@ -396,6 +396,15 @@ export default {
             return `${r.height} * ${r.width} * ${r.num}`;
           },
         },
+        {
+          title: '抽/拉/条',
+          align: "left",
+          dataIndex: 'extendType_dictText',
+          customRender: function (t, r) {
+            if (!r.extendNum) return '';
+            return `${r.extendType_dictText} * ${r.extendNum}`;
+          },
+        },
       ],
       // 铝材数据源
       aluminumDataSource: [],
