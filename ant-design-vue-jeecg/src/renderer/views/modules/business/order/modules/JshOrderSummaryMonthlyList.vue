@@ -128,6 +128,11 @@ export default {
         showSizeChanger: true,
         total: 0
       },
+      /* 排序参数 */
+      isorter:{
+        column: 'id',
+        order: 'desc',
+      },
       selectedMainId: '',
       customerDictOptions: [],
     };

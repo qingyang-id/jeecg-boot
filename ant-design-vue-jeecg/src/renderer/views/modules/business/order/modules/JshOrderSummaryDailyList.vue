@@ -76,6 +76,16 @@ export default {
       // 表头
       columns: [
         {
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: "center",
+          customRender: function (t, r, index) {
+            return parseInt(index) + 1;
+          }
+        },
+        {
           title: '时间',
           align: "center",
           sorter: true,
@@ -127,6 +137,11 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 0
+      },
+      /* 排序参数 */
+      isorter:{
+        column: 'id',
+        order: 'desc',
       },
       selectedMainId: '',
       customerDictOptions: [],

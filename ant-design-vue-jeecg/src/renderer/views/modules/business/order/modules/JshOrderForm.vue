@@ -409,7 +409,7 @@ export default {
         }
         case 3: {
           // 条 15/条
-          extendPrice = (row.extendNum || 0) * 1500;
+          extendPrice = (row.extendNum || 0) * 1000;
           price = 0;
           break;
         }
