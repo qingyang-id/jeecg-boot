@@ -407,12 +407,12 @@ export default {
           extendPrice = (row.extendNum || 0) * 2000 / 3;
           break;
         }
-        case 3: {
-          // 条 15/条
-          // extendPrice = (row.extendNum || 0) * 1000;
-          price = 0;
-          break;
-        }
+        // case 3: {
+        //   // 条 15/条
+        //   extendPrice = (row.extendNum || 0) * 1000;
+        //   price = 0;
+        //   break;
+        // }
         case 2: // 拉 10/拉
         case 4: // 调味篮 10/位
         case 5:
