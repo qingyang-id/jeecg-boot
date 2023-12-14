@@ -415,7 +415,6 @@ export default {
         // }
         case 2: // 拉 10/拉
         case 4: // 调味篮 10/位
-        case 5:
         case 6:
         case 7: {
           extendPrice = (row.extendNum || 0) * 1000;
@@ -517,7 +516,8 @@ export default {
                 }]);
                 break;
               }
-              case 2: {
+              case 2:
+              case 5: {
                 // 拉
                 target.setValues([{
                   rowKey: row.id,
