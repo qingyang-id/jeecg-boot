@@ -516,8 +516,8 @@ export default {
                 }]);
                 break;
               }
-              case 2:
-              case 5: {
+              // 付费拉手
+              case 2: {
                 // 拉
                 target.setValues([{
                   rowKey: row.id,
@@ -525,6 +525,9 @@ export default {
                 }]);
                 break;
               }
+              // 免费拉手
+              case 5:
+              // 条子
               case 3: {
                 // 条
                 target.setValues([{
