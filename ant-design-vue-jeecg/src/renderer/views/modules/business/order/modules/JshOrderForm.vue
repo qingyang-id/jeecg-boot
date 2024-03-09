@@ -516,6 +516,8 @@ export default {
                 }]);
                 break;
               }
+              // 免费拉手
+              case 5:
               // 付费拉手
               case 2: {
                 // 拉
@@ -525,8 +527,6 @@ export default {
                 }]);
                 break;
               }
-              // 免费拉手
-              case 5:
               // 条子
               case 3: {
                 // 条
@@ -675,6 +675,9 @@ export default {
               });
               break;
             }
+            // 免费拉手
+            case 5:
+            // 付费拉手
             case 2: {
               // 拉 原尺寸高/2 - 2
               Object.assign(productDetail, {
