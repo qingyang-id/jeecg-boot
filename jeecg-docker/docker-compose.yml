@@ -32,7 +32,7 @@ services:
     ports:
       - "6379:6379"
   erp-api:
-    image: openjdk:8-jdk
+    image: eclipse-temurin:17-jre
     restart: always
     container_name: erp-api
     links:
@@ -42,17 +42,19 @@ services:
       - mysql
       - redis
     volumes:
-      - "/home/java/erp-api/jeecg-boot-module-system-3.0.jar:/app/erp-api.jar"
+      - "/home/java/erp-api/jeecg-system-start-3.9.5.jar:/app/erp-api.jar"
     entrypoint:
       - "java"
-      - "-Xms1024m"
+      - "-Xms512m"
+      - "-Xmx1g"
+      - "-XX:MaxMetaspaceSize=320m"
       - "-Dspring.profiles.active=prod"
       - "-Duser.timezone=GMT+8"
       - "-Dspring.datasource.dynamic.datasource.master.username=root"
       - "-Dspring.datasource.dynamic.datasource.master.password=${ERP_DB_PASSWORD:?set ERP_DB_PASSWORD in .env}"
-      - "-Dspring.redis.host=redis"
-      - "-Dspring.redis.port=6379"
-      - "-Dspring.redis.password=${REDIS_PASSWORD:?set REDIS_PASSWORD in .env}"
+      - "-Dspring.data.redis.host=redis"
+      - "-Dspring.data.redis.port=6379"
+      - "-Dspring.data.redis.password=${REDIS_PASSWORD:?set REDIS_PASSWORD in .env}"
       - "-jar"
       - "/app/erp-api.jar"
     ports:

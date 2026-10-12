@@ -1,0 +1,257 @@
+package org.jeecg.modules.business.order.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
+import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.business.order.entity.JshOrder;
+import org.jeecg.modules.business.order.entity.JshOrderProduct;
+import org.jeecg.modules.business.order.service.IJshOrderProductService;
+import org.jeecg.modules.business.order.service.IJshOrderService;
+import org.jeecg.modules.business.order.vo.JshOrderPage;
+import org.jeecg.modules.business.order.vo.JshOrderVo;
+import org.jeecg.modules.business.sequence.constant.SequenceConstant;
+import org.jeecg.modules.business.sequence.service.IJshSequenceService;
+import org.jeecgframework.poi.excel.ExcelImportUtil;
+import org.jeecgframework.poi.excel.def.NormalExcelConstants;
+import org.jeecgframework.poi.excel.entity.ExportParams;
+import org.jeecgframework.poi.excel.entity.ImportParams;
+import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * @Description: jsh_order
+ * @Author: jeecg-boot
+ * @Date: 2022-02-04
+ * @Version: V1.0
+ */
+@Tag(name = "jsh_order")
+@RestController
+@RequestMapping("/business/order/jshOrder")
+@Slf4j
+public class JshOrderController extends JeecgController<JshOrder, IJshOrderService> {
+    @Autowired
+    private IJshSequenceService jshSequenceService;
+    @Autowired
+    private IJshOrderService jshOrderService;
+    @Autowired
+    private IJshOrderProductService jshOrderProductService;
+
+    /**
+     * 分页列表查询
+     *
+     * @param jshOrder
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @AutoLog(value = "jsh_order-分页列表查询")
+    @Operation(summary = "jsh_order-分页列表查询", description = "jsh_order-分页列表查询")
+    @GetMapping(value = "/list")
+    public Result<?> queryPageList(JshOrder jshOrder,
+                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                   HttpServletRequest req) {
+        QueryWrapper<JshOrder> queryWrapper = QueryGenerator.initQueryWrapper(jshOrder, req.getParameterMap());
+        Page<JshOrder> page = new Page<JshOrder>(pageNo, pageSize);
+        IPage<JshOrder> pageList = jshOrderService.page(page, queryWrapper);
+        return Result.OK(pageList);
+    }
+
+    /**
+     * 添加
+     *
+     * @param jshOrderPage
+     * @return
+     */
+    @AutoLog(value = "jsh_order-添加")
+    @Operation(summary = "jsh_order-添加", description = "jsh_order-添加")
+    @PostMapping(value = "/add")
+    public Result<?> add(@RequestBody JshOrderPage jshOrderPage) {
+        JshOrder jshOrder = new JshOrder();
+        BeanUtils.copyProperties(jshOrderPage, jshOrder);
+        // 获取order code
+        String orderCode = jshSequenceService.buildOnlyNumber(SequenceConstant.ORDER_NUMBER_SEQ);
+        jshOrderPage.setOrderCode(String.format("T%s", orderCode));
+        jshOrderService.saveMain(jshOrderPage);
+        return Result.OK("添加成功！");
+    }
+
+    /**
+     * 编辑
+     *
+     * @param jshOrderPage
+     * @return
+     */
+    @AutoLog(value = "jsh_order-编辑")
+    @Operation(summary = "jsh_order-编辑", description = "jsh_order-编辑")
+    @PutMapping(value = "/edit")
+    public Result<?> edit(@RequestBody JshOrderPage jshOrderPage) {
+        JshOrder jshOrder = new JshOrder();
+        BeanUtils.copyProperties(jshOrderPage, jshOrder);
+        JshOrder jshOrderEntity = jshOrderService.getById(jshOrder.getId());
+        if (jshOrderEntity == null) {
+            return Result.error("未找到对应数据");
+        }
+        jshOrderService.updateMain(jshOrderPage);
+        return Result.OK("编辑成功!");
+    }
+
+    /**
+     * 通过id删除
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "jsh_order-通过id删除")
+    @Operation(summary = "jsh_order-通过id删除", description = "jsh_order-通过id删除")
+    @DeleteMapping(value = "/delete")
+    public Result<?> delete(@RequestParam(name = "id", required = true) Long id) {
+        jshOrderService.delMain(id);
+        return Result.OK("删除成功!");
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @AutoLog(value = "jsh_order-批量删除")
+    @Operation(summary = "jsh_order-批量删除", description = "jsh_order-批量删除")
+    @DeleteMapping(value = "/deleteBatch")
+    public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
+        this.jshOrderService.delBatchMain(Arrays.asList(ids.split(",")));
+        return Result.OK("批量删除成功！");
+    }
+
+    /**
+     * 通过id查询
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "jsh_order-通过id查询")
+    @Operation(summary = "jsh_order-通过id查询", description = "jsh_order-通过id查询")
+    @GetMapping(value = "/queryById")
+    public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
+        JshOrder jshOrder = jshOrderService.getById(id);
+        if (jshOrder == null) {
+            return Result.error("未找到对应数据");
+        }
+        return Result.OK(jshOrder);
+
+    }
+
+    /**
+     * 通过id查询
+     *
+     * @param id
+     * @return
+     */
+    @AutoLog(value = "jsh_order_product通过主表ID查询")
+    @Operation(summary = "jsh_order_product主表ID查询", description = "jsh_order_product-通主表ID查询")
+    @GetMapping(value = "/queryJshOrderProductByMainId")
+    public Result<?> queryJshOrderProductListByMainId(@RequestParam(name = "id", required = true) Long id) {
+        List<JshOrderProduct> jshOrderProductList = jshOrderProductService.selectByMainId(id);
+        return Result.OK(jshOrderProductList);
+    }
+
+    /**
+     * 导出excel
+     *
+     * @param request
+     * @param jshOrder
+     */
+    @RequestMapping(value = "/exportXls")
+    public ModelAndView exportXls(HttpServletRequest request, JshOrder jshOrder) {
+        // Step.1 组装查询条件查询数据
+        QueryWrapper<JshOrder> queryWrapper = QueryGenerator.initQueryWrapper(jshOrder, request.getParameterMap());
+        // 过滤选中数据
+        String selections = request.getParameter("selections");
+        if (!oConvertUtils.isEmpty(selections)) {
+            List<Long> ids = Arrays.stream(selections.split(",")).map(idStr -> {
+                try {
+                    return Long.parseLong(idStr);
+                } catch (Exception e){
+                    log.error("Id {} parse to long error:", idStr, e);
+                    return 0L;
+                }
+            }).collect(Collectors.toList());
+            queryWrapper.in("id", ids);
+        }
+        // Step.2 获取导出数据
+        // Step.3 组装pageList
+        List<JshOrderVo> pageList = jshOrderService.getOrderExportList(queryWrapper);
+
+        // Step.4 AutoPoi 导出Excel
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
+        mv.addObject(NormalExcelConstants.FILE_NAME, "订单信息");
+        mv.addObject(NormalExcelConstants.CLASS, JshOrderVo.class);
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("订单信息", "导出人:" + sysUser.getRealname(), "订单信息"));
+        mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
+        return mv;
+    }
+
+    /**
+     * 通过excel导入数据
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
+            MultipartFile file = entity.getValue();// 获取上传文件对象
+            ImportParams params = new ImportParams();
+            params.setTitleRows(2);
+            params.setHeadRows(1);
+            params.setNeedSave(true);
+            try {
+                List<JshOrderPage> list = ExcelImportUtil.importExcel(file.getInputStream(), JshOrderPage.class, params);
+                for (JshOrderPage page : list) {
+                    jshOrderService.saveMain(page);
+                }
+                return Result.OK("文件导入成功！数据行数:" + list.size());
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return Result.error("文件导入失败:" + e.getMessage());
+            } finally {
+                try {
+                    file.getInputStream().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return Result.OK("文件导入失败！");
+    }
+
+}

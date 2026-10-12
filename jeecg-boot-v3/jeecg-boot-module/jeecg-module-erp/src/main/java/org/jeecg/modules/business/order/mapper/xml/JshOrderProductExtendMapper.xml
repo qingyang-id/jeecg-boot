@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.order.mapper.JshOrderProductExtendMapper">
+
+  <delete id="deleteByMainId" parameterType="java.lang.Long">
+    DELETE
+    FROM jsh_order_product_extend
+    WHERE order_product_id = #{mainId}
+  </delete>
+
+  <update id="logicDeleteByMainId" parameterType="java.lang.Long">
+    UPDATE jsh_order_product_extend
+    SET del_flag = 1
+    WHERE order_product_id = #{mainId}
+  </update>
+
+  <select id="selectByMainId" parameterType="java.lang.Long"
+          resultType="org.jeecg.modules.business.order.entity.JshOrderProductExtend">
+    SELECT *
+    FROM jsh_order_product_extend
+    WHERE order_product_id = #{mainId}
+  </select>
+  <delete id="deleteByOrderId" parameterType="java.lang.Long">
+    DELETE
+    FROM jsh_order_product_extend
+    WHERE order_id = #{orderId}
+  </delete>
+
+  <update id="logicDeleteByOrderId" parameterType="java.lang.Long">
+    UPDATE jsh_order_product_extend
+    SET del_flag = 1
+    WHERE order_id = #{orderId}
+  </update>
+
+  <select id="selectByOrderId" parameterType="java.lang.Long"
+          resultType="org.jeecg.modules.business.order.entity.JshOrderProductExtend">
+    SELECT *
+    FROM jsh_order_product_extend
+    WHERE order_id = #{orderId}
+  </select>
+</mapper>

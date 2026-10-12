@@ -1,0 +1,17 @@
+# Local-only verify env. Server params mirror prod (queried read-only 2026-10-12):
+# sql_mode, lower_case_table_names=1, utf8mb4/utf8mb4_general_ci, explicit_defaults_for_timestamp=1, TZ CST.
+# max_allowed_packet raised to 256M (prod 4M) only to ease dump import.
+services:
+  mysql:
+    image: mysql:5.7.37
+    platform: linux/amd64
+    container_name: erp-verify-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --lower_case_table_names=1 --explicit_defaults_for_timestamp=1 --max_allowed_packet=256M --sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+    ports: ["127.0.0.1:13306:3306"]
+  redis:
+    image: redis:5.0
+    container_name: erp-verify-redis
+    ports: ["127.0.0.1:16379:6379"]
