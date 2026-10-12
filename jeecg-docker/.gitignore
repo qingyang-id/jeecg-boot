@@ -1,0 +1,8 @@
+.env
+mysql/data/
+mysql/logs/
+redis/data/
+nginx/logs/
+nginx/conf/cert/*.key
+nginx/conf/cert/*.pem
+.omc/

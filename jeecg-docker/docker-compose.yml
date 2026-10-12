@@ -1,0 +1,77 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7.37
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: '%'
+      TZ: Asia/Shanghai
+    env_file:
+      .env
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/logs:/var/log/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:5.0
+    container_name: redis
+    restart: always
+    command: redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:?set REDIS_PASSWORD in .env}
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+  erp-api:
+    image: openjdk:8-jdk
+    restart: always
+    container_name: erp-api
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - "/home/java/erp-api/jeecg-boot-module-system-3.0.jar:/app/erp-api.jar"
+    entrypoint:
+      - "java"
+      - "-Xms1024m"
+      - "-Dspring.profiles.active=prod"
+      - "-Duser.timezone=GMT+8"
+      - "-Dspring.datasource.dynamic.datasource.master.username=root"
+      - "-Dspring.datasource.dynamic.datasource.master.password=${ERP_DB_PASSWORD:?set ERP_DB_PASSWORD in .env}"
+      - "-Dspring.redis.host=redis"
+      - "-Dspring.redis.port=6379"
+      - "-Dspring.redis.password=${REDIS_PASSWORD:?set REDIS_PASSWORD in .env}"
+      - "-jar"
+      - "/app/erp-api.jar"
+    ports:
+      - "8080:8080"
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    restart: always
+    links:
+      - erp-api
+    depends_on:
+      - erp-api
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf/conf.d:/etc/nginx/conf.d
+      - ./nginx/conf/cert:/etc/nginx/cert
+      - ./nginx/logs:/var/log/nginx
+      - /home/www/web/erp:/var/www/web
+      - /home/www/web/electron:/var/www/electron
+    ports:
+      - "80:80"
+      - "443:443"
