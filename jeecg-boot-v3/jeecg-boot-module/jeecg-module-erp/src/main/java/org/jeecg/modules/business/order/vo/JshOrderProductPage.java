@@ -1,0 +1,178 @@
+package org.jeecg.modules.business.order.vo;
+
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.jeecg.common.aspect.annotation.Dict;
+import org.jeecg.modules.business.order.entity.JshOrderProductDetail;
+import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
+import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelCollection;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.List;
+
+/**
+ * @Description: jsh_order_product
+ * @Author: jeecg-boot
+ * @Date: 2022-02-05
+ * @Version: V1.0
+ */
+@Data
+@Schema(description = "jsh_order_product")
+public class JshOrderProductPage {
+
+    /**
+     * 主键
+     */
+    @Schema(description = "主键")
+    private Long id;
+
+    /**
+     * 创建人
+     */
+    @Schema(description = "创建人")
+    private java.lang.String createBy;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "创建时间")
+    private java.util.Date createTime;
+
+    /**
+     * 更新人
+     */
+    @Schema(description = "更新人")
+    private java.lang.String updateBy;
+
+    /**
+     * 更新时间
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "更新时间")
+    private java.util.Date updateTime;
+
+    /**
+     * 删除状态（0，正常，1已删除）
+     */
+    @TableLogic
+    private Integer delFlag;
+
+    /**
+     * 客户id
+     */
+    @Excel(name = "客户", width = 15, dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Dict(dictTable = "jsh_customer", dicText = "name", dicCode = "id")
+    @Schema(description = "客户id")
+    private java.lang.Long customerId;
+    /**
+     * 订单ID
+     */
+    @Excel(name = "订单编号", width = 15, dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @Dict(dictTable = "jsh_order", dicText = "order_code", dicCode = "id")
+    @Schema(description = "订单ID")
+    private java.lang.Long orderId;
+    /**
+     * 产品id
+     */
+    @Excel(name = "产品", width = 15, dictTable = "jsh_product", dicText = "name", dicCode = "id")
+    @Dict(dictTable = "jsh_product", dicText = "name", dicCode = "id")
+    @Schema(description = "产品id")
+    private java.lang.Long productId;
+    /**
+     * 宽
+     */
+    @Excel(name = "宽(mm)", width = 15)
+    @Schema(description = "宽(mm)")
+    private java.lang.Long width;
+    /**
+     * 高
+     */
+    @Excel(name = "高(mm)", width = 15)
+    @Schema(description = "高(mm)")
+    private java.lang.Long height;
+    /**
+     * 数量
+     */
+    @Excel(name = "数量", width = 15)
+    @Schema(description = "数量")
+    private java.lang.Integer num;
+
+    /**
+     * 方向:0其他,1双开,2左开,3右开
+     */
+    @Excel(name = "方向", width = 15, dicCode = "direction")
+    @Dict(dicCode = "direction")
+    @Schema(description = "方向:0其他,1双开,2左开,3右开")
+    private java.lang.Integer direction;
+
+    /**
+     * 铝材颜色
+     */
+    @Excel(name = "铝材颜色", width = 15)
+    @Schema(description = "铝材颜色")
+    private java.lang.String color;
+
+    /**
+     * 玻璃颜色
+     */
+    @Excel(name = "玻璃颜色", width = 15)
+    @Schema(description = "玻璃颜色")
+    private java.lang.String glassColor;
+
+    /**
+     * 类型:1抽,2拉,3条
+     */
+    @Excel(name = "类型", width = 15, dicCode = "product_extend")
+    @Dict(dicCode = "product_extend")
+    @Schema(description = "类型:0无,1抽,2拉,3条")
+    private java.lang.Integer extendType;
+
+    /**
+     * 数量
+     */
+    @Excel(name = "数量", width = 15)
+    @Schema(description = "数量")
+    private java.lang.Integer extendNum;
+
+    /**
+     * 单价(分)
+     */
+    @Excel(name = "单价(元)", width = 15)
+    @Schema(description = "单价(分)")
+    private java.lang.Long price;
+
+    /**
+     * 附加(分)
+     */
+    @Excel(name = "附加(元)", width = 15)
+    @Schema(description = "附加(分)")
+    private java.lang.Long extendPrice;
+
+    /**
+     * 总面积
+     */
+    @Excel(name = "总面积(m²)", width = 15)
+    @Schema(description = "总面积(mm²)")
+    private java.lang.Long totalArea;
+
+    /**
+     * 订单总额
+     */
+    @Excel(name = "订单总额(元)", width = 15)
+    @Schema(description = "订单总额(分)")
+    private java.lang.Long totalPrice;
+
+    @ExcelCollection(name = "jsh_order_product_detail")
+    @Schema(description = "jsh_order_product_detail")
+    private List<JshOrderProductDetail> jshOrderProductDetailList;
+    @ExcelCollection(name = "jsh_order_product_extend")
+    @Schema(description = "jsh_order_product_extend")
+    private List<JshOrderProductExtend> jshOrderProductExtendList;
+
+}

@@ -4,74 +4,74 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-A customized ERP built on JeecgBoot 3.0 (low-code platform: Spring Boot 2.3.5 + MyBatis-Plus + Shiro/JWT, Ant Design Vue 1.x). Two independent sub-projects in one git repo:
+A customized ERP built on JeecgBoot **3.9.5** (low-code platform: Spring Boot 4 + MyBatis-Plus + Shiro/JWT, Vue 3 + Ant Design Vue 4). Active sub-projects:
 
-- `jeecg-boot/` — Java 8 Maven multi-module backend.
-- `ant-design-vue-jeecg/` — Vue 2 frontend (package name `erp-admin`), shipped both as a web app and as an Electron desktop app (`vue-cli-plugin-electron-builder`).
+- `jeecg-boot-v3/` — JDK 17 Maven multi-module backend (upstream `jeecg-boot/` of tag v3.9.5 + ERP module).
+- `erp-web-v3/` — Vue 3 / Vite web frontend (upstream `jeecgboot-vue3`, package name `erp-admin`, pnpm). Web only; Electron is out of scope for now.
 
-The root `package.json` only holds stray Electron deps; real frontend commands run inside `ant-design-vue-jeecg/`.
+Legacy (旧版，待切换完成后删除 — do not modify): `jeecg-boot/` (JeecgBoot 3.0, Java 8) and `ant-design-vue-jeecg/` (Vue 2 + Electron). The root `package.json` only holds stray Electron deps of the legacy app.
 
 ## Commands
 
-Backend (run in `jeecg-boot/`):
+Backend (run in `jeecg-boot-v3/`, JDK 17 required):
 
 ```bash
-mvn clean install -DskipTests                 # build all modules (dev profile is activeByDefault)
-mvn clean package -P prod -DskipTests         # build with application-prod.yml (profile sets spring.profiles.active via @profile.name@)
-mvn -pl jeecg-boot-module-system test -Dtest=OrderSummaryServiceTest   # single test
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
+mvn clean install -DskipTests                 # build all modules (dev profile)
+mvn clean package -P prod -DskipTests         # prod build -> jeecg-module-system/jeecg-system-start/target/jeecg-system-start-3.9.5.jar
+mvn -pl jeecg-boot-module/jeecg-module-erp test -Dtest=OrderSummaryServiceTest   # single ERP test
 ```
 
-Entry point: `jeecg-boot-module-system/src/main/java/org/jeecg/JeecgSystemApplication.java`. Output jar: `jeecg-boot-module-system/target/jeecg-boot-module-system-3.0.jar`.
+Entry point: `jeecg-module-system/jeecg-system-start/src/main/java/org/jeecg/JeecgSystemApplication.java`.
 
-Frontend (run in `ant-design-vue-jeecg/`, yarn lockfile present):
+Local verify env (MySQL 5.7.37 on 13306 / Redis 5.0 on 16379, matching prod): `jeecg-boot-v3/docker/local-verify/` (`docker-compose.yml`, `restore_prod_dump.sh`).
+
+Frontend (run in `erp-web-v3/`, pnpm lockfile present):
 
 ```bash
-yarn install
-yarn serve                      # web dev server; proxies /portal -> http://localhost:8080
-yarn build                      # web build -> dist/web
-yarn lint
-yarn electron:serve             # Electron dev (main entry src/main/index.dev.js)
-yarn electron:build:mac         # Electron package -> dist/electron (main entry src/main/index.js)
-yarn electron:build:win64       # also :win32, and :test:* variants using --mode test
+pnpm install
+pnpm dev                        # Vite dev server; proxy settings in .env.development
+pnpm build                      # web build -> dist
 ```
 
 ## Architecture
 
-### Backend modules (`jeecg-boot/pom.xml`)
+### Backend modules (`jeecg-boot-v3/pom.xml`)
 
-- `jeecg-boot-base/` (`-api`, `-core`, `-tools`): shared framework — auth, base entities, utilities. Rarely changed.
-- `jeecg-boot-module-system/`: the runnable app. Stock Jeecg modules live under `org.jeecg.modules.{system,quartz,message,monitor,oss,cas,...}`. **Custom ERP code lives in `org.jeecg.modules.business`** (`customer`, `order`, `product`, `sequence`, `version`), each following controller / entity / mapper / service (+ `vo`) layering.
-- `jeecg-boot-module-demo/`: demo code.
-- `jeecg-boot-starter/` and `jeecg-cloud-module/`: microservice variants, commented out of the parent `<modules>` and not built.
+- `jeecg-boot-base-core/`: shared framework — auth, base entities, utilities, MyBatis-Plus tenant config (`MybatisPlusSaasConfig.TENANT_TABLE` includes the `jsh_*` tables).
+- `jeecg-module-system/` (`jeecg-system-api`, `jeecg-system-biz`, `jeecg-system-start`): stock system modules; `jeecg-system-start` is the runnable app and depends on the ERP module.
+- `jeecg-boot-module/jeecg-module-erp/`: **custom ERP code**, package `org.jeecg.modules.business` (`customer`, `order`, `product`, `sequence`, `version`, `job/StatisticOrderJob`, `util`), controller / entity / mapper / service (+ `vo`) layering. REST paths stay `/business/**` (same as the legacy app).
+- `jeecg-boot-module/{jeecg-module-demo,jeecg-boot-module-airag}`: upstream modules; `jeecg-server-cloud/` is a microservice variant not built by default.
 
-Profiles: `application.yml` + `application-{dev,test,prod}.yml` in `jeecg-boot-module-system/src/main/resources`. Prod uses `server.servlet.context-path: /portal`, MySQL host `mysql`, Redis host `redis`, `uploadType: alioss`.
+Profiles: `application.yml` + `application-{dev,test,prod}.yml` in `jeecg-module-system/jeecg-system-start/src/main/resources`. Prod uses `server.servlet.context-path: /portal`, DB `jeecg-boot-v3` on host `mysql`, Redis (`spring.data.redis.*`) on host `redis`, `uploadType: alioss`, `spring.flyway.enabled: false`.
 
-SQL: `jeecg-boot/db/` holds the base schema (`jeecgboot-mysql-5.7.sql`), the ERP schema (`jsh_erp_new.sql`), quartz tables, and `增量SQL/` for incremental migrations.
+SQL:
+- `jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql`: upstream base schema. Its first two lines `CREATE`/`USE` the database `` `jeecg-boot` `` and it contains `DROP TABLE` statements — rewrite the DB name before running it anywhere near prod.
+- Flyway scripts: `jeecg-module-system/jeecg-system-start/src/main/resources/flyway/sql/mysql/`; ERP tables, dicts, menus, roles and quartz job are created by `V3.9.5_100__erp_init.sql`. Flyway is run by `org.jeecg.config.flyway.FlywayConfig`; a failure is only logged and does not stop startup, so check `flyway_schema_history`.
+- `jeecg-boot-v3/db/erp/`: one-off 3.0 → 3.9.5 data migration (`migrate_from_3.0.sql`, `verify_migration.sql`, `README.md`). Written for local DBs `jeecg_old` → `jeecg_v3`; prod is `` `jeecg-boot` `` → `` `jeecg-boot-v3` ``.
+- All SQL must run on MySQL 5.7.37 (no `utf8mb4_0900_*`, window functions, CTE, `JSON_TABLE`).
 
-### Frontend (`ant-design-vue-jeecg/src/`)
+### Frontend (`erp-web-v3/src/`)
 
-Split by Electron process:
-
-- `src/main/` — Electron main process: window creation, tray, shortcuts, IPC, `electron-updater` auto-update (`services/appAutoUpdate.js`) and zip hot-update (`services/appHotUpdate.js`, downloads `https://<API host>/electron/app.zip`).
-- `src/renderer/` — the Vue app (also the web build). Custom ERP pages are in `views/modules/business/{customer,order,product}`; API helpers in `api/`.
-
-API base URL comes from `VUE_APP_API_BASE_URL` (in `.env.*` files), assigned to `window._CONFIG['domianURL']` in `src/renderer/config/index.js` and used as axios `baseURL` in `utils/request.js`. Electron `productName`/`appId` come from `VUE_APP_NANE`/`VUE_APP_ID`.
+Upstream Vben-based layout. ERP pages are in `views/business/{customer,product,order}` (`*.api.ts` / `*.data.ts` / `*List.vue` / `*Modal.vue`); menus are delivered by the backend (`sys_permission`), with `component` paths like `business/order/JshOrderList`. API base: `VITE_GLOB_API_URL=/portal` and `VITE_GLOB_DOMAIN_URL` from `.env.production`, emitted into `dist/_app.config.js` at build time.
 
 ## Deployment
 
-Production is NOT deployed with the Dockerfiles / `docker-compose*.yml` in this repo (those are upstream Jeecg leftovers: wrong `/jeecg-boot` proxy prefix, `jeecg-boot-mysql` hostnames, `dist/` path). The real setup is `jeecg-docker/` (mirrored on the server at `/home/base/docker/`; server host is `SSH_HOST` in `jeecg-docker/.env`, which is gitignored along with TLS certs — copy `.env.example`). Secrets come from `.env` (`MYSQL_ROOT_PASSWORD`, `ERP_DB_PASSWORD`, `REDIS_PASSWORD`); the server's own compose still has them inline, so diff before copying the repo compose over it. TLS for `erp.jijianxia.com` is issued by acme.sh on the server (`/root/.acme.sh`, Let's Encrypt, root cron auto-renews into `nginx/conf/cert/`) and depends on the `/.well-known/acme-challenge/` location in the port-80 server block. Domain: `erp.jijianxia.com`.
+Production is NOT deployed with the Dockerfiles / other `docker-compose*.yml` in this repo (upstream leftovers). The real setup is `jeecg-docker/` (mirrored on the server at `/home/base/docker/`; server host is `SSH_HOST` in `jeecg-docker/.env`, which is gitignored along with TLS certs — copy `.env.example`). Secrets come from `.env` (`MYSQL_ROOT_PASSWORD`, `ERP_DB_PASSWORD`, `REDIS_PASSWORD`); the server's own compose still has them inline (and its Redis password lives in `redis/conf/redis.conf`), so never copy the repo compose over it — edit the server file in place. The server uses standalone `docker-compose` (v2.2.3) and cannot pull from Docker Hub (load images via `docker save`/`docker load`). TLS for `erp.jijianxia.com` is issued by acme.sh on the server (`/root/.acme.sh`, Let's Encrypt, root cron auto-renews into `nginx/conf/cert/`, webroot `/home/www/web/erp`) and depends on the `/.well-known/acme-challenge/` location in the port-80 server block. Domain: `erp.jijianxia.com`.
 
-Server compose runs four containers: `mysql` (5.7.37), `redis` (5.0), `erp-api` (`openjdk:8-jdk`), `nginx`. No images are built; artifacts are copied onto host paths that are bind-mounted:
+The 3.0 → 3.9.5 cutover procedure (backup, new DB, Flyway, data migration, verification, rollback) is `jeecg-docker/UPGRADE-3.9.5.md`.
+
+Server compose runs four containers: `mysql` (5.7.37), `redis` (5.0), `erp-api` (`eclipse-temurin:17-jre` after the cutover; `openjdk:8-jdk` before), `nginx`. No images are built; artifacts are copied onto host paths that are bind-mounted:
 
 | Artifact | Build | Host path |
 |---|---|---|
-| Backend jar | `mvn clean package -P prod -DskipTests` | `/home/java/erp-api/jeecg-boot-module-system-3.0.jar` (mounted as `/app/erp-api.jar`; restart `erp-api` after replacing) |
-| Web frontend | `yarn build` (`dist/web`) | `/home/www/web/erp` |
-| Electron hot-update | `yarn electron:build:*` (`afterPack.js` zips resources) | `/home/www/web/electron/app.zip` |
+| Backend jar | `mvn clean package -P prod -DskipTests` in `jeecg-boot-v3/` | `/home/java/erp-api/jeecg-system-start-3.9.5.jar` (mounted as `/app/erp-api.jar`; restart `erp-api` after replacing) |
+| Web frontend | `pnpm build` in `erp-web-v3/` (`dist`) | `/home/www/web/erp` (bind-mounted into nginx: replace the contents in place, keep `.well-known`; `mv` of the directory is not seen until nginx restarts) |
 
 Wiring that must stay consistent:
 
-- nginx proxies `/portal` (and `/portal/websocket`) to `erp-api:8080/portal`, matching `server.servlet.context-path: /portal` in `application-prod.yml`.
-- `application-prod.yml` uses hosts `mysql` / `redis` = container names; DB and Redis credentials are overridden by `-D` flags in the server compose `entrypoint`.
-- Frontend prod API URL comes from `ant-design-vue-jeecg/.env.production.local` (`https://erp.jijianxia.com/portal`), which overrides `.env.production`. `appHotUpdate.js` derives `https://<host>/electron/app.zip` from it, served by nginx `location /electron`.
-- MySQL init scripts (`mysql/init/`) only run on an empty data dir. `jsh_erp_new.sql` there has no `USE` statement, and `jeecg-boot/db/增量SQL/` must be applied manually for schema changes.
+- nginx proxies `/portal` (and `/portal/websocket`) to `erp-api:8080/portal`, matching `server.servlet.context-path: /portal` in `application-prod.yml`; `location /` falls back to `index.html` for history routes.
+- `application-prod.yml` uses DB `jeecg-boot-v3` and hosts `mysql` / `redis` = container names; DB and Redis credentials are overridden by `-D` flags in the compose `entrypoint` (`spring.datasource.dynamic.datasource.master.{username,password}`, `spring.data.redis.{host,port,password}`). Add `-Dspring.flyway.enabled=true` only for a run that should apply new Flyway scripts.
+- Frontend prod API URL comes from `erp-web-v3/.env.production` (`https://erp.jijianxia.com/portal`).
+- MySQL init scripts (`mysql/init/`) only run on an empty data dir; schema changes go through Flyway (or are applied manually).
+- The legacy 3.0 DB `jeecg-boot`, jar `jeecg-boot-module-system-3.0.jar` and `/home/www/web/electron` stay on the server until the cutover is confirmed; they are the rollback path.

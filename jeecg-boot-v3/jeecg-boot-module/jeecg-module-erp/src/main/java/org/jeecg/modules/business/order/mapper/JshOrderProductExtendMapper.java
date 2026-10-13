@@ -1,0 +1,28 @@
+package org.jeecg.modules.business.order.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.jeecg.modules.business.order.entity.JshOrderProductExtend;
+
+import java.util.List;
+
+/**
+ * @Description: jsh_order_product_extend
+ * @Author: jeecg-boot
+ * @Date: 2022-02-04
+ * @Version: V1.0
+ */
+public interface JshOrderProductExtendMapper extends BaseMapper<JshOrderProductExtend> {
+
+  public boolean deleteByMainId(@Param("mainId") Long mainId);
+
+  public boolean logicDeleteByMainId(@Param("mainId") Long mainId);
+
+  public List<JshOrderProductExtend> selectByMainId(@Param("mainId") Long mainId);
+
+  public boolean deleteByOrderId(@Param("orderId") Long orderId);
+
+  public boolean logicDeleteByOrderId(@Param("orderId") Long orderId);
+
+  public List<JshOrderProductExtend> selectByOrderId(@Param("orderId") Long orderId);
+}
