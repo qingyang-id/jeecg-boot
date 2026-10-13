@@ -15,7 +15,7 @@
    ```bash
    export JAVA_HOME=/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home
    (cd jeecg-boot && mvn -q clean package -DskipTests)
-   java -jar jeecg-boot/jeecg-boot-module-system/target/jeecg-boot-module-system-3.0.jar \
+   java -jar legacy/jeecg-boot/jeecg-boot-module-system/target/jeecg-boot-module-system-3.0.jar \
      --server.port=8081 --spring.profiles.active=dev \
      --spring.datasource.dynamic.datasource.master.url='jdbc:mysql://127.0.0.1:13306/jeecg_old?characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai' \
      --spring.datasource.dynamic.datasource.master.username=root --spring.datasource.dynamic.datasource.master.password=root \
@@ -29,7 +29,7 @@
 账号从命令行传入，脚本里没有真实用户名。`--user name` 表示无租户账号（admin），`--user name:1001` 表示带租户的账号。
 
 ```bash
-python3 -I jeecg-boot-v3/parity/parity_check.py \
+python3 -I jeecg-boot/parity/parity_check.py \
   --old http://127.0.0.1:8081/portal --new http://127.0.0.1:8080/portal \
   --user admin --user <erp用户>:1001 --password 'Test@12345' \
   --db-cmd "docker exec -i erp-verify-mysql mysql -uroot -proot" \

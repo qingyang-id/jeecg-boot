@@ -60,8 +60,8 @@ ssh root@"$SSH_HOST" 'echo ok'
 ```bash
 # [local]
 export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
-(cd jeecg-boot-v3 && mvn clean package -P prod -DskipTests)
-J=jeecg-boot-v3/jeecg-module-system/jeecg-system-start/target/jeecg-system-start-3.9.5.jar
+(cd jeecg-boot && mvn clean package -P prod -DskipTests)
+J=jeecg-boot/jeecg-module-system/jeecg-system-start/target/jeecg-system-start-3.9.5.jar
 ls -la "$J"
 unzip -l "$J" | grep -c 'V3.9.5_100__erp_init.sql'
 unzip -l "$J" | grep -c 'BOOT-INF/lib/jeecg-module-erp'
@@ -74,9 +74,9 @@ cp "$J" "$OUT/"
 
 ```bash
 # [local]
-(cd erp-web-v3 && pnpm install --frozen-lockfile && pnpm build)
-grep -o 'erp.jijianxia.com/portal' erp-web-v3/dist/_app.config.js | head -1
-tar -czf "$OUT/erp-web-dist.tgz" -C erp-web-v3/dist .
+(cd jeecgboot-vue3 && pnpm install --frozen-lockfile && pnpm build)
+grep -o 'erp.jijianxia.com/portal' jeecgboot-vue3/dist/_app.config.js | head -1
+tar -czf "$OUT/erp-web-dist.tgz" -C jeecgboot-vue3/dist .
 ls -la "$OUT/erp-web-dist.tgz"
 ```
 预期：build 成功；grep 输出 `erp.jijianxia.com/portal`（API 地址来自 `.env.production`，若为空说明地址没配对，停止）；tgz 约 30~40MB。
@@ -87,22 +87,22 @@ ls -la "$OUT/erp-web-dist.tgz"
 
 ```bash
 # [local]
-sed -e '1,2s/`jeecg-boot`/`jeecg-boot-v3`/' jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql > "$OUT/base.prod.sql"
+sed -e '1,2s/`jeecg-boot`/`jeecg-boot-v3`/' jeecg-boot/db/jeecgboot-mysql-5.7.sql > "$OUT/base.prod.sql"
 head -2 "$OUT/base.prod.sql"
 grep -c '`jeecg-boot`' "$OUT/base.prod.sql"
 
 # 迁移/核对脚本：本地约定 jeecg_old → jeecg_v3，生产为 `jeecg-boot` → `jeecg-boot-v3`
 RW='s/'"'"'jeecg_old'"'"'/'"'"'jeecg-boot'"'"'/g; s/'"'"'jeecg_v3'"'"'/'"'"'jeecg-boot-v3'"'"'/g; s/"jeecg_old"/"jeecg-boot"/g; s/"jeecg_v3"/"jeecg-boot-v3"/g; s/`?\bjeecg_old\b`?/`jeecg-boot`/g; s/`?\bjeecg_v3\b`?/`jeecg-boot-v3`/g'
-perl -pe "$RW" jeecg-boot-v3/db/erp/migrate_from_3.0.sql > "$OUT/migrate.prod.sql"
-perl -pe "$RW" jeecg-boot-v3/db/erp/verify_migration.sql  > "$OUT/verify.prod.sql"
+perl -pe "$RW" jeecg-boot/db/erp/migrate_from_3.0.sql > "$OUT/migrate.prod.sql"
+perl -pe "$RW" jeecg-boot/db/erp/verify_migration.sql  > "$OUT/verify.prod.sql"
 grep -c 'jeecg_old\|jeecg_v3' "$OUT/migrate.prod.sql" "$OUT/verify.prod.sql"
 grep -c 'jeecg-boot-v3' "$OUT/migrate.prod.sql"
-diff <(perl -pe "$RW" jeecg-boot-v3/db/erp/migrate_from_3.0.sql) "$OUT/migrate.prod.sql" && echo same
+diff <(perl -pe "$RW" jeecg-boot/db/erp/migrate_from_3.0.sql) "$OUT/migrate.prod.sql" && echo same
 ```
 预期：
 - `head -2` 两行都是 `` `jeecg-boot-v3` ``；第一个 `grep -c` 输出 `0`。
 - 两个迁移文件 `jeecg_old|jeecg_v3` 计数均为 `0`；`jeecg-boot-v3` 计数 > 0。
-- 若 `jeecg-boot-v3/db/erp/README.md` 写了额外的替换规则，以 README 为准，再肉眼看一遍 `diff jeecg-boot-v3/db/erp/migrate_from_3.0.sql "$OUT/migrate.prod.sql"`，确认只有库名变化。
+- 若 `jeecg-boot/db/erp/README.md` 写了额外的替换规则，以 README 为准，再肉眼看一遍 `diff jeecg-boot/db/erp/migrate_from_3.0.sql "$OUT/migrate.prod.sql"`，确认只有库名变化。
 
 ### 1.5 准备 JRE 镜像（服务器拉不到 Docker Hub）
 
@@ -117,7 +117,7 @@ docker save eclipse-temurin:17-jre | gzip > "$OUT/temurin17jre.tar.gz"
 
 ### 1.6（强烈建议）本地用 prod profile 演练一次
 
-在 `jeecg-boot-v3/docker/local-verify` 环境（`erp-verify-mysql` 13306 / `erp-verify-redis` 16379）上，按第 3 节同样顺序跑：新建库 → 基础脚本（本地用 `sed -e '1,2s/`jeecg-boot`/`jeecg_v3`/' jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql | docker exec -i erp-verify-mysql mysql -uroot -proot`）→ jar 以 **prod profile** + flyway 启动 → 迁移 → 核对。jar 启动命令：
+在 `jeecg-boot/docker/local-verify` 环境（`erp-verify-mysql` 13306 / `erp-verify-redis` 16379）上，按第 3 节同样顺序跑：新建库 → 基础脚本（本地用 `sed -e '1,2s/`jeecg-boot`/`jeecg_v3`/' jeecg-boot/db/jeecgboot-mysql-5.7.sql | docker exec -i erp-verify-mysql mysql -uroot -proot`）→ jar 以 **prod profile** + flyway 启动 → 迁移 → 核对。jar 启动命令：
 
 ```bash
 # [local] 已有 jeecg_old（生产快照）的前提下；本地库名就是 jeecg_v3，所以用 -D 覆盖 url
