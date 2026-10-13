@@ -72,7 +72,7 @@ services:
       - ./nginx/conf/conf.d:/etc/nginx/conf.d
       - ./nginx/conf/cert:/etc/nginx/cert
       - ./nginx/logs:/var/log/nginx
-      - /home/www/web/erp:/var/www/web
+      - /home/www/web/erp-site:/var/www/site
       - /home/www/web/electron:/var/www/electron
     ports:
       - "80:80"

@@ -59,7 +59,7 @@ Upstream Vben-based layout. ERP pages are in `views/business/{customer,product,o
 
 ## Deployment
 
-Production is NOT deployed with the Dockerfiles / other `docker-compose*.yml` in this repo (upstream leftovers). The real setup is `jeecg-docker/` (mirrored on the server at `/home/base/docker/`; server host is `SSH_HOST` in `jeecg-docker/.env`, which is gitignored along with TLS certs — copy `.env.example`). Secrets come from `.env` (`MYSQL_ROOT_PASSWORD`, `ERP_DB_PASSWORD`, `REDIS_PASSWORD`); the server's own compose still has them inline (and its Redis password lives in `redis/conf/redis.conf`), so never copy the repo compose over it — edit the server file in place. The server uses standalone `docker-compose` (v2.2.3) and cannot pull from Docker Hub (load images via `docker save`/`docker load`). TLS for `erp.jijianxia.com` is issued by acme.sh on the server (`/root/.acme.sh`, Let's Encrypt, root cron auto-renews into `nginx/conf/cert/`, webroot `/home/www/web/erp`) and depends on the `/.well-known/acme-challenge/` location in the port-80 server block. Domain: `erp.jijianxia.com`.
+Production is NOT deployed with the Dockerfiles / other `docker-compose*.yml` in this repo (upstream leftovers). The real setup is `jeecg-docker/` (mirrored on the server at `/home/base/docker/`; server host is `SSH_HOST` in `jeecg-docker/.env`, which is gitignored along with TLS certs — copy `.env.example`). Secrets come from `.env` (`MYSQL_ROOT_PASSWORD`, `ERP_DB_PASSWORD`, `REDIS_PASSWORD`); the server's own compose still has them inline (and its Redis password lives in `redis/conf/redis.conf`), so never copy the repo compose over it — edit the server file in place. The server uses standalone `docker-compose` (v2.2.3) and cannot pull from Docker Hub (load images via `docker save`/`docker load`). TLS for `erp.jijianxia.com` is issued by acme.sh on the server (`/root/.acme.sh`, Let's Encrypt, root cron auto-renews into `nginx/conf/cert/`, webroot `/home/www/web/erp-site/acme`) and depends on the `/.well-known/acme-challenge/` location in the port-80 server block. Domain: `erp.jijianxia.com`.
 
 The 3.0 → 3.9.5 cutover procedure (backup, new DB, Flyway, data migration, verification, rollback) is `jeecg-docker/UPGRADE-3.9.5.md`.
 
@@ -68,7 +68,7 @@ Server compose runs four containers: `mysql` (8.4.11, data dir `mysql84/data`; t
 | Artifact | Build | Host path |
 |---|---|---|
 | Backend jar | `mvn clean package -P prod -DskipTests` in `jeecg-boot/` | `/home/java/erp-api/jeecg-system-start-3.9.5.jar` (mounted as `/app/erp-api.jar`; restart `erp-api` after replacing) |
-| Web frontend | `pnpm build` in `jeecgboot-vue3/` (`dist`) | `/home/www/web/erp` (bind-mounted into nginx: replace the contents in place, keep `.well-known`; `mv` of the directory is not seen until nginx restarts) |
+| Web frontend | `jeecg-docker/deploy-web.sh` (builds HEAD, uploads, switches, verifies; `list` / `rollback [版本]`) | `/home/www/web/erp-site/releases/<时间戳>-<提交>`, served through the `current` symlink; nginx mounts `/home/www/web/erp-site` as `/var/www/site`, so switching the symlink takes effect without a restart. Hashed `assets/` and `js/` accumulate in `shared/` and nginx falls back to it, so tabs opened before a release still load their old chunks |
 
 Wiring that must stay consistent:
 
