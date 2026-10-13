@@ -53,6 +53,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
      */
     @AutoLog(value = "填值规则-分页列表查询")
     @Operation(summary = "填值规则-分页列表查询")
+    @RequiresRoles({"admin"})
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SysFillRule sysFillRule,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -145,6 +146,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
      */
     @AutoLog(value = "填值规则-通过id查询")
     @Operation(summary = "填值规则-通过id查询")
+    @RequiresRoles({"admin"})
     @GetMapping(value = "/queryById")
     public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
         SysFillRule sysFillRule = sysFillRuleService.getById(id);
@@ -157,6 +159,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
      * @param request
      * @param sysFillRule
      */
+    @RequiresRoles({"admin"})
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysFillRule sysFillRule) {
         return super.exportXls(request, sysFillRule, SysFillRule.class, "填值规则");
@@ -169,6 +172,7 @@ public class SysFillRuleController extends JeecgController<SysFillRule, ISysFill
      * @param response
      * @return
      */
+    @RequiresRoles({"admin"})
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         //update-begin---author:wangshuai ---date:20260803  for：【LHZP-1265】系统编码规则导入重复编码时提示具体Excel行号-----------

@@ -86,7 +86,7 @@ JeecgBoot低代码平台兼容所有J2EE项目开发，支持信创国产化，�
 | 项目名              | 说明                                                                 | 
 |------------------|--------------------------------------------------------------------|
 | `jeecg-boot`     | 后端源码JAVA（SpringBoot4微服务架构）                                         |
-| `jeecgboot-vue3` | 前端源码VUE3（vue3+vite6+antd4+ts最新技术栈）                                 |
+| `jeecgboot-vue3` | 前端源码VUE3（vue3+vite8+antd4+ts最新技术栈）                                 |
 
 
 
@@ -130,7 +130,7 @@ JeecgBoot平台提供了一套完善的AI应用管理系统模块，是一套类
 为什么选择JeecgBoot?
 -----------------------------------
 - 1.采用最新主流前后分离框架（Spring Boot 4 + MyBatis + Shiro/SpringAuthorizationServer + Ant Design4 + Vue3），容易上手；代码生成器依赖性低，灵活的扩展能力，可快速实现二次开发。
-- 2.前端大版本换代，最新版采用 Vue3.0 + TypeScript + Vite6 + Ant Design Vue4 等新技术方案。
+- 2.前端大版本换代，最新版采用 Vue3.0 + TypeScript + Vite8 + Ant Design Vue4 等新技术方案。
 - 3.支持微服务Spring Cloud Alibaba（Nacos、Gateway、Sentinel、Skywalking），提供简易机制，支持单体和微服务自由切换（这样可以满足各类项目需求）。
 - 4.开发效率高，支持在线建表和AI建表，提供强大代码生成器，单表、树列表、一对多、一对一等数据模型，增删改查功能一键生成，菜单配置直接使用。
 - 5.代码生成器提供强大模板机制，支持自定义模板，目前提供四套风格模板（单表两套、树模型一套、一对多三套）。
@@ -186,7 +186,8 @@ JeecgBoot平台提供了一套完善的AI应用管理系统模块，是一套类
 - 基础框架：Spring Boot 4.1.0
 - 微服务框架： Spring Cloud Alibaba 2025.1.0.0
 - 持久层框架：MybatisPlus 3.5.16
-- 报表工具： JimuReport 2.1.5
+- 报表工具： JimuReport 2.5.1
+- 大屏设计： JimuBI v2.5.0
 - 安全框架：Apache Shiro 3.0.0，Jwt 4.5.0
 - 微服务技术栈：Spring Cloud Alibaba、Nacos、Gateway、Sentinel、Skywalking
 - 数据库连接池：阿里巴巴Druid 1.2.28
@@ -205,8 +206,8 @@ JeecgBoot平台提供了一套完善的AI应用管理系统模块，是一套类
 
 - 依赖管理：node、npm、pnpm
 - 前端IDE建议：IDEA、WebStorm、Vscode
-- 采用 Vue3.0+TypeScript+Vite6+Ant-Design-Vue4等新技术方案，包括二次封装组件、utils、hooks、动态菜单、权限校验、按钮级别权限控制等功能
-- 最新技术栈：Vue3.0 + TypeScript + Vite6 + ant-design-vue4 + pinia + echarts + unocss + vxe-table + qiankun + es6
+- 采用 Vue3.0+TypeScript+Vite8+Ant-Design-Vue4等新技术方案，包括二次封装组件、utils、hooks、动态菜单、权限校验、按钮级别权限控制等功能
+- 最新技术栈：Vue3.0 + TypeScript + Vite8 + ant-design-vue4 + pinia + echarts + unocss + vxe-table + qiankun + es6
 
 
 

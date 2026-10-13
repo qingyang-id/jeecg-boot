@@ -85,7 +85,7 @@ public class SysDataSource {
     /**
      * 密码
      */
-    @Excel(name = "密码", width = 15)
+    // 密码为敏感凭据，不参与Excel导出（同SysUser.password处理），编辑时密码留空表示不修改
     @Schema(description = "密码")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private java.lang.String dbPassword;

@@ -166,6 +166,14 @@ jeecg:
     timeout: 60
     skills-dir:
     skills-shell-dir:
+    # AI聊天助手访问限流配置
+    rate-limit:
+      # 单 session 每分钟上限
+      send-per-session-per-minute: 10
+      # 单 IP 每分钟上限
+      send-per-ip-per-minute: 20
+      # 单 session 每小时上限
+      upload-per-session-per-hour: 20
     # AI文生图绘画
     ai-model-draw:
       # 提供商 OPENAI/ZHIPU/QWEN
@@ -225,15 +233,6 @@ jeecg:
       endpoint: https://api.search.brave.com/res/v1/web/search
       count: 10
       timeout: 15
-  airag:
-    # AI聊天助手访问限流配置
-    rate-limit:
-      # 单 session 每分钟上限
-      send-per-session-per-minute: 10
-      # 单 IP 每分钟上限
-      send-per-ip-per-minute: 20
-      # 单 session 每小时上限
-      upload-per-session-per-hour: 20
   # 平台上线安全配置
   firewall:
     # 数据源安全 (开启后，Online报表和图表的数据源为必填)
