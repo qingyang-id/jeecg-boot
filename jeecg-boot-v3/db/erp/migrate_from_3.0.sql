@@ -24,7 +24,7 @@ SELECT IF(IFNULL((SELECT MAX(1 + LENGTH(rel_tenant_ids) - LENGTH(REPLACE(rel_ten
 --    两边 DDL 相同（均取自生产 dump），列清单写死
 -- ---------------------------------------------------------------------
 TRUNCATE TABLE jeecg_v3.jsh_customer;
-INSERT INTO jeecg_v3.jsh_customer (`id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `rank`, `status`, `tenant_id`)
+INSERT INTO jeecg_v3.jsh_customer (`id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `sort_no`, `status`, `tenant_id`)
 SELECT `id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `rank`, `status`, `tenant_id` FROM jeecg_old.jsh_customer;
 
 TRUNCATE TABLE jeecg_v3.jsh_customer_address;

@@ -1,0 +1,15 @@
+# Local-only verify env for the MySQL 8.4 / Redis 7.4 upgrade. Runs beside the 5.7 env (different ports/names).
+# NO_AUTO_CREATE_USER removed from sql_mode (gone in MySQL 8.0); otherwise mirrors prod.
+services:
+  mysql:
+    image: mysql:8.4.11
+    container_name: erp-v84-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Shanghai
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --lower_case_table_names=1 --explicit_defaults_for_timestamp=1 --max_allowed_packet=256M --sql_mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+    ports: ["127.0.0.1:23306:3306"]
+  redis:
+    image: redis:7.4.11
+    container_name: erp-v84-redis
+    ports: ["127.0.0.1:26379:6379"]

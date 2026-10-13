@@ -1,5 +1,6 @@
 .env
 mysql/data/
+mysql84/data/
 mysql/logs/
 redis/data/
 nginx/logs/

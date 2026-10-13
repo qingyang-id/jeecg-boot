@@ -27,11 +27,11 @@ export const customerOptions = ref<{ value: string; text: string; title: string 
 let customerLoading: Promise<void> | null = null;
 export function loadCustomerOptions(force = false) {
   if (customerLoading && !force) return customerLoading;
-  customerLoading = customerList({ status: 1, pageSize: 5000, column: 'rank', order: 'asc' })
+  customerLoading = customerList({ status: 1, pageSize: 5000, column: 'sortNo', order: 'asc' })
     .then((res) => {
       const records = (res && res.records) || [];
       customerOptions.value = records
-        .sort((a, b) => a.rank - b.rank)
+        .sort((a, b) => a.sortNo - b.sortNo)
         .map((item) => ({ value: `${item.id}`, text: item.name, title: item.name }));
     })
     .catch(() => {
