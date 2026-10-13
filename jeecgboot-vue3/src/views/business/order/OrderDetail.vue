@@ -21,7 +21,7 @@
     <div class="print-form">
       <!--铝材单/玻璃单打印-->
       <template v-if="printType === '铝材生产单' || printType === '玻璃生产单'">
-        <section id="orderProducePrint">
+        <section id="orderProducePrint" class="print-area">
           <a-row class="form-row" justify="center" :gutter="24" style="text-align: center; margin-bottom: 10px">
             <a-col style="font-size: 24px; font-weight: 500">
               {{ title }}
@@ -49,7 +49,7 @@
       <!--订单打印-->
       <template v-else-if="printType === '订单信息'">
         <!--原尺寸-->
-        <section id="orderDetailPrint">
+        <section id="orderDetailPrint" class="print-area">
           <a-row justify="center" :gutter="24" style="text-align: center; margin-bottom: 10px">
             <a-col style="font-size: 24px; font-weight: bold">
               {{ title }}
@@ -100,7 +100,7 @@
       </template>
       <!--生产单：铝材单 + 玻璃单-->
       <template v-if="printType === '生产单'">
-        <section id="producePrint" style="min-height: 800px; display: flex; flex-direction: column">
+        <section id="producePrint" class="print-area" style="min-height: 800px; display: flex; flex-direction: column">
           <section style="flex: 1">
             <a-row class="form-row" justify="center">
               <a-col style="font-size: 24px; font-weight: 500"> 铝材单 </a-col>
@@ -208,8 +208,8 @@
   // 铝材生产单
   const aluminumColumns = withStyle([
     { title: '#', dataIndex: '', key: 'rowIndex', align: 'left', customRender: indexRender },
-    { title: '产品', align: 'left', dataIndex: 'productId_dictText', className: 'print-table-row' },
-    { title: '颜色', align: 'left', dataIndex: 'color', className: 'print-table-row' },
+    { title: '产品', align: 'left', dataIndex: 'productId_dictText' },
+    { title: '颜色', align: 'left', dataIndex: 'color' },
     {
       title: '原尺寸(高*宽)',
       align: 'left',
@@ -339,23 +339,23 @@
     -webkit-tap-highlight-color: #000000 !important;
   }
 
-  .print-form {
+  .print-area {
     font-size: 18px;
     font-weight: bold;
   }
 
-  .print-form :deep(*) {
+  .print-area :deep(*) {
     color: #000000 !important;
   }
 
   /* 上游全局 design/ant/index.less 把 .ant-col 设为 width:100%，会让抬头信息每项独占一行；
      antdv4 的 Row/Col 又把字号重置为 14px。这里恢复老页面的同行居中、18px 粗体抬头 */
-  .print-form :deep(.ant-row),
-  .print-form :deep(.ant-col) {
+  .print-area :deep(.ant-row),
+  .print-area :deep(.ant-col) {
     font-size: inherit;
   }
 
-  .print-form :deep(.ant-col) {
+  .print-area :deep(.ant-col) {
     width: auto;
   }
 
