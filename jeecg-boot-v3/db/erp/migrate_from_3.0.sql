@@ -167,7 +167,7 @@ WHERE ud.user_id IN (SELECT id FROM jeecg_old.sys_user)
 --    同名的上游系统字典（如 msgType）语义已变，不合并
 -- ---------------------------------------------------------------------
 DROP TEMPORARY TABLE IF EXISTS jeecg_v3.tmp_migrate_dict;
-CREATE TEMPORARY TABLE jeecg_v3.tmp_migrate_dict (dict_code VARCHAR(100) NOT NULL PRIMARY KEY) ENGINE=MEMORY;
+CREATE TEMPORARY TABLE jeecg_v3.tmp_migrate_dict (dict_code VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY) ENGINE=MEMORY;
 INSERT INTO jeecg_v3.tmp_migrate_dict (dict_code)
 SELECT dict_code FROM jeecg_old.sys_dict WHERE dict_code NOT IN (SELECT dict_code FROM jeecg_v3.sys_dict)
 UNION
