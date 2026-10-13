@@ -89,7 +89,9 @@ rowcount > /home/base/rowcount-57-$TS.txt; echo exit=$? lines=$(wc -l < /home/ba
 diff docker-compose.yml.bak-$TS docker-compose.yml     # 只应有上面 3 行差异
 docker-compose stop mysql redis
 docker-compose up -d mysql
-until docker exec mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "select 1"' >/dev/null 2>&1; do sleep 3; done
+# 必须走 TCP（-h127.0.0.1）：空数据目录首次启动时，entrypoint 先起一个 --skip-networking 的临时实例做初始化，随后重启。
+# 用 socket 检查会被临时实例骗过，紧接着的导入撞上重启而失败（2026-10-13 生产切换实际发生过）。
+until docker exec mysql sh -c 'mysql -h127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" -e "select 1"' >/dev/null 2>&1; do sleep 3; done
 docker exec mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -N -e "select version(),@@lower_case_table_names,@@character_set_server,@@collation_server"'
 ```
 
