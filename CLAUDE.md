@@ -24,7 +24,7 @@ mvn -pl jeecg-boot-module/jeecg-module-erp test -Dtest=OrderSummaryServiceTest  
 
 Entry point: `jeecg-module-system/jeecg-system-start/src/main/java/org/jeecg/JeecgSystemApplication.java`.
 
-Local verify env: `jeecg-boot-v3/docker/local-verify/` — `docker-compose.yml` (MySQL 5.7.37 on 13306 / Redis 5.0 on 16379, current prod), `docker-compose.v84.yml` (MySQL 8.4.11 on 23306 / Redis 7.4.11 on 26379, upgrade target), `restore_prod_dump.sh`.
+Local verify env: `jeecg-boot-v3/docker/local-verify/` — `docker-compose.v84.yml` (MySQL 8.4.11 on 23306 / Redis 7.4.11 on 26379, matching prod), `docker-compose.yml` (MySQL 5.7.37 on 13306 / Redis 5.0 on 16379, pre-upgrade prod), `restore_prod_dump.sh`.
 
 Frontend (run in `erp-web-v3/`, pnpm lockfile present):
 
@@ -49,7 +49,7 @@ SQL:
 - `jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql`: upstream base schema. Its first two lines `CREATE`/`USE` the database `` `jeecg-boot` `` and it contains `DROP TABLE` statements — rewrite the DB name before running it anywhere near prod.
 - Flyway scripts: `jeecg-module-system/jeecg-system-start/src/main/resources/flyway/sql/mysql/`; ERP tables, dicts, menus, roles and quartz job are created by `V3.9.5_100__erp_init.sql`. Flyway is run by `org.jeecg.config.flyway.FlywayConfig`; a failure is only logged and does not stop startup, so check `flyway_schema_history`.
 - `jeecg-boot-v3/db/erp/`: one-off 3.0 → 3.9.5 data migration (`migrate_from_3.0.sql`, `verify_migration.sql`, `README.md`). Written for local DBs `jeecg_old` → `jeecg_v3`; prod is `` `jeecg-boot` `` → `` `jeecg-boot-v3` ``.
-- All SQL must run on both MySQL 5.7.37 and 8.4 until the 8.4 upgrade (`jeecg-docker/UPGRADE-MYSQL84-REDIS74.md`) is done: no `utf8mb4_0900_*`, window functions, CTE, `JSON_TABLE`, and no column/alias that is an 8.x reserved word (check `information_schema.keywords` on 8.4) — MyBatis-Plus does not quote column names.
+- Prod runs MySQL 8.4.11 since 2026-10-13 (`jeecg-docker/UPGRADE-MYSQL84-REDIS74.md`). No column/alias may be an 8.x reserved word (check `information_schema.keywords`) — MyBatis-Plus does not quote column names. Keep collations at `utf8mb4_general_ci` (no `utf8mb4_0900_*`) to match the existing tables.
 
 ### Frontend (`erp-web-v3/src/`)
 
@@ -61,7 +61,7 @@ Production is NOT deployed with the Dockerfiles / other `docker-compose*.yml` in
 
 The 3.0 → 3.9.5 cutover procedure (backup, new DB, Flyway, data migration, verification, rollback) is `jeecg-docker/UPGRADE-3.9.5.md`.
 
-Server compose runs four containers: `mysql` (5.7.37; repo compose already targets 8.4.11 with data dir `mysql84/data`), `redis` (5.0; repo targets 7.4.11), `erp-api` (`eclipse-temurin:17-jre` after the cutover; `openjdk:8-jdk` before), `nginx`. No images are built; artifacts are copied onto host paths that are bind-mounted:
+Server compose runs four containers: `mysql` (8.4.11, data dir `mysql84/data`; the pre-upgrade 5.7 dir `mysql/data` is kept for rollback until about 2026-10-27), `redis` (7.4.11), `erp-api` (`eclipse-temurin:17-jre` after the cutover; `openjdk:8-jdk` before), `nginx`. No images are built; artifacts are copied onto host paths that are bind-mounted:
 
 | Artifact | Build | Host path |
 |---|---|---|
