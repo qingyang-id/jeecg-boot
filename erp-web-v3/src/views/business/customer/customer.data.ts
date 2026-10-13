@@ -9,7 +9,7 @@ export const columns: BasicColumn[] = [
   { title: '性别', align: 'center', dataIndex: 'sex_dictText', width: 80 },
   { title: '常用地址', align: 'center', dataIndex: 'address' },
   { title: '手机', align: 'center', dataIndex: 'phone' },
-  { title: '排序', align: 'center', dataIndex: 'rank', sorter: true, width: 100 },
+  { title: '排序', align: 'center', dataIndex: 'sortNo', sorter: true, width: 100 },
   {
     title: '状态',
     align: 'center',
@@ -76,7 +76,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     label: '排序',
-    field: 'rank',
+    field: 'sortNo',
     component: 'InputNumber',
     componentProps: { min: 0, max: 100000, placeholder: '请输入排序值，越小越靠前' },
   },

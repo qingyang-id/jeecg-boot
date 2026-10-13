@@ -12,7 +12,7 @@ SELECT 'jsh_customer' AS tbl,
   (SELECT COUNT(*) FROM jeecg_old.jsh_customer) AS old_cnt,
   (SELECT COUNT(*) FROM jeecg_v3.jsh_customer) AS new_cnt,
   (SELECT SUM(CRC32(CONCAT_WS('|', `id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `rank`, `status`, `tenant_id`))) FROM jeecg_old.jsh_customer) AS old_crc,
-  (SELECT SUM(CRC32(CONCAT_WS('|', `id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `rank`, `status`, `tenant_id`))) FROM jeecg_v3.jsh_customer) AS new_crc
+  (SELECT SUM(CRC32(CONCAT_WS('|', `id`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`, `name`, `sex`, `address`, `phone`, `sort_no`, `status`, `tenant_id`))) FROM jeecg_v3.jsh_customer) AS new_crc
 UNION ALL
 SELECT 'jsh_customer_address' AS tbl,
   (SELECT COUNT(*) FROM jeecg_old.jsh_customer_address) AS old_cnt,

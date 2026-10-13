@@ -102,7 +102,7 @@ public class JshCustomer implements Serializable {
      * 排序
      */
     @Schema(description = "排序")
-    private java.lang.Integer rank;
+    private java.lang.Integer sortNo;
 
     /**
      * 状态:1启用,0禁用
