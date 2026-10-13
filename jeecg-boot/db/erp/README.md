@@ -11,11 +11,11 @@
 ## 执行顺序
 
 1. 建空库（utf8mb4 / utf8mb4_general_ci）。
-2. 导入上游基础脚本 `jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql`。
+2. 导入上游基础脚本 `jeecg-boot/db/jeecgboot-mysql-5.7.sql`。
    - **这个文件第 1、2 行是 `CREATE database if NOT EXISTS \`jeecg-boot\`` 和 ``USE `jeecg-boot`;``，后面跟着约 143 条 `DROP TABLE IF EXISTS`。原样导入会建库 `jeecg-boot`，并清空同名库里的所有表。** 生产 3.0 库正好叫 `jeecg-boot`，所以导入前必须改写这两行。
    - 本地做法：删掉这两行，再导入到 `jeecg_v3`：
      ```bash
-     sed -e '1,2{/^CREATE database/d;/^USE /d;}' jeecg-boot-v3/db/jeecgboot-mysql-5.7.sql \
+     sed -e '1,2{/^CREATE database/d;/^USE /d;}' jeecg-boot/db/jeecgboot-mysql-5.7.sql \
        | docker exec -i erp-verify-mysql mysql -uroot -proot jeecg_v3
      ```
    - 生产做法：把这两行改写成 `jeecg-boot-v3`，或者像上面一样删掉后用 `mysql ... jeecg-boot-v3` 导入。导入前先检查改写结果：`head -5` 看不到 `jeecg-boot` 后面不带 `-v3` 的写法；`grep -n '^USE ' <改写后文件>` 只有指向 `jeecg-boot-v3` 的行，或者一行都没有。具体步骤见 `jeecg-docker/UPGRADE-3.9.5.md`。

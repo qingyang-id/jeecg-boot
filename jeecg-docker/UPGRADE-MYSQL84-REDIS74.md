@@ -12,7 +12,7 @@
 - 实体 `JshCustomer.rank` → `sortNo`；前端 `customer.data.ts` / `order.data.ts` 同步改。
 - **新 jar 只能配新库，旧 jar 只能配旧库**：jar、web、Flyway 102 必须在同一个停机窗口内一起上线，回滚时一起回退。
 
-本地验证结果（`jeecg-boot-v3/docker/local-verify/docker-compose.v84.yml`，导入本地的生产 dump）：
+本地验证结果（`jeecg-boot/docker/local-verify/docker-compose.v84.yml`，导入本地的生产 dump）：
 
 | 项 | 结果 |
 |---|---|

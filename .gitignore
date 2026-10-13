@@ -12,8 +12,8 @@
 .DS_Store
 
 # JeecgBoot v3.9.5 upgrade
-erp-web-v3/node_modules
-erp-web-v3/dist*
-jeecg-boot-v3/**/target
+jeecgboot-vue3/node_modules
+jeecgboot-vue3/dist*
+jeecg-boot/**/target
 .omc/
-jeecg-boot-v3/**/config/jeecg/
+jeecg-boot/**/config/jeecg/
