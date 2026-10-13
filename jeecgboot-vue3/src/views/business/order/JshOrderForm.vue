@@ -1,7 +1,15 @@
 <template>
   <a-spin :spinning="confirmLoading">
     <!-- 主表单区域 -->
-    <a-form ref="formRef" :model="model" :rules="validatorRules" :labelCol="labelCol" :wrapperCol="wrapperCol" :disabled="formDisabled">
+    <a-form
+      ref="formRef"
+      :model="model"
+      :rules="validatorRules"
+      :labelCol="labelCol"
+      :wrapperCol="wrapperCol"
+      :disabled="formDisabled"
+      @keyup.tab="openPopup($event.target)"
+    >
       <a-row>
         <a-col :md="8" :sm="24">
           <a-form-item label="订单编码" name="orderCode">
@@ -51,31 +59,33 @@
     <!-- 子表单区域 -->
     <a-tabs v-model:activeKey="activeKey" @change="handleChangeTabs">
       <a-tab-pane tab="订单商品" key="jshOrderProduct" :forceRender="true">
-        <JVxeTable
-          ref="tableRef"
-          :class="{ 'is-editable': !formDisabled }"
-          keepSource
-          :loading="tableLoading"
-          :columns="columns"
-          :dataSource="dataSource"
-          :maxHeight="300"
-          :disabled="formDisabled"
-          rowNumber
-          rowSelection
-          toolbar
-          @removed="handleRemoved"
-          @valueChange="handleValueChange"
-        >
-          <template #toolbarSuffix>
-            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
-            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('width')">宽-批量设置</a-button>
-            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
-            <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
-          </template>
-          <template #action="props">
-            <a :disabled="disabled" @click="handleCopy(props)">复制</a>
-          </template>
-        </JVxeTable>
+        <div @keydown.capture="handleTableTab">
+          <JVxeTable
+            ref="tableRef"
+            :class="{ 'is-editable': !formDisabled }"
+            keepSource
+            :loading="tableLoading"
+            :columns="columns"
+            :dataSource="dataSource"
+            :maxHeight="300"
+            :disabled="formDisabled"
+            rowNumber
+            rowSelection
+            toolbar
+            @removed="handleRemoved"
+            @valueChange="handleValueChange"
+          >
+            <template #toolbarSuffix>
+              <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('height')">高-批量设置</a-button>
+              <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('width')">宽-批量设置</a-button>
+              <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('num')">数量-批量设置</a-button>
+              <a-button :disabled="disabled" style="margin-left: 8px" @click="batchSetSize('extendNum')">抽/拉/条数量-批量设置</a-button>
+            </template>
+            <template #action="props">
+              <a :disabled="disabled" @click="handleCopy(props)">复制</a>
+            </template>
+          </JVxeTable>
+        </div>
         <BatchSetSizeModal ref="sizeModalRef" @ok="batchSetSizeModalFormOk" />
       </a-tab-pane>
     </a-tabs>
@@ -126,7 +136,7 @@
   const confirmLoading = ref(false);
   const activeKey = ref('jshOrderProduct');
   const model = reactive<Recordable>({});
-  const columns = ref(createOrderProductVxeColumns());
+  const columns = ref(createOrderProductVxeColumns().map((c) => (c.disabled ? { ...c, className: 'col--readonly' } : c)));
   const dataSource = ref<Recordable[]>([]);
   const tableLoading = ref(false);
   /** 商品 id -> 商品（含 wholesalePrice 与铝材/玻璃尺寸差），老 jshProductPricesMap */
@@ -254,6 +264,52 @@
     calculateSumPrice(getAllRows().filter((r) => !deleteRows.includes(r)));
   }
 
+  /** 选择框 / 日期框经键盘获得焦点时直接展开下拉或日历（antd 只在鼠标按下时展开） */
+  function openPopup(el: EventTarget | null) {
+    if (!(el instanceof Element)) return;
+    const select = el.closest('.ant-select');
+    if (select) {
+      if (!select.classList.contains('ant-select-open')) {
+        select.querySelector('.ant-select-selector')?.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      }
+      return;
+    }
+    if (el.closest('.ant-picker') && el instanceof HTMLInputElement) {
+      el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    }
+  }
+
+  /**
+   * 表格内 Tab / Shift+Tab 跳到下一个（上一个）可填单元格并直接进入编辑。
+   * vxe-table 在 click + cell 编辑模式下 Tab 只移动选中、不进入编辑，所以在捕获阶段先处理；
+   * 跳过禁用列，行尾换行，首尾单元格交还给浏览器默认行为（焦点离开表格）
+   */
+  async function handleTableTab(e: KeyboardEvent) {
+    if (e.key !== 'Tab' || formDisabled.value) return;
+    const xTable = tableRef.value?.getXTable();
+    const record = xTable?.getEditRecord();
+    if (!record) return;
+    const cols = xTable.getColumns().filter((c) => c.editRender && !c.params?.disabled);
+    const rows = xTable.getTableData().visibleData;
+    let r = rows.indexOf(record.row);
+    let c = cols.indexOf(record.column) + (e.shiftKey ? -1 : 1);
+    if (c >= cols.length) {
+      r++;
+      c = 0;
+    } else if (c < 0) {
+      r--;
+      c = cols.length - 1;
+    }
+    if (r < 0 || r >= rows.length) return;
+    e.preventDefault();
+    e.stopPropagation();
+    await xTable.setEditCell(rows[r], cols[c]);
+    await nextTick();
+    const editor = xTable.getCellElement(rows[r], cols[c])?.querySelector<HTMLElement>('input, textarea');
+    editor?.focus();
+    openPopup(editor ?? null);
+  }
+
   /** 老：handleCopy（JshOrderForm.vue:385-389） */
   async function handleCopy({ row }) {
     if (props.disabled) return;
@@ -373,7 +429,7 @@
 
 <style lang="less" scoped>
   // 可编辑单元格未激活时画一个输入位底块，空值显示占位字，避免看起来像只读
-  .is-editable :deep(.vxe-body--column.col--edit:not(.col--active)) {
+  .is-editable :deep(.vxe-body--column.col--edit:not(.col--active):not(.col--readonly)) {
     position: relative;
     cursor: text;
 
