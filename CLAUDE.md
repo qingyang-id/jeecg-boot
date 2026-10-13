@@ -67,7 +67,7 @@ Server compose runs four containers: `mysql` (8.4.11, data dir `mysql84/data`; t
 
 | Artifact | Build | Host path |
 |---|---|---|
-| Backend jar | `mvn clean package -P prod -DskipTests` in `jeecg-boot/` | `/home/java/erp-api/jeecg-system-start-3.9.5.jar` (mounted as `/app/erp-api.jar`; restart `erp-api` after replacing) |
+| Backend jar | `jeecg-docker/deploy-api.sh` (builds HEAD of `electron`, Flyway pre-check, DB + jar backup, one Flyway-enabled start via `docker-compose.yml.flyway`, cache clear, verify; `check` / `status` / `rollback`). Procedure: `.claude/skills/erp-deploy/SKILL.md` | `/home/java/erp-api/jeecg-system-start-3.9.5.jar` (mounted as `/app/erp-api.jar`); releases in `/home/java/erp-api/releases/`, DB backups in `/home/java/erp-api/backup/` |
 | Web frontend | `jeecg-docker/deploy-web.sh` (builds HEAD, uploads, switches, verifies; `list` / `rollback [版本]`) | `/home/www/web/erp-site/releases/<时间戳>-<提交>`, served through the `current` symlink; nginx mounts `/home/www/web/erp-site` as `/var/www/site`, so switching the symlink takes effect without a restart. Hashed `assets/` and `js/` accumulate in `shared/` and nginx falls back to it, so tabs opened before a release still load their old chunks |
 
 Wiring that must stay consistent:
