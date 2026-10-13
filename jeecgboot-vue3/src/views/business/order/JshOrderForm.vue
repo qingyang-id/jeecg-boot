@@ -53,6 +53,7 @@
       <a-tab-pane tab="订单商品" key="jshOrderProduct" :forceRender="true">
         <JVxeTable
           ref="tableRef"
+          :class="{ 'is-editable': !formDisabled }"
           keepSource
           :loading="tableLoading"
           :columns="columns"
@@ -369,3 +370,37 @@
 
   defineExpose({ add, edit, handleOk });
 </script>
+
+<style lang="less" scoped>
+  // 可编辑单元格未激活时画一个输入位底块，空值显示占位字，避免看起来像只读
+  .is-editable :deep(.vxe-body--column.col--edit:not(.col--active)) {
+    position: relative;
+    cursor: text;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 6px 4px;
+      pointer-events: none;
+      background: #f3f7fd;
+      border-radius: 4px;
+      box-shadow: inset 0 0 0 1px #e1e9f5;
+      transition: box-shadow 0.15s, background 0.15s;
+    }
+
+    &:hover::before {
+      background: #fff;
+      box-shadow: inset 0 0 0 1px @primary-color;
+    }
+
+    .vxe-cell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .j-vxe-reload-effect-span:empty::after {
+      content: '点击填写';
+      color: #b4bcc8;
+    }
+  }
+</style>
