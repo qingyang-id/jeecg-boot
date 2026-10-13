@@ -78,7 +78,8 @@ export function useBasicFormSchema(treeData) {
       component: 'JDictSelectTag',
       componentProps: ({ formModel, formActionType }) => {
         return {
-          dictCode: "sys_position,name,id, 1=1 order by post_level asc",
+          // 原写法带 "1=1 order by post_level asc"，会被后端 SqlInjectionUtil 拦截（操作失败），去掉排序条件
+          dictCode: "sys_position,name,id",
           getPopupContainer: ()=> document.body,
           onChange: (value) => {
             formModel.depPostParentId = "";
