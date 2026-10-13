@@ -164,6 +164,9 @@ public class LoginController {
 			log.debug("2 获取用户信息耗时 (首页面配置)" + (System.currentTimeMillis() - start) + "毫秒");
 			
 			obj.put("userInfo",sysUser);
+			//update-begin---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			obj.put("dictVersion", sysDictService.getDictVersion());
+			//update-end---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
 			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
 			log.debug("3 获取用户信息耗时 (字典数据)" + (System.currentTimeMillis() - start) + "毫秒");
 
@@ -376,6 +379,14 @@ public class LoginController {
 			result.setSuccess(false);
 			return result;
 		}
+		//update-begin---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流，不依赖客户端IP-----------
+		if(!DySmsLimit.canSendSmsToPhone(mobile)){
+			result.setMessage("短信发送过于频繁，请稍后再试！");
+			result.setCode(CommonConstant.PHONE_SMS_FAIL_CODE);
+			result.setSuccess(false);
+			return result;
+		}
+		//update-end---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流，不依赖客户端IP-----------
 		//-------------------------------------------------------------------------------------
 
 		//随机数
@@ -561,6 +572,9 @@ public class LoginController {
 		// 5.vue3版本不加载字典数据，vue2下加载字典
 		String vue3Version = request.getHeader(CommonConstant.VERSION);
 		if(oConvertUtils.isEmpty(vue3Version)){
+			//update-begin---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
+			obj.put("dictVersion", sysDictService.getDictVersion());
+			//update-end---author:scott ---date:20261013  for：【issues/9838】返回字典版本号；先取版本号再查字典，避免期间字典变更导致前端拿到新版本号+旧数据-----------
 			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
 		}
 		
@@ -892,6 +906,13 @@ public class LoginController {
 			result.setSuccess(false);
 			return result;
 		}
+		//update-begin---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
+		if (!DySmsLimit.canSendSmsToPhone(mobile)) {
+			result.setMessage("短信发送过于频繁，请稍后再试！");
+			result.setSuccess(false);
+			return result;
+		}
+		//update-end---author:scott ---date:20261013  for：【安全 GHSA-5qr3-c98m-9767】增加按手机号限流-----------
 		//随机数
 		String captcha = RandomUtil.randomNumbers(6);
 		JSONObject obj = new JSONObject();
@@ -977,6 +998,9 @@ public class LoginController {
             result.setCode(HttpStatus.PRECONDITION_FAILED.value());
             return null;
         }
+        //update-begin---author:scott ---date:20261013  for：【安全】图形验证码校验通过后立即作废（一次一用），防止同一验证码被反复用于尝试登录-----------
+        redisUtil.del(realKey);
+        //update-end---author:scott ---date:20261013  for：【安全】图形验证码校验通过后立即作废（一次一用），防止同一验证码被反复用于尝试登录-----------
         return realKey;
     }
 }

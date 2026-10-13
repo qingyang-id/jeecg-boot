@@ -4,14 +4,9 @@ MAINTAINER jeecgos@163.com
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-# 解决linuxkit 精简镜像对 locale 裁剪导致中文乱码问题 java:17-anolis基于anolis（CentOS/RHEL 系）应当使用yum
-RUN yum install -y --setopt=tsflags=nodocs \
-        glibc-langpack-en \
-        glibc-common \
-    && yum clean all
-
-ENV LANG=en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
+# 解决中文乱码：基础镜像自带 C.utf8 locale，直接使用，无需 yum 安装 glibc-langpack-en（避免构建时网络慢）
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 ENV JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
 
 RUN mkdir -p /jeecg-system-cloud
@@ -22,4 +17,5 @@ EXPOSE 7001
 
 ADD ./target/jeecg-system-cloud-start-3.9.5.jar ./
 
-CMD sleep 60 && exec java -Djava.security.egd=file:/dev/./urandom -jar jeecg-system-cloud-start-3.9.5.jar
+# 去掉sleep 60，容器启动后立即拉起应用（Nacos就绪由docker-compose的healthcheck+depends_on: service_healthy保证）
+CMD exec java -Djava.security.egd=file:/dev/./urandom -jar jeecg-system-cloud-start-3.9.5.jar

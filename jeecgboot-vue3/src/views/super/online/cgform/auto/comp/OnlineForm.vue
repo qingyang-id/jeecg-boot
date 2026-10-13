@@ -888,15 +888,7 @@
 
       //提交数据前 先走一下自定义的JS校验
       function handleApplyRequest(formData) {
-        // update-begin--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
-        // 非分享 ERP：列表页勾选主表后维护子表，编辑主表时需把列表页 subTableSource 合并进去（新增不合并）
-        // 分享 ERP：主子表同页一块提交，子表已在 validateSubTableFields 写入 formData，禁止再用 subTableSource 覆盖
-        // update-begin--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-        if (props.themeTemplate === ERP && !props.isShare && isUpdate.value && Object.keys(props.subTableSource).length) {
-          formData = { ...formData, ...props.subTableSource };
-        }
-        // update-end--author:liaozhiyang---date:20260807---for：【LHZP-166】修复erp风格的外部链接没子表
-        // update-end--author:liaozhiyang---date:20231128---for：【QQYUN-7260】erp主表编辑时保存子表记录
+        // 【issues/9873】ERP列表子表是分页数据，由子表接口独立维护，禁止随主表全量提交
         customBeforeSubmit(context, formData)
           .then(() => {
             doApplyRequest(formData);

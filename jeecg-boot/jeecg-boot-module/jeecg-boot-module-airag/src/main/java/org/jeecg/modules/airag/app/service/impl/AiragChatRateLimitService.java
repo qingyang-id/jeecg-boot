@@ -3,8 +3,7 @@ package org.jeecg.modules.airag.app.service.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.util.IpUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.jeecg.config.AiChatConfig;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,29 +21,24 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class AiragChatRateLimitService {
 
-	@Autowired
-	private RedisTemplate redisTemplate;
-
-	/**
-	 * 每会话每分钟最多发送消息次数
-	 */
-	@Value("${jeecg.airag.rate-limit.send-per-session-per-minute:20}")
-	private int sendPerSessionPerMinute;
-
-	/**
-	 * 每 IP 每分钟最多发送消息次数
-	 */
-	@Value("${jeecg.airag.rate-limit.send-per-ip-per-minute:60}")
-	private int sendPerIpPerMinute;
-
-	/**
-	 * 每会话每小时最多上传文件次数
-	 */
-	@Value("${jeecg.airag.rate-limit.upload-per-session-per-hour:20}")
-	private int uploadPerSessionPerHour;
+	private final RedisTemplate redisTemplate;
+	private final AiChatConfig.RateLimitConfig rateLimit;
 
 	private static final DateTimeFormatter MINUTE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 	private static final DateTimeFormatter HOUR_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHH");
+
+	/**
+	 * 构造 AI 聊天助手访问限流服务
+	 *
+	 * @param redisTemplate Redis 操作模板
+	 * @param aiChatConfig AI 聊天配置
+	 * @author scott
+	 * @since 2026-09-01 issues/9871 AI聊天助手访问限流配置优化
+	 */
+	public AiragChatRateLimitService(RedisTemplate redisTemplate, AiChatConfig aiChatConfig) {
+		this.redisTemplate = redisTemplate;
+		this.rateLimit = aiChatConfig.getRateLimit();
+	}
 
 	/**
 	 * 校验 /airag/chat/send 调用频次
@@ -56,9 +50,9 @@ public class AiragChatRateLimitService {
 		String clientIp = IpUtils.getIpAddr(request);
 		String minute = LocalDateTime.now().format(MINUTE_FORMAT);
 
-		checkLimit("airag:rate:send:session:" + sessionId + ":" + minute, sendPerSessionPerMinute, 120,
+		checkLimit("airag:rate:send:session:" + sessionId + ":" + minute, rateLimit.getSendPerSessionPerMinute(), 120,
 			"发送消息过于频繁，请稍后再试");
-		checkLimit("airag:rate:send:ip:" + clientIp + ":" + minute, sendPerIpPerMinute, 120,
+		checkLimit("airag:rate:send:ip:" + clientIp + ":" + minute, rateLimit.getSendPerIpPerMinute(), 120,
 			"发送消息过于频繁，请稍后再试");
 	}
 
@@ -72,9 +66,9 @@ public class AiragChatRateLimitService {
 		String clientIp = IpUtils.getIpAddr(request);
 		String hour = LocalDateTime.now().format(HOUR_FORMAT);
 
-		checkLimit("airag:rate:upload:session:" + sessionId + ":" + hour, uploadPerSessionPerHour, 7200,
+		checkLimit("airag:rate:upload:session:" + sessionId + ":" + hour, rateLimit.getUploadPerSessionPerHour(), 7200,
 			"上传文件过于频繁，请稍后再试");
-		checkLimit("airag:rate:upload:ip:" + clientIp + ":" + hour, uploadPerSessionPerHour, 7200,
+		checkLimit("airag:rate:upload:ip:" + clientIp + ":" + hour, rateLimit.getUploadPerSessionPerHour(), 7200,
 			"上传文件过于频繁，请稍后再试");
 	}
 
@@ -85,7 +79,10 @@ public class AiragChatRateLimitService {
 	 * @param limit 窗口上限
 	 * @param expireSeconds key 过期时间（秒）
 	 */
-	private void checkLimit(String key, int limit, int expireSeconds, String errorMessage) {
+	private void checkLimit(String key, Integer limit, int expireSeconds, String errorMessage) {
+		if (limit == null || limit <= 0) {
+			return;
+		}
 		Long count = redisTemplate.opsForValue().increment(key, 1);
 		if (count == null) {
 			return;
